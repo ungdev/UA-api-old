@@ -1,0 +1,35 @@
+{
+  "name": "arena.utt.fr-api",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.2",
+    "cors": "^2.8.4",
+    "cross-env": "^5.1.4",
+    "debug": "^3.1.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-validator": "^5.1.0",
+    "helmet": "^3.12.0",
+    "joi": "^13.1.2",
+    "jsonwebtoken": "^8.2.1",
+    "jwt-simple": "^0.5.1",
+    "lodash": "^4.17.5",
+    "lodash.pick": "^4.4.0",
+    "morgan": "^1.9.0",
+    "mysql2": "^1.5.3",
+    "node-etupay": "ungdev/node-etupay",
+    "sequelize": "^4.37.5",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./src/index.js",
+    "start": "cross-env NODE_ENV=production DEBUG=arena.utt.fr-api:* node ./src/index.js",
+    "lint": "standard src"
+  }
+}
