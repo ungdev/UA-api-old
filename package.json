@@ -22,6 +22,7 @@
     "mysql2": "^1.5.3",
     "node-etupay": "ungdev/node-etupay",
     "sequelize": "^4.37.5",
+    "socket.io": "^2.1.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
