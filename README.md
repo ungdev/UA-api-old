@@ -36,3 +36,24 @@ yarn dev
 ```
 yarn start
 ```
+
+## Structure
+
+```
+arena.utt.fr-api/
+├── src/                          # base directory
+│   ├── api/                         # api files
+│   │   ├── controllers/                # endpoints controllers
+│   │   ├── live/                       # socket.io controllers
+│   │   ├── middlewares/                # endpoints middlewares
+│   │   ├── models/                     # database models
+│   │   └── utils/                      # utils files
+│   ├── app.js                       # create express server
+│   ├── database.js                  # create sequelize connection
+│   ├── env.js                       # convert .env and .env.local to JSON
+│   ├── index.js                     # entry point
+│   └── socket.js                    # create socket.io server
+├── .editorconfig                 # define your editor options
+├── .env                          # global configuration
+└── .env.local                    # override global configuration (not pushed to repository)
+```
