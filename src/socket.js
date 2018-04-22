@@ -13,4 +13,6 @@ module.exports = (http, sequelize, models) => {
 
     require('./api/live')(socket)
   })
+
+  return io
 }

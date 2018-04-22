@@ -5,6 +5,8 @@ const path = require('path')
 module.exports = (app) => {
   const router = new express.Router()
 
+  router.locals = app.locals
+
   fs
     .readdirSync(__dirname)
     .filter(name => name !== 'index.js' && name.slice(-3) === '.js')

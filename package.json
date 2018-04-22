@@ -23,14 +23,13 @@
     "node-etupay": "ungdev/node-etupay",
     "sequelize": "^4.37.5",
     "socket.io": "^2.1.0",
+    "svr": "^0.6.2",
     "uuid": "^3.2.1"
   },
-  "devDependencies": {
-    "nodemon": "^1.17.3"
-  },
+  "devDependencies": {},
   "scripts": {
-    "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./src/index.js",
-    "start": "cross-env NODE_ENV=production DEBUG=arena.utt.fr-api:* node ./src/index.js",
+    "dev": "cross-env NODE_ENV=development svr ./src/index.js",
+    "start": "cross-env NODE_ENV=production DEBUG=arena.utt.fr-api:* node ./bin/start.js",
     "lint": "standard src"
   }
 }
