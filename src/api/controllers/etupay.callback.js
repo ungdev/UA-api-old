@@ -13,7 +13,10 @@ async function handlePaylod(User, payload) {
     const userHadPay = user.paid
 
     if (!user) {
-      return res.status(404).json({ error: 'USER_NOT_FOUND' }).end()
+      return res
+        .status(404)
+        .json({ error: 'USER_NOT_FOUND' })
+        .end()
     }
 
     user.transactionId = payload.transactionId
@@ -25,7 +28,7 @@ async function handlePaylod(User, payload) {
     await user.save()
 
     return {
-      shouldSendMail: (user.paid && !userHadPay),
+      shouldSendMail: user.paid && !userHadPay,
       user
     }
   } catch (err) {
@@ -46,9 +49,8 @@ async function handlePaylod(User, payload) {
  *
  * }
  */
-module.exports = (app) => {
+module.exports = app => {
   app.post('/user/pay/', etupay.router)
-
 
   app.use('/user/pay/callback', async (req, res) => {
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
@@ -59,7 +61,7 @@ module.exports = (app) => {
 
     return res
       .status(200)
-      .json({ })
+      .json({})
       .end()
   })
 

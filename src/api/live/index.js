@@ -2,7 +2,7 @@ const express = require('express')
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (socket) => {
+module.exports = socket => {
   const router = new express.Router()
 
   fs

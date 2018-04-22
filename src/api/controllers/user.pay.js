@@ -29,16 +29,22 @@ const gender = { M: 'Homme', F: 'Femme' }
  *    url: String
  * }
  */
-module.exports = (app) => {
-  app.post('/user/pay', [
-    isAuth('user-pay')
-  ])
+module.exports = app => {
+  app.post('/user/pay', [isAuth('user-pay')])
 
   app.post('/user/pay', [
-    check('plusone').exists().isBoolean(),
-    check('ethernet').exists().isBoolean(),
-    check('shirtGender').optional().isIn(['M', 'F']),
-    check('shirtSize').optional().isIn(['XS', 'S', 'M', 'L', 'XL']),
+    check('plusone')
+      .exists()
+      .isBoolean(),
+    check('ethernet')
+      .exists()
+      .isBoolean(),
+    check('shirtGender')
+      .optional()
+      .isIn(['M', 'F']),
+    check('shirtSize')
+      .optional()
+      .isIn(['XS', 'S', 'M', 'L', 'XL'])
   ])
 
   app.post('/user/pay', async (req, res) => {
@@ -77,7 +83,11 @@ module.exports = (app) => {
       )
 
       if (req.body.plusone) {
-        basket.addItem('Place UTT Arena Visiteur/Accompagnateur', euro * env.ARENA_PRICES_PLUSONE, 1)
+        basket.addItem(
+          'Place UTT Arena Visiteur/Accompagnateur',
+          euro * env.ARENA_PRICES_PLUSONE,
+          1
+        )
       } else {
         basket.addItem('Place UTT Arena', euro * price, 1)
       }
@@ -87,10 +97,17 @@ module.exports = (app) => {
       }
 
       if (req.user.shirt !== 'none') {
-        basket.addItem(`T-Shirt ${sex[req.body.shirtGender]} ${req.body.shirtSize}`, euro * config.prices.shirt, 1)
+        basket.addItem(
+          `T-Shirt ${sex[req.body.shirtGender]} ${req.body.shirtSize}`,
+          euro * config.prices.shirt,
+          1
+        )
       }
 
-      return res.status(200).json({ url: basket.compute() }).end()
+      return res
+        .status(200)
+        .json({ url: basket.compute() })
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }

@@ -26,10 +26,12 @@
     "svr": "^0.6.2",
     "uuid": "^3.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "^1.12.1"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development svr ./src/index.js",
     "start": "cross-env NODE_ENV=production DEBUG=arena.utt.fr-api:* node ./bin/start.js",
-    "lint": "standard src"
+    "lint": "prettier --single-quote --print-width 100 --tab-width 2 --no-semi --write \"{src,bin}/**/*.js\""
   }
 }

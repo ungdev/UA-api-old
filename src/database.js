@@ -6,7 +6,7 @@ const env = require('./env')
 module.exports = async function database() {
   const sequelize = new Sequelize(env.ARENA_DB, {
     operatorsAliases: Sequelize.Op,
-    logging: (sql) => debug(sql)
+    logging: sql => debug(sql)
   })
 
   try {

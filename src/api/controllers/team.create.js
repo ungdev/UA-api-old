@@ -16,16 +16,10 @@ const isNotInTeam = require('../middlewares/isNotInTeam')
  *    team: Team
  * }
  */
-module.exports = (app) => {
-  app.post('/team', [
-    isAuth('team-create'),
-    isNotInTeam('team-create')
-  ])
+module.exports = app => {
+  app.post('/team', [isAuth('team-create'), isNotInTeam('team-create')])
 
-  app.post('/team', [
-    check('name').matches(/^[A-zÀ-ÿ0-9 ]{3,}$/i),
-    validateBody()
-  ])
+  app.post('/team', [check('name').matches(/^[A-zÀ-ÿ0-9 ]{3,}$/i), validateBody()])
 
   app.post('/team', async (req, res) => {
     try {
@@ -38,7 +32,10 @@ module.exports = (app) => {
 
       debug(`user ${req.user.name} created team ${req.body.teamName}`)
 
-      return res.status(200).json({ team }).end()
+      return res
+        .status(200)
+        .json({ team })
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }

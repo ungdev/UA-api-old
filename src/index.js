@@ -4,7 +4,7 @@ const socket = require('./socket')
 const arena = require('./arena')
 const env = require('./env')
 
-module.exports = async function (app, express) {
+module.exports = async function(app, express) {
   const { sequelize, models } = await database()
 
   arena(app)

@@ -7,7 +7,7 @@ const controllers = require('./api/controllers')
 const error = require('./api/middlewares/error')
 const env = require('./env')
 
-module.exports = (app) => {
+module.exports = app => {
   app.use(morgan(env.ARENA_API_LOGS))
   app.use(helmet())
   app.use(cors())

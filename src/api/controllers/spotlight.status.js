@@ -15,21 +15,21 @@ const env = require('../../env')
  *    spotlights: [Spotlight]
  * }
  */
-module.exports = (app) => {
+module.exports = app => {
   app.get('/spotlights', async (req, res) => {
     const { Spotlight } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
-          include: [
-            {
-              model: Team,
-              include: [ User ]
-            }
-          ]
+        include: [
+          {
+            model: Team,
+            include: [User]
+          }
+        ]
       })
 
-      spotlights = spotlights.map((spotlight) => {
+      spotlights = spotlights.map(spotlight => {
         spotlight = spotlight.toJSON()
 
         spotlight.isFull = isSpotlightFull(spotlight, true)
@@ -37,7 +37,10 @@ module.exports = (app) => {
         return pick(spotlight, ['id', 'name', 'isFull'])
       })
 
-      return res.status(200).json(spotlights).end()
+      return res
+        .status(200)
+        .json(spotlights)
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }

@@ -14,7 +14,7 @@ const isNotInTeam = require('../middlewares/isNotInTeam')
  *    http: Boolean
  * }
  */
-module.exports = (app) => {
+module.exports = app => {
   app.get('/status?', async (req, res) => {
     let db = 1
     let http = 1

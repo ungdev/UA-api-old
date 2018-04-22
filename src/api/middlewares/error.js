@@ -10,14 +10,17 @@ const handler = (err, req, res, next) => {
     code: err.status,
     message: err.message,
     errors: err.errors,
-    stack: err.stack,
+    stack: err.stack
   }
 
   if (env.NODE_ENV !== 'development') {
     delete response.stack
   }
 
-  res.status(err.status).json(response).end()
+  res
+    .status(err.status)
+    .json(response)
+    .end()
 }
 
 /**
@@ -31,7 +34,7 @@ const converter = (err, req, res, next) => {
     convertedError = new APIError({
       message: err.message,
       status: err.status,
-      stack: err.stack,
+      stack: err.stack
     })
   }
 
@@ -45,7 +48,7 @@ const converter = (err, req, res, next) => {
 const notFound = (req, res, next) => {
   const err = new APIError({
     message: 'Not found',
-    status: 404,
+    status: 404
   })
 
   return handler(err, req, res)

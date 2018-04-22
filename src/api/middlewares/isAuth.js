@@ -7,7 +7,7 @@ const env = require('../../env')
 
 jwt.verify = promisify(jwt.verify)
 
-module.exports = (route) => async (req, res, next) => {
+module.exports = route => async (req, res, next) => {
   const { User, Team, Spotlight } = req.app.locals.models
 
   const auth = req.get('X-Token')
@@ -15,7 +15,10 @@ module.exports = (route) => async (req, res, next) => {
   if (!auth || auth.length === 0) {
     debug(`${route} failed : not connected`)
 
-    return res.status(401).json({ error: 'NO_TOKEN' }).end()
+    return res
+      .status(401)
+      .json({ error: 'NO_TOKEN' })
+      .end()
   }
 
   try {
@@ -25,7 +28,7 @@ module.exports = (route) => async (req, res, next) => {
       include: [
         {
           model: Team,
-          include: [ User, Spotlight ]
+          include: [User, Spotlight]
         }
       ]
     })
@@ -34,8 +37,11 @@ module.exports = (route) => async (req, res, next) => {
 
     next()
   } catch (err) {
-      debug(`${route} failed : invalid token`)
+    debug(`${route} failed : invalid token`)
 
-      return res.status(401).json({ error: 'INVALID_TOKEN' }).end()
+    return res
+      .status(401)
+      .json({ error: 'INVALID_TOKEN' })
+      .end()
   }
 }

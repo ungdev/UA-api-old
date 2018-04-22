@@ -14,18 +14,18 @@ const isInTeam = require('../middlewares/isInTeam')
  *
  * }
  */
-module.exports = (app) => {
-  app.post('/team/:id/kick', [
-    isAuth('team-kick'),
-    isInTeam('team-kick')
-  ])
+module.exports = app => {
+  app.post('/team/:id/kick', [isAuth('team-kick'), isInTeam('team-kick')])
 
   app.post('/team/:id/kick', async (req, res) => {
     // is captain or self-kick (= leave), else deny
     if (req.user.team.captainId !== req.user.id && req.user.id !== req.params.userId) {
       debug(`user ${req.user.name} tried to kick without being captain`)
 
-      return res.status(401).json({ error: 'NO_CAPTAIN' }).end()
+      return res
+        .status(401)
+        .json({ error: 'NO_CAPTAIN' })
+        .end()
     }
 
     try {
@@ -40,7 +40,10 @@ module.exports = (app) => {
 
       debug(`user ${req.user.name} kicked ${user.name}`)
 
-      return res.status(200).json({ }).end()
+      return res
+        .status(200)
+        .json({})
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }

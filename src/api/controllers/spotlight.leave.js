@@ -15,7 +15,7 @@ const isCaptain = require('../middlewares/isCaptain')
  *
  * }
  */
-module.exports = (app) => {
+module.exports = app => {
   app.post('/spotlight/:id/leave', [
     isAuth('spotlight-leave'),
     isInTeam('spotlight-leave'),
@@ -32,7 +32,10 @@ module.exports = (app) => {
         await req.user.team.destroy()
       }
 
-      return res.status(200).json({ }).end()
+      return res
+        .status(200)
+        .json({})
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }

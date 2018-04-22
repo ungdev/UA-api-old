@@ -15,10 +15,8 @@ const isAuth = require('../middlewares/isAuth')
  *    team: Team
  * }
  */
-module.exports = (app) => {
-  app.post('/spotlight/:id/join', [
-    isAuth('spotlight-join')
-  ])
+module.exports = app => {
+  app.post('/spotlight/:id/join', [isAuth('spotlight-join')])
 
   app.post('/spotlight/:id/join', async (req, res) => {
     const { Spotlight } = req.app.locals.models
@@ -28,7 +26,7 @@ module.exports = (app) => {
         include: [
           {
             model: Team,
-            include: [ User ]
+            include: [User]
           }
         ]
       })
@@ -37,7 +35,10 @@ module.exports = (app) => {
       if (isSpotlightFull(spotlight)) {
         debug(`user ${req.user.name} tried to join ${spotlight.name}, but it's full`)
 
-        return res.status(401).json({ error: 'SPOTLIGHT_FULL' }).end()
+        return res
+          .status(401)
+          .json({ error: 'SPOTLIGHT_FULL' })
+          .end()
       }
 
       const requireTeam = spotlight.perTeam > 1
@@ -47,14 +48,20 @@ module.exports = (app) => {
       if (requireTeam && withoutTeam) {
         debug(`user ${req.user.name} tried to join ${spotlight.name} without a team`)
 
-        return res.status(401).json({ error: 'NO_TEAM' }).end()
+        return res
+          .status(401)
+          .json({ error: 'NO_TEAM' })
+          .end()
       }
 
       // spotlight needs team and user is not a captain
       if (requireTeam && !withoutTeam && !req.user.isCaptain(req.user.team)) {
         debug(`user ${req.user.name} tried to join ${spotlight.name} without being captain`)
 
-        return res.status(401).json({ error: 'NO_CAPTAIN' }).end()
+        return res
+          .status(401)
+          .json({ error: 'NO_CAPTAIN' })
+          .end()
       }
 
       // User hasnt pay. Must be after TEAM_NOT_FULL as error will be different
@@ -62,14 +69,20 @@ module.exports = (app) => {
       if (!req.user.paid) {
         debug(`user ${req.user.name} tried to join a single spotlight without having paid`)
 
-        return res.status(401).json({ error: 'NOT_PAID' }).end()
+        return res
+          .status(401)
+          .json({ error: 'NOT_PAID' })
+          .end()
       }
 
       // spotlight needs team and team not full/paid
       if (requireTeam && !withoutTeam && !isTeamFull(req.user.team, spotlight.perTeam, true)) {
         debug(`user ${req.user.name} tried to join ${spotlight.name} without a full team`)
 
-        return res.status(401).json({ error: 'TEAM_NOT_FULL' }).end()
+        return res
+          .status(401)
+          .json({ error: 'TEAM_NOT_FULL' })
+          .end()
       }
 
       let team = null
@@ -90,7 +103,6 @@ module.exports = (app) => {
         })
 
         debug(`user ${req.user.name} created self-team for ${spotlight.name}`)
-
       } else {
         team = req.user.team
       }
@@ -101,7 +113,10 @@ module.exports = (app) => {
 
       debug(`team ${team.name} joined ${spotlight.name}`)
 
-      return res.status(200).json({ team }).end()
+      return res
+        .status(200)
+        .json({ team })
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }

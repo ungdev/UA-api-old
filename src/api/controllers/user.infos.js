@@ -18,38 +18,33 @@ const env = require('../../env')
  *    teamfinders: [Teamfinder]
  * }
  */
-module.exports = (app) => {
-  app.get('/user', [
-    isAuth()
-  ])
+module.exports = app => {
+  app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
     const { User } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
-          include: [
-            {
-              model: Team,
-              include: [ User ]
-            }
-          ]
-      })
-
-      let teams = await Team.findAll({
         include: [
-          { model: User, through: AskingUsers, as: 'AskingUser' }
+          {
+            model: Team,
+            include: [User]
+          }
         ]
       })
 
+      let teams = await Team.findAll({
+        include: [{ model: User, through: AskingUsers, as: 'AskingUser' }]
+      })
 
       // clean teams
-      teams = teams.map((team) => {
+      teams = teams.map(team => {
         team = team.toJSON()
 
         // AskingUser = users on AskingUsers
         if (team.AskingUser) {
-          team.askingUsers = team.AskingUser.map((teamUser) => {
+          team.askingUsers = team.AskingUser.map(teamUser => {
             // Clean the user
             const cleanedUser = outputFields(teamUser)
 
@@ -65,14 +60,16 @@ module.exports = (app) => {
         return team
       })
 
-      spotlights = spotlights.map((spotlight) => {
+      spotlights = spotlights.map(spotlight => {
         spotlight = spotlight.toJSON()
 
         spotlight.isFull = isSpotlightFull(spotlight, true)
       })
 
       // Generate new token
-      const token = jwt.sign({ id: req.user.id }, env.ARENA_API_SECRET, { expiresIn: env.ARENA_API_SECRET_EXPIRES })
+      const token = jwt.sign({ id: req.user.id }, env.ARENA_API_SECRET, {
+        expiresIn: env.ARENA_API_SECRET_EXPIRES
+      })
 
       const user = req.user.toJSON()
 

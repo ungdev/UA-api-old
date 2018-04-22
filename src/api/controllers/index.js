@@ -2,7 +2,7 @@ const express = require('express')
 const fs = require('fs')
 const path = require('path')
 
-module.exports = (app) => {
+module.exports = app => {
   const router = new express.Router()
 
   router.locals = app.locals

@@ -25,13 +25,7 @@ class APIError extends ExtendableError {
    * @param {number} status - HTTP status code of error.
    * @param {boolean} isPublic - Whether the message should be visible to user or not.
    */
-  constructor({
-    message,
-    errors,
-    stack,
-    status = 500,
-    isPublic = false,
-  }) {
+  constructor({ message, errors, stack, status = 500, isPublic = false }) {
     super({ message, errors, status, isPublic, stack })
   }
 }

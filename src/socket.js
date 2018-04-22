@@ -8,7 +8,7 @@ module.exports = (http, sequelize, models) => {
     models: models
   }
 
-  io.on('connection', (socket) => {
+  io.on('connection', socket => {
     socket.app = io
 
     require('./api/live')(socket)

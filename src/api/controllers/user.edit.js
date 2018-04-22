@@ -19,15 +19,20 @@ const env = require('../../env')
  *    user: User
  * }
  */
-module.exports = (app) => {
-  app.put('/user', [
-    isAuth('user-edit')
-  ])
+module.exports = app => {
+  app.put('/user', [isAuth('user-edit')])
 
   app.put('/user', [
-    check('name').exists().isAlphanumeric().isLength({ min: 3, max: 90 }),
-    check('password').optional().isLength({ min: 6 }),
-    check('email').exists().isEmail(),
+    check('name')
+      .exists()
+      .isAlphanumeric()
+      .isLength({ min: 3, max: 90 }),
+    check('password')
+      .optional()
+      .isLength({ min: 6 }),
+    check('email')
+      .exists()
+      .isEmail(),
     validateBody()
   ])
 
@@ -43,7 +48,10 @@ module.exports = (app) => {
 
       debug(`user ${req.body.name} updated`)
 
-      res.status(200).json({ user: outputFields(req.user) }).end()
+      res
+        .status(200)
+        .json({ user: outputFields(req.user) })
+        .end()
     } catch (err) {
       errorHandler(err, res)
     }
