@@ -11,6 +11,7 @@ module.exports = app => {
   app.use(morgan(env.ARENA_API_LOGS))
   app.use(helmet())
   app.use(cors())
+  app.use(bodyParser.json())
 
   app.use('/api/v1', controllers(app))
 

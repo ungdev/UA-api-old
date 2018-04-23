@@ -6,8 +6,8 @@ module.exports = () => (req, res, next) => {
 
   if (!errors.isEmpty()) {
     return res
-      .status(422)
-      .json({ error: errors.mapped() })
+      .status(400)
+      .json({ error: 'INVALID_FORM', details: errors.mapped() })
       .end()
   }
 

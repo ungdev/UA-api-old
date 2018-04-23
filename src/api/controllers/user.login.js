@@ -1,6 +1,7 @@
 const debug = require('debug')('arena.utt.fr-api:user-login')
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const errorHandler = require('../utils/errorHandler')
 const { outputFields } = require('../utils/publicFields')
 const validateBody = require('../middlewares/validateBody')
