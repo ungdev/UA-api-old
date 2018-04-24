@@ -1,5 +1,6 @@
-const debug = require('debug')(':arena.utt.fr-api:user-infos')
+const debug = require('debug')('arena.utt.fr-api:user-infos')
 const pick = require('lodash.pick')
+const jwt = require('jsonwebtoken')
 const errorHandler = require('../utils/errorHandler')
 const { outputFields } = require('../utils/publicFields')
 const { isSpotlightFull } = require('../utils/isFull')
@@ -22,7 +23,7 @@ module.exports = app => {
   app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
-    const { User, Spotlight, Team } = req.app.locals.models
+    const { User, Spotlight, Team, AskingUser } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
@@ -35,7 +36,7 @@ module.exports = app => {
       })
 
       let teams = await Team.findAll({
-        include: [{ model: User, through: AskingUsers, as: 'AskingUser' }]
+        include: [{ model: User, through: AskingUser, as: 'AskingUser' }]
       })
 
       // clean teams
@@ -84,8 +85,7 @@ module.exports = app => {
           user: outputFields(user),
           token,
           spotlights: spotlights,
-          teams,
-          teamfinders
+          teams
         })
         .end()
     } catch (err) {
