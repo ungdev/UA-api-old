@@ -34,7 +34,7 @@ module.exports = app => {
       .isLength({ min: 3, max: 90 }),
     check('fullname')
       .exists()
-      .matches(/[0-9A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
       .isLength({ min: 3, max: 200 }),
     check('password')
       .exists()
