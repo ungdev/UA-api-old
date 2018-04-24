@@ -2,6 +2,7 @@ const debug = require('debug')('arena.utt.fr-api:user-login')
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 const errorHandler = require('../utils/errorHandler')
 const { outputFields } = require('../utils/publicFields')
 const validateBody = require('../middlewares/validateBody')
@@ -32,13 +33,21 @@ module.exports = app => {
     validateBody()
   ])
 
-  app.put('/user', async (req, res) => {
+  app.put('/user/login', async (req, res) => {
+    const { User } = req.app.locals.models
+
     try {
-      const username = req.body.username
+      const username = req.body.name
       const password = req.body.password
 
+
       const user = await User.findOne({
-        where: { $or: [{ name: username }, { email: username }] }
+        where: {
+          [Op.or]: [
+            { name: username },
+            { email: username }
+          ]
+        }
       })
 
       if (!user) {
@@ -46,11 +55,18 @@ module.exports = app => {
 
         return res
           .status(400)
-          .json({ error: 'INVALID_LOGIN' })
+          .json({ error: 'INVALID_USERNAME' })
           .end()
       }
 
-      await bcrypt.compare(password, user.password)
+      const passwordMatches = await bcrypt.compare(password, user.password)
+
+      if (!passwordMatches) {
+        return res
+          .status(400)
+          .json({ error: 'INVALID_PASSWORD' })
+          .end()
+      }
 
       const token = jwt.sign({ id: user.id }, env.ARENA_API_SECRET, {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
