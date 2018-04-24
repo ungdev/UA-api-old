@@ -18,5 +18,9 @@ module.exports = async function(app, express) {
   app.locals.models = models
   app.locals.io = io
 
+  if (process.send) {
+    process.send('ready')
+  }
+
   return app
 }

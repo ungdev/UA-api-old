@@ -9,6 +9,13 @@ module.exports = async function database() {
     logging: sql => debug(sql)
   })
 
+
+  process.on('SIGINT', function() {
+     db.stop(err => {
+       process.exit(err ? 1 : 0)
+     })
+  })
+
   try {
     const models = modelsFactory(sequelize)
 

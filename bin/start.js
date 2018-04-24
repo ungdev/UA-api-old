@@ -2,6 +2,10 @@
 
 'use strict'
 
+// this will be overrided by .env and .env.local
+process.env.NODE_ENV = 'production'
+process.env.DEBUG = 'arena.utt.fr-api:*'
+
 const express = require('express')
 const debug = require('debug')('arena.utt.fr-api:bin')
 const app = express()
@@ -11,4 +15,4 @@ require('../src')(app, express)
 
 const { name } = require('../package.json')
 
-app.listen(env.ARENA_API_PORT, () => debug(`server started on port ${env.ARENA_API_PORT}`))
+app.listen(env.ARENA_API_PORT, () => debug(`server started on port ${env.ARENA_API_PORT} [${env.NODE_ENV}]`))

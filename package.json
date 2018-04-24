@@ -21,6 +21,7 @@
     "morgan": "^1.9.0",
     "mysql2": "^1.5.3",
     "node-etupay": "ungdev/node-etupay",
+    "pm2": "^2.10.2",
     "sequelize": "^4.37.5",
     "socket.io": "^2.1.0",
     "svr": "^0.6.2",
@@ -31,7 +32,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development svr ./src/index.js",
-    "start": "cross-env NODE_ENV=production DEBUG=arena.utt.fr-api:* node ./bin/start.js",
+    "start": "node ./bin/start.js",
+    "serve": "pm2 start ./bin/start.js -i max --wait-ready --name arena.utt.fr-api",
+    "reload": "pm2 reload arena.utt.fr-api --update-env",
     "lint": "prettier --single-quote --print-width 100 --tab-width 2 --no-semi --write \"{src,bin}/**/*.js\""
   }
 }
