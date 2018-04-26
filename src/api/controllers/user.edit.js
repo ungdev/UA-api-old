@@ -1,4 +1,5 @@
 const debug = require('debug')('arena.utt.fr-api:user-edit')
+const bcrypt = require('bcryptjs')
 const { check } = require('express-validator/check')
 const errorHandler = require('../utils/errorHandler')
 const { outputFields, inputFields } = require('../utils/publicFields')
@@ -27,6 +28,10 @@ module.exports = app => {
       .exists()
       .isAlphanumeric()
       .isLength({ min: 3, max: 90 }),
+    check('fullname')
+      .exists()
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .isLength({ min: 3, max: 200 }),
     check('password')
       .optional()
       .isLength({ min: 6 }),
@@ -39,7 +44,7 @@ module.exports = app => {
   app.put('/user', async (req, res) => {
     try {
       if (req.body.password) {
-        req.body.password = await bcrypt.hash(req.body.password, env.ARENA_API_BCRYPT_LEVEL)
+        req.body.password = await bcrypt.hash(req.body.password, parseInt(env.ARENA_API_BCRYPT_LEVEL, 10))
       }
 
       const body = inputFields(req.body)

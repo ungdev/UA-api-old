@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   return sequelize.define('user', {
     id: { primaryKey: true, type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
     name: { type: DataTypes.STRING, unique: true },
+    fullname: { type: DataTypes.STRING },
     email: { type: DataTypes.STRING, validate: { isEmail: true }, unique: true },
     isAdmin: { type: DataTypes.BOOLEAN, defaultValue: false },
     password: { type: DataTypes.STRING },
