@@ -10,10 +10,13 @@ module.exports = async function database() {
   })
 
 
-  process.on('SIGINT', function() {
-     db.stop(err => {
-       process.exit(err ? 1 : 0)
-     })
+  process.on('SIGINT', async function () {
+    try {
+      await sequelize.close()
+      process.exit(0)
+    } catch (_) {
+      process.exit(1)
+    }
   })
 
   try {
