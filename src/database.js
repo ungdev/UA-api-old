@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize')
-const debug = require('debug')('arena.utt.fr-api:database')
 const modelsFactory = require('./api/models')
 const env = require('./env')
+const log = require('./api/utils/log')(module)
 
 module.exports = async function database() {
   const sequelize = new Sequelize(env.ARENA_DB, {
     operatorsAliases: Sequelize.Op,
-    logging: sql => debug(sql)
+    logging: sql => log.debug(sql)
   })
 
 
@@ -24,7 +24,7 @@ module.exports = async function database() {
 
     await sequelize.sync()
 
-    debug('connected to database')
+    log.info('connected to database', { database: env.ARENA_DB })
 
     return { sequelize, models }
   } catch (err) {

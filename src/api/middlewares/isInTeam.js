@@ -1,9 +1,9 @@
-const debug = require('debug')('arena.utt.fr-api:isInTeam')
+const log = require('../utils/log')(module)
 
 module.exports = route =>
   async function(req, res, next) {
     if (!req.user.team) {
-      debug(`${route} failed : not in team`)
+      log.warn(`${route} failed : not in team`, { username: req.user.name })
 
       return res
         .status(401)

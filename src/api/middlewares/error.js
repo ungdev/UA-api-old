@@ -1,4 +1,5 @@
 const APIError = require('../utils/APIError')
+const log = require('../utils/log')(module)
 const env = require('../../env')
 
 /**
@@ -16,6 +17,8 @@ const handler = (err, req, res, next) => {
   if (env.NODE_ENV !== 'development') {
     delete response.stack
   }
+
+  log.error('error', { path: req.path, err })
 
   res
     .status(err.status)

@@ -1,9 +1,9 @@
-const debug = require('debug')('arena.utt.fr-api:team-create')
 const { check } = require('express-validator/check')
-const errorHandler = require('../utils/errorHandler')
 const validateBody = require('../middlewares/validateBody')
 const isAuth = require('../middlewares/isAuth')
 const isNotInTeam = require('../middlewares/isNotInTeam')
+const errorHandler = require('../utils/errorHandler')
+const log = require('../utils/log')(module)
 
 /**
  * POST /team
@@ -30,7 +30,7 @@ module.exports = app => {
 
       await req.user.setTeam(team)
 
-      debug(`user ${req.user.name} created team ${req.body.teamName}`)
+      log.info(`user ${req.user.name} created team ${req.body.teamName}`)
 
       return res
         .status(200)

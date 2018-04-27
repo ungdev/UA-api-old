@@ -8,7 +8,7 @@ const error = require('./api/middlewares/error')
 const env = require('./env')
 
 module.exports = app => {
-  app.use(morgan(env.ARENA_API_LOGS))
+  app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'))
   app.use(helmet())
   app.use(cors())
   app.use(bodyParser.json())

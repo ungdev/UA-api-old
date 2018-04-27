@@ -1,8 +1,8 @@
-const debug = require('debug')('arena.utt.fr-api:spotlight-join')
-const errorHandler = require('../utils/errorHandler')
 const isAuth = require('../middlewares/isAuth')
 const isInTeam = require('../middlewares/isInTeam')
 const isCaptain = require('../middlewares/isCaptain')
+const log = require('../utils/log')(module)
+const errorHandler = require('../utils/errorHandler')
 
 /**
  * POST /spotlight/:id/leave
@@ -27,6 +27,8 @@ module.exports = app => {
       await req.user.team.update({
         spotlightId: null
       })
+
+      log.info(`${req.user.name} left team ${req.user.team.name}`)
 
       if (req.user.team.soloTeam) {
         await req.user.team.destroy()

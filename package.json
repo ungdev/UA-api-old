@@ -28,10 +28,11 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "prettier": "^1.12.1"
+    "prettier": "^1.12.1",
+    "winston": "^2.4.2"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development svr ./src/index.js",
+    "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* svr ./src/index.js",
     "start": "node ./bin/start.js",
     "serve": "pm2 start ./bin/start.js -i max --wait-ready --name arena.utt.fr-api",
     "reload": "pm2 reload arena.utt.fr-api --update-env",

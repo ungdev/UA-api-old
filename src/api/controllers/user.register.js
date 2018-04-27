@@ -1,13 +1,13 @@
-const debug = require('debug')('arena.utt.fr-api:user-register')
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields } = require('../utils/publicFields')
-const random = require('../utils/random')
 const validateBody = require('../middlewares/validateBody')
 const isLoginEnabled = require('../middlewares/isLoginEnabled')
 const env = require('../../env')
+const random = require('../utils/random')
+const { outputFields } = require('../utils/publicFields')
+const errorHandler = require('../utils/errorHandler')
+const log = require('../utils/log')(module)
 
 const hash = require('util').promisify(bcrypt.hash)
 
@@ -58,14 +58,13 @@ module.exports = app => {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
 
-      debug(`user ${req.body.name} created`)
+      log.info(`user ${req.body.name} created`)
 
       res
         .status(200)
         .json({ token })
         .end()
     } catch (err) {
-      console.log(err)
       errorHandler(err, res)
     }
   })

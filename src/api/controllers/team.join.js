@@ -1,10 +1,10 @@
-const debug = require('debug')('arena.utt.fr-api:team-join')
 const { check } = require('express-validator/check')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields } = require('../utils/publicFields')
 const validateBody = require('../middlewares/validateBody')
 const isAuth = require('../middlewares/isAuth')
 const isNotInTeam = require('../middlewares/isNotInTeam')
+const errorHandler = require('../utils/errorHandler')
+const { outputFields } = require('../utils/publicFields')
+const log = require('../utils/log')(module)
 
 /**
  * POST /team/:id/join
@@ -24,7 +24,7 @@ module.exports = app => {
 
   app.post('/team/:id/join', async (req, res) => {
     if (req.user.teamId !== null) {
-      debug(`user ${req.user.name} tried to join team while he already has one`)
+      log.warn(`user ${req.user.name} tried to join team while he already has one`)
 
       return res
         .status(400)
@@ -41,7 +41,7 @@ module.exports = app => {
 
       team.users = team.users.map(outputFields)
 
-      debug(`user ${req.user.name} asked to join team ${team.name}`)
+      log.info(`user ${req.user.name} asked to join team ${team.name}`)
 
       return res
         .status(200)
@@ -55,7 +55,7 @@ module.exports = app => {
           .end()
       }
 
-      debug('failed to join team', err)
+      log.error('failed to join team', err)
 
       return res
         .status(500)

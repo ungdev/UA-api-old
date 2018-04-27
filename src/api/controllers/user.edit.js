@@ -1,11 +1,11 @@
-const debug = require('debug')('arena.utt.fr-api:user-edit')
 const bcrypt = require('bcryptjs')
 const { check } = require('express-validator/check')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields, inputFields } = require('../utils/publicFields')
 const validateBody = require('../middlewares/validateBody')
 const isAuth = require('../middlewares/isAuth')
 const env = require('../../env')
+const errorHandler = require('../utils/errorHandler')
+const { outputFields, inputFields } = require('../utils/publicFields')
+const log = require('../utils/log')(module)
 
 /**
  * PUT /user
@@ -51,7 +51,7 @@ module.exports = app => {
 
       await req.user.update(body)
 
-      debug(`user ${req.body.name} updated`)
+      log.info(`user ${req.body.name} updated`, { data: req.body })
 
       res
         .status(200)

@@ -1,8 +1,8 @@
-const debug = require('debug')('arena.utt.fr-api:isCaptain')
+const log = require('../utils/log')(module)
 
 module.exports = route => (req, res, next) => {
   if (!req.user.team || req.user.team.captainId !== req.user.id) {
-    debug(`${route} failed : not captain`)
+    log.warn(`${route} failed : not captain`)
 
     return res
       .status(401)

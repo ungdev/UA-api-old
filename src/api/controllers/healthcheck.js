@@ -1,6 +1,4 @@
-const debug = require('debug')('arena.utt.fr-api:team-create')
 const { check } = require('express-validator/check')
-const errorHandler = require('../utils/errorHandler')
 const validateBody = require('../middlewares/validateBody')
 const isAuth = require('../middlewares/isAuth')
 const isNotInTeam = require('../middlewares/isNotInTeam')

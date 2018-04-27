@@ -1,5 +1,5 @@
-const debug = require('debug')('arena.utt.fr-api:etupay-callback')
 const env = require('../../env')
+const log = require('../utils/log')(module)
 const etupay = require('node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -23,7 +23,7 @@ async function handlePaylod(User, payload) {
     user.transactionState = payload.step
     user.paid = payload.paid
 
-    debug(`user ${user.name} is at state ${user.transactionState}`)
+    log.info(`user ${user.name} is at state ${user.transactionState}`)
 
     await user.save()
 
@@ -34,7 +34,7 @@ async function handlePaylod(User, payload) {
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
 
-    debug(`callback error with ${body}`, err)
+    log.info(`callback error with ${body}`, err)
   }
 }
 

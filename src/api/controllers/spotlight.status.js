@@ -1,8 +1,7 @@
-const debug = require('debug')('arena.utt.fr-api:spotlight-status')
-const errorHandler = require('../utils/errorHandler')
 const pick = require('lodash.pick')
-const { isSpotlightFull } = require('../utils/isFull')
 const env = require('../../env')
+const { isSpotlightFull } = require('../utils/isFull')
+const errorHandler = require('../utils/errorHandler')
 
 /**
  * GET /spotlights

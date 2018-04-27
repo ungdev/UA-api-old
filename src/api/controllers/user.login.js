@@ -1,13 +1,13 @@
-const debug = require('debug')('arena.utt.fr-api:user-login')
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields } = require('../utils/publicFields')
 const validateBody = require('../middlewares/validateBody')
 const isLoginEnabled = require('../middlewares/isLoginEnabled')
 const env = require('../../env')
+const errorHandler = require('../utils/errorHandler')
+const { outputFields } = require('../utils/publicFields')
+const log = require('../utils/log')(module)
 
 /**
  * POST /user/login
@@ -51,7 +51,7 @@ module.exports = app => {
       })
 
       if (!user) {
-        debug(`user ${username} couldn't be found`)
+        log.warn(`user ${username} couldn't be found`)
 
         return res
           .status(400)
@@ -62,6 +62,8 @@ module.exports = app => {
       const passwordMatches = await bcrypt.compare(password, user.password)
 
       if (!passwordMatches) {
+        log.warn(`user ${username} password didn't match`)
+
         return res
           .status(400)
           .json({ error: 'INVALID_PASSWORD' })
@@ -72,7 +74,7 @@ module.exports = app => {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
 
-      debug(`user ${user.name} logged`)
+      log.info(`user ${user.name} logged`)
 
       res
         .status(200)

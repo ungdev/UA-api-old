@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 const pick = require('lodash.pick')
 const bcrypt = require('bcryptjs')
-const debug = require('debug')('arena.utt.fr-api:isAuth')
 const { promisify } = require('util')
 const env = require('../../env')
+const log = require('../utils/log')(module)
 
 jwt.verify = promisify(jwt.verify)
 
@@ -13,7 +13,7 @@ module.exports = route => async (req, res, next) => {
   const auth = req.get('X-Token')
 
   if (!auth || auth.length === 0) {
-    debug(`${route} failed : not connected`)
+    log.warn('missing token', { route })
 
     return res
       .status(401)
@@ -37,7 +37,7 @@ module.exports = route => async (req, res, next) => {
 
     next()
   } catch (err) {
-    debug(`${route} failed : invalid token`)
+    log.warn('invalid token', { route })
 
     return res
       .status(401)
