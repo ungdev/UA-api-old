@@ -15,7 +15,8 @@ const { isSpotlightFull } = require('../utils/isFull')
  *    token: String,
  *    spotlights: [Spotlight]
  *    teams: [Team]
- *    teamfinders: [Teamfinder]
+ *    teamfinders: [Teamfinder],
+ *    prices: Object
  * }
  */
 module.exports = app => {
@@ -84,7 +85,15 @@ module.exports = app => {
           user: outputFields(user),
           token,
           spotlights: spotlights,
-          teams
+          teams,
+          prices: {
+            partners: env.ARENA_PRICES_PARTNER_MAILS,
+            plusone: env.ARENA_PRICES_PLUSONE,
+            partner: env.ARENA_PRICES_PARTNER,
+            default: env.ARENA_PRICES_DEFAULT,
+            ethernet: env.ARENA_PRICES_ETHERNET,
+            shirt: env.ARENA_PRICES_SHIRT
+          }
         })
         .end()
     } catch (err) {
