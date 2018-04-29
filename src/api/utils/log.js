@@ -16,7 +16,13 @@ module.exports = (loggedModule) => {
       label: path
   })
 
-  return new winston.Logger({
+  const logger = new winston.Logger({
     transports: [ consoleTransport ]
   })
+
+  logger.stream = {
+    write: (message, encoding) => logger.info(message)
+  }
+
+  return logger
 }
