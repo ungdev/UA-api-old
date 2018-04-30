@@ -46,11 +46,11 @@ module.exports = app => {
         // AskingUser = users on AskingUsers
         if (team.AskingUser) {
           team.askingUsers = team.AskingUser.map(teamUser => {
-            // Clean the user
+            // clean the user
             const cleanedUser = outputFields(teamUser)
 
-            // Add data from join table
-            cleanedUser.askingMessage = teamUser.askingUsers.message
+            // add data from join table
+            cleanedUser.askingMessage = teamUser.askingUser.message
 
             return cleanedUser
           })

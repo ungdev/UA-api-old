@@ -25,16 +25,14 @@ cp .env .env.local
 nano .env.local
 ```
 
-## Development
+## Commands
 
 ```
-yarn dev
-```
-
-## Production
-
-```
-yarn start
+yarn dev    # development server
+yarn start  # production server
+yarn serve  # pm2 production server (load balancing)
+yarn reload # pm2 hot reload
+yarn lint   # prettier lint
 ```
 
 ## Structure

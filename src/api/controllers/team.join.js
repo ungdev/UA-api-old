@@ -48,19 +48,7 @@ module.exports = app => {
         .json({ team })
         .end()
     } catch (err) {
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        return res
-          .status(400)
-          .json({ error: 'DUPLICATE_ENTRY' })
-          .end()
-      }
-
-      log.error('failed to join team', err)
-
-      return res
-        .status(500)
-        .json({ error: 'UNKNOWN' })
-        .end()
+      errorHandler(err, res)
     }
   })
 }
