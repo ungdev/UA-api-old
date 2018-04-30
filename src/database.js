@@ -9,8 +9,7 @@ module.exports = async function database() {
     logging: sql => log.debug(sql)
   })
 
-
-  process.on('SIGINT', async function () {
+  process.on('SIGINT', async function() {
     try {
       await sequelize.close()
       process.exit(0)

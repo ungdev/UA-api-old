@@ -9,10 +9,9 @@ const env = require('./env')
 const log = require('./api/utils/log')(module)
 
 module.exports = app => {
-  app.use(morgan(
-    process.env.NODE_ENV === 'development' ? 'dev' : 'combined',
-    { stream: log.stream }
-  ))
+  app.use(
+    morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined', { stream: log.stream })
+  )
   app.use(helmet())
   app.use(cors())
   app.use(bodyParser.json())

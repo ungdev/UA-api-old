@@ -61,18 +61,19 @@ module.exports = app => {
       await req.user.save()
 
       // step 2 : determine price (based on profile + mail)
-      const partnerPrice = env.ARENA_PRICES_PARTNER_MAILS
-        .split(',')
-        .some(partner => req.user.email.toLowerCase().endsWith(partner))
+      const partnerPrice = env.ARENA_PRICES_PARTNER_MAILS.split(',').some(partner =>
+        req.user.email.toLowerCase().endsWith(partner)
+      )
 
-      let price = partnerPrice
-        ? env.ARENA_PRICES_PARTNER
-        : env.ARENA_PRICES_DEFAULT
+      let price = partnerPrice ? env.ARENA_PRICES_PARTNER : env.ARENA_PRICES_DEFAULT
 
       const basket = new Basket(
         'Inscription UTT Arena 2018',
         req.user.fullname.split(' ')[0],
-        req.user.fullname.split(' ').slice(1).join(' '),
+        req.user.fullname
+          .split(' ')
+          .slice(1)
+          .join(' '),
         req.user.email,
         'checkout',
         req.user.id

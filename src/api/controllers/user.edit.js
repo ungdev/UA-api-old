@@ -44,7 +44,10 @@ module.exports = app => {
   app.put('/user', async (req, res) => {
     try {
       if (req.body.password) {
-        req.body.password = await bcrypt.hash(req.body.password, parseInt(env.ARENA_API_BCRYPT_LEVEL, 10))
+        req.body.password = await bcrypt.hash(
+          req.body.password,
+          parseInt(env.ARENA_API_BCRYPT_LEVEL, 10)
+        )
       }
 
       const body = inputFields(req.body)

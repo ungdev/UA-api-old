@@ -40,13 +40,9 @@ module.exports = app => {
       const username = req.body.name
       const password = req.body.password
 
-
       const user = await User.findOne({
         where: {
-          [Op.or]: [
-            { name: username },
-            { email: username }
-          ]
+          [Op.or]: [{ name: username }, { email: username }]
         }
       })
 
