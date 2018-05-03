@@ -19,18 +19,18 @@ const log = require('../utils/log')(module)
 module.exports = app => {
   app.post('/team', [isAuth('team-create'), isNotInTeam('team-create')])
 
-  app.post('/team', [check('name').matches(/^[A-zÀ-ÿ0-9 ]{3,}$/i), validateBody()])
+  app.post('/team', [check('name').matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i), validateBody()])
 
   app.post('/team', async (req, res) => {
     try {
       const team = await req.app.locals.models.Team.create({
-        name: req.body.teamName,
+        name: req.body.name,
         captainId: req.user.id
       })
 
       await req.user.setTeam(team)
 
-      log.info(`user ${req.user.name} created team ${req.body.teamName}`)
+      log.info(`user ${req.user.name} created team ${req.body.name}`)
 
       return res
         .status(200)

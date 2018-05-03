@@ -16,7 +16,7 @@ const errorHandler = require('../utils/errorHandler')
  */
 module.exports = app => {
   app.get('/spotlights', async (req, res) => {
-    const { Spotlight } = req.app.locals.models
+    const { Spotlight, Team, User } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
