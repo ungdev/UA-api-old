@@ -23,6 +23,8 @@ module.exports = app => {
   app.post('/team/:id/join', [check('message').optional(), validateBody()])
 
   app.post('/team/:id/join', async (req, res) => {
+    const { Team, User, Spotlight } = req.app.locals.models
+
     if (req.user.teamId !== null) {
       log.warn(`user ${req.user.name} tried to join team while he already has one`)
 
@@ -33,11 +35,11 @@ module.exports = app => {
     }
 
     try {
-      const team = await req.app.locals.models.Team.findById(req.params.id, {
+      const team = await Team.findById(req.params.id, {
         include: [User, Spotlight]
       })
 
-      await team.addAskingUser(req.user, { through: { message: req.body.joinTeamFinderMessage } })
+      await team.addAskingUser(req.user, { through: { message: req.body.message } })
 
       team.users = team.users.map(outputFields)
 
