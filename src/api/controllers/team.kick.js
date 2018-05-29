@@ -18,6 +18,8 @@ module.exports = app => {
   app.post('/team/:id/kick', [isAuth('team-kick'), isInTeam('team-kick')])
 
   app.post('/team/:id/kick', async (req, res) => {
+    const { User } = req.app.locals.models
+
     // is captain or self-kick (= leave), else deny
     if (req.user.team.captainId !== req.user.id && req.user.id !== req.params.userId) {
       log.warn(`user ${req.user.name} tried to kick without being captain`)
@@ -31,14 +33,27 @@ module.exports = app => {
     try {
       const user = await User.findOne({
         where: {
-          id: req.params.userId,
+          id: req.params.id,
           teamId: req.user.team.id
         }
       })
 
-      await req.user.team.removeUser(req.body.user)
+      if (!user) {
+        log.warn(`user ${req.user.name} tried to kick someone but he was not in the team`)
 
-      log.info(`user ${req.user.name} kicked ${user.name}`)
+        return res
+          .status(404)
+          .json({ error: 'NOT_FOUND' })
+          .end()
+      }
+
+      if (req.user.team.captainId === req.body.user.id) {
+        log.info(`user ${req.user.name} left ${req.user.team.name} and destroyed it, as captain`)
+        await req.user.team.destroy()
+      } else {
+        log.info(`user ${req.user.name} kicked ${user.name}`)
+        await req.user.team.removeUser(req.body.user)
+      }
 
       return res
         .status(200)

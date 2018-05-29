@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     plusone: { type: DataTypes.BOOLEAN, defaultValue: false },
     ethernet: { type: DataTypes.BOOLEAN, defaultValue: false },
     transactionId: { type: DataTypes.INTEGER, defaultValue: 0 },
-    transactionState: { type: DataTypes.STRING }
+    transactionState: { type: DataTypes.STRING },
+    registerToken: { type: DataTypes.STRING },
+    resetToken: { type: DataTypes.STRING }
   })
 }
