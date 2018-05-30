@@ -44,7 +44,8 @@ module.exports = app => {
       .isIn(['M', 'F']),
     check('shirtSize')
       .optional()
-      .isIn(['XS', 'S', 'M', 'L', 'XL'])
+      .isIn(['XS', 'S', 'M', 'L', 'XL']),
+    validateBody()
   ])
 
   app.post('/user/pay', async (req, res) => {
