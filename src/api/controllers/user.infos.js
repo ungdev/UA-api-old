@@ -65,6 +65,8 @@ module.exports = app => {
         spotlight = spotlight.toJSON()
 
         spotlight.isFull = isSpotlightFull(spotlight, true)
+
+        return spotlight
       })
 
       // Generate new token
