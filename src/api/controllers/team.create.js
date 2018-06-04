@@ -19,7 +19,7 @@ const log = require('../utils/log')(module)
 module.exports = app => {
   app.post('/team', [isAuth('team-create'), isNotInTeam('team-create')])
 
-  app.post('/team', [check('name').matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i), validateBody()])
+  app.post('/team', [check('name').exists().matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i), validateBody()])
 
   app.post('/team', async (req, res) => {
     try {

@@ -55,6 +55,15 @@ module.exports = app => {
           .end()
       }
 
+      if (user.registerToken) {
+        log.warn(`user ${username} tried to login before activating`)
+
+        return res
+          .status(400)
+          .json({ error: 'USER_NOT_ACTIVATED' })
+          .end()
+      }
+
       const passwordMatches = await bcrypt.compare(password, user.password)
 
       if (!passwordMatches) {

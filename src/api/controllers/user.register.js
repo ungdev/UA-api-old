@@ -1,8 +1,9 @@
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const uuid = require('uuid')
 const validateBody = require('../middlewares/validateBody')
 const isLoginEnabled = require('../middlewares/isLoginEnabled')
+const mail = require('../mail')
 const env = require('../../env')
 const random = require('../utils/random')
 const { outputFields } = require('../utils/publicFields')
@@ -52,17 +53,19 @@ module.exports = app => {
       req.body.barcode = random(env.ARENA_API_BARCODE_LENGTH)
       req.body.password = await hash(req.body.password, parseInt(env.ARENA_API_BCRYPT_LEVEL, 10))
 
+      req.body.registerToken = uuid()
       const user = await User.create(req.body)
 
-      const token = jwt.sign({ id: user.id }, env.ARENA_API_SECRET, {
-        expiresIn: env.ARENA_API_SECRET_EXPIRES
+      await mail('user.register', user.email, {
+        mail: user.email,
+        link: `${env.ARENA_WEBSITE}/valid/${user.registerToken}`
       })
 
       log.info(`user ${req.body.name} created`)
 
       res
         .status(200)
-        .json({ token })
+        .json({ })
         .end()
     } catch (err) {
       errorHandler(err, res)

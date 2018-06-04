@@ -17,6 +17,12 @@ const log = require('../utils/log')(module)
  * {
  *
  * }
+ *
+ * PUT /user/reset
+ * {
+ *    token: String,
+ *    password: String
+ * }
  */
 module.exports = app => {
   app.post('/user/reset', [check('email').exists().isEmail(), validateBody()])
@@ -60,6 +66,7 @@ module.exports = app => {
       .optional()
       .isLength({ min: 6 }),
     check('token')
+      .exists()
       .isUUID(),
     validateBody()
   ])
