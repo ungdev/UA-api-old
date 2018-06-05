@@ -21,7 +21,12 @@ const log = require('../utils/log')(module)
  *
  */
 module.exports = app => {
-  app.post('/user/validate', [check('token').exists().isUUID(), validateBody()])
+  app.post('/user/validate', [
+    check('token')
+      .exists()
+      .isUUID(),
+    validateBody()
+  ])
 
   app.post('/user/validate', async (req, res) => {
     const { User } = req.app.locals.models

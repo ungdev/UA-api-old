@@ -10,7 +10,10 @@ const templates = fs
   .map(name => {
     const html = fs.readFileSync(path.join(__dirname, name, 'mail.html')).toString()
     const text = fs.readFileSync(path.join(__dirname, name, 'mail.txt')).toString()
-    const subject = fs.readFileSync(path.join(__dirname, name, 'subject.txt')).toString().trim()
+    const subject = fs
+      .readFileSync(path.join(__dirname, name, 'subject.txt'))
+      .toString()
+      .trim()
 
     mustache.parse(html)
     mustache.parse(text)
@@ -22,7 +25,7 @@ module.exports = async (name, to, data) => {
   const mail = templates.find(template => template.name === name)
 
   if (!mail) {
-      throw new Error(`Cannot find template ${name}`)
+    throw new Error(`Cannot find template ${name}`)
   }
 
   let transporter = nodemailer.createTransport(env.ARENA_MAIL_SMTP)

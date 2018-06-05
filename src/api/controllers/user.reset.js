@@ -25,7 +25,12 @@ const log = require('../utils/log')(module)
  * }
  */
 module.exports = app => {
-  app.post('/user/reset', [check('email').exists().isEmail(), validateBody()])
+  app.post('/user/reset', [
+    check('email')
+      .exists()
+      .isEmail(),
+    validateBody()
+  ])
 
   app.post('/user/reset', async (req, res) => {
     const { User } = req.app.locals.models
@@ -54,7 +59,7 @@ module.exports = app => {
 
       res
         .status(200)
-        .json({ })
+        .json({})
         .end()
     } catch (err) {
       errorHandler(err, res)
@@ -102,7 +107,7 @@ module.exports = app => {
 
       res
         .status(200)
-        .json({ })
+        .json({})
         .end()
     } catch (err) {
       errorHandler(err, res)

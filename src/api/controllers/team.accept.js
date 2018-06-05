@@ -24,14 +24,23 @@ module.exports = app => {
     isCaptain('team-accept')
   ])
 
-  app.post('/team/:id/accept', [check('user').exists().isUUID(), validateBody()])
+  app.post('/team/:id/accept', [
+    check('user')
+      .exists()
+      .isUUID(),
+    validateBody()
+  ])
 
   app.post('/team/:id/accept', async (req, res) => {
     try {
       const user = await req.app.locals.models.User.findById(req.body.user)
 
       if (user.teamid) {
-        log.warn(`user ${req.user.name} tried to accept ${user.name}, but he's in another team (${user.teamId})`)
+        log.warn(
+          `user ${req.user.name} tried to accept ${user.name}, but he's in another team (${
+            user.teamId
+          })`
+        )
 
         return res
           .status(401)

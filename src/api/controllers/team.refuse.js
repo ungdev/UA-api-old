@@ -24,7 +24,12 @@ module.exports = app => {
     isCaptain('team-refuse')
   ])
 
-  app.post('/team/:id/refuse', [check('user').exists().isUUID(), validateBody()])
+  app.post('/team/:id/refuse', [
+    check('user')
+      .exists()
+      .isUUID(),
+    validateBody()
+  ])
 
   app.post('/team/:id/refuse', async (req, res) => {
     try {
