@@ -80,11 +80,6 @@ module.exports = app => {
     const { User } = req.app.locals.models
 
     try {
-      req.body.password = await bcrypt.hash(
-        req.body.password,
-        parseInt(env.ARENA_API_BCRYPT_LEVEL, 10)
-      )
-
       const resetToken = req.body.token
 
       const user = await User.findOne({ where: { resetToken } })
@@ -98,7 +93,11 @@ module.exports = app => {
           .end()
       }
 
-      user.password = req.body.password
+      user.password = await bcrypt.hash(
+        req.body.password,
+        parseInt(env.ARENA_API_BCRYPT_LEVEL, 10)
+      )
+
       user.resetToken = null
 
       await user.save()

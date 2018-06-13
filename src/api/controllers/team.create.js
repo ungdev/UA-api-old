@@ -23,6 +23,9 @@ module.exports = app => {
     check('name')
       .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
+    check('spotlight_id')
+      .exists()
+      .matches(),
     validateBody()
   ])
 
