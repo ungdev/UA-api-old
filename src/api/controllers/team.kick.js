@@ -15,9 +15,9 @@ const log = require('../utils/log')(module)
  * }
  */
 module.exports = app => {
-  app.post('/team/:id/kick', [isAuth('team-kick'), isInTeam('team-kick')])
+  app.post('/team/kick/:id', [isAuth('team-kick'), isInTeam('team-kick')])
 
-  app.post('/team/:id/kick', async (req, res) => {
+  app.post('/team/kick/:id', async (req, res) => {
     const { User } = req.app.locals.models
 
     // is captain or self-kick (= leave), else deny
@@ -47,7 +47,7 @@ module.exports = app => {
           .end()
       }
 
-      if (req.user.team.captainId === req.body.user.id) {
+      if (req.user.team.captainId === req.params.id) {
         log.info(`user ${req.user.name} left ${req.user.team.name} and destroyed it, as captain`)
         await req.user.team.destroy()
       } else {

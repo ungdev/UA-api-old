@@ -23,9 +23,9 @@ module.exports = app => {
     check('name')
       .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
-    check('spotlight_id')
+    check('spotlight')
       .exists()
-      .matches(),
+      .matches(/\d/),
     validateBody()
   ])
 
@@ -33,6 +33,7 @@ module.exports = app => {
     try {
       const team = await req.app.locals.models.Team.create({
         name: req.body.name,
+        spotlightId: req.body.spotlight,
         captainId: req.user.id
       })
 
