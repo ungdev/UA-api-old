@@ -19,7 +19,7 @@ module.exports = app => {
   app.post('/spotlight/:id/join', [isAuth('spotlight-join')])
 
   app.post('/spotlight/:id/join', async (req, res) => {
-    const { Spotlight } = req.app.locals.models
+    const { Team, User, Spotlight, AskingUser } = req.app.locals.models
 
     try {
       const spotlight = await Spotlight.findById(req.params.id, {
@@ -96,7 +96,7 @@ module.exports = app => {
 
         await req.user.setTeam(team)
 
-        await AskingUsers.destroy({
+        await AskingUser.destroy({
           where: {
             userId: req.user.id
           }
@@ -109,7 +109,8 @@ module.exports = app => {
 
       await team.setSpotlight(req.params.id)
 
-      team.users = team.users.map(outputFields)
+      // add || [ req.user ] because only a team created line 91 would have no users key
+      team.users = (team.users || [ req.user ]).map(outputFields)
 
       log.info(`team ${team.name} joined ${spotlight.name}`)
 
