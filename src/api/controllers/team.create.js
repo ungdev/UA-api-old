@@ -2,6 +2,7 @@ const { check } = require('express-validator/check')
 const validateBody = require('../middlewares/validateBody')
 const isAuth = require('../middlewares/isAuth')
 const isNotInTeam = require('../middlewares/isNotInTeam')
+const { isSpotlightFull } = require('../utils/isFull')
 const errorHandler = require('../utils/errorHandler')
 const log = require('../utils/log')(module)
 
@@ -30,8 +31,26 @@ module.exports = app => {
   ])
 
   app.post('/team', async (req, res) => {
+    const { Spotlight, Team, User } = req.app.locals.models
+
     try {
-      const team = await req.app.locals.models.Team.create({
+      const spotlight = await Spotlight.findById(req.body.spotlight, {
+        include: [
+          {
+            model: Team,
+            include: [User]
+          }
+        ]
+      })
+
+      if (isSpotlightFull(spotlight)) {
+        return res
+          .status(400)
+          .json({ error: 'SPOTLIGHT_FULL' })
+          .end()
+      }
+
+      const team = await Team.create({
         name: req.body.name,
         spotlightId: req.body.spotlight,
         captainId: req.user.id

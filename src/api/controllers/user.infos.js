@@ -64,7 +64,7 @@ module.exports = app => {
       spotlights = spotlights.map(spotlight => {
         spotlight = spotlight.toJSON()
 
-        spotlight.isFull = isSpotlightFull(spotlight, true)
+        spotlight.isFull = true //isSpotlightFull(spotlight)
 
         return spotlight
       })

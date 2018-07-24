@@ -89,7 +89,7 @@ module.exports = app => {
 
       if (!req.user.team) {
         team = await Team.create({
-          name: req.user.name,
+          name: `${req.user.name}-solo-team`,
           captainId: req.user.id,
           soloTeam: true
         })
