@@ -1,8 +1,8 @@
-const isAuth = require('../middlewares/isAuth')
-const { outputFields } = require('../utils/publicFields')
-const { isSpotlightFull, isTeamFull } = require('../utils/isFull')
-const errorHandler = require('../utils/errorHandler')
-const log = require('../utils/log')(module)
+const isAuth = require('../../middlewares/isAuth')
+const { outputFields } = require('../../utils/publicFields')
+const { isSpotlightFull, isTeamFull } = require('../../utils/isFull')
+const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')(module)
 
 /**
  * POST /spotlight/:id/join

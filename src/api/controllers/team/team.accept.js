@@ -1,10 +1,10 @@
 const { check } = require('express-validator/check')
-const validateBody = require('../middlewares/validateBody')
-const isAuth = require('../middlewares/isAuth')
-const isInTeam = require('../middlewares/isInTeam')
-const isCaptain = require('../middlewares/isCaptain')
-const errorHandler = require('../utils/errorHandler')
-const log = require('../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const isAuth = require('../../middlewares/isAuth')
+const isInTeam = require('../../middlewares/isInTeam')
+const isCaptain = require('../../middlewares/isCaptain')
+const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')(module)
 
 /**
  * POST /team/:id/accept

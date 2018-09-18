@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 const { check } = require('express-validator/check')
-const validateBody = require('../middlewares/validateBody')
-const isAuth = require('../middlewares/isAuth')
-const env = require('../../env')
-const errorHandler = require('../utils/errorHandler')
+const validateBody = require('../../middlewares/validateBody')
+const isAuth = require('../../middlewares/isAuth')
+const env = require('../../../env')
+const errorHandler = require('../../utils/errorHandler')
 const etupay = require('node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,

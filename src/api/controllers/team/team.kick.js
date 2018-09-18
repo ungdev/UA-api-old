@@ -1,7 +1,7 @@
-const isAuth = require('../middlewares/isAuth')
-const isInTeam = require('../middlewares/isInTeam')
-const errorHandler = require('../utils/errorHandler')
-const log = require('../utils/log')(module)
+const isAuth = require('../../middlewares/isAuth')
+const isInTeam = require('../../middlewares/isInTeam')
+const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')(module)
 
 /**
  * POST /team/:id/kick/:userId

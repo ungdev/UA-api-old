@@ -1,8 +1,8 @@
-const isAuth = require('../middlewares/isAuth')
-const isInTeam = require('../middlewares/isInTeam')
-const isCaptain = require('../middlewares/isCaptain')
-const log = require('../utils/log')(module)
-const errorHandler = require('../utils/errorHandler')
+const isAuth = require('../../middlewares/isAuth')
+const isInTeam = require('../../middlewares/isInTeam')
+const isCaptain = require('../../middlewares/isCaptain')
+const log = require('../../utils/log')(module)
+const errorHandler = require('../../utils/errorHandler')
 
 /**
  * POST /spotlight/:id/leave

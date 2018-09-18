@@ -16,6 +16,13 @@ cd arena.utt.fr-api
 yarn
 ```
 
+## Database
+
+```
+# create the databse 'arena', should be in utf8 not utf8mb4, otherwise it wont work
+CREATE DATABASE arena CHARACTER SET utf8;
+```
+
 ## Configuration
 
 ```
@@ -23,7 +30,9 @@ yarn
 cp .env .env.local
 # makes your changes in .env.local, which will not be pushed
 nano .env.local
+# you should change ARENA_DB for your database and ARENA_API_DISABLE_LOGIN to enable login
 ```
+
 
 ## Commands
 

@@ -8,9 +8,9 @@ module.exports = app => {
   router.locals = app.locals
 
   fs.readdirSync(__dirname)
-    .filter(name => name !== 'index.js')
+    .filter(name => name !== 'index.js' && name.slice(-3) === '.js')
     .map(name => require(path.join(__dirname, name)))
     .forEach(controller => controller(router))
 
-  return router
+  return app.use(router)
 }

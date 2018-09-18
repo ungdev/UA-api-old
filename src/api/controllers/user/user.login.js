@@ -2,12 +2,12 @@ const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const validateBody = require('../middlewares/validateBody')
-const isLoginEnabled = require('../middlewares/isLoginEnabled')
-const env = require('../../env')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields } = require('../utils/publicFields')
-const log = require('../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const isLoginEnabled = require('../../middlewares/isLoginEnabled')
+const env = require('../../../env')
+const errorHandler = require('../../utils/errorHandler')
+const { outputFields } = require('../../utils/publicFields')
+const log = require('../../utils/log')(module)
 
 /**
  * POST /user/login
@@ -39,7 +39,7 @@ module.exports = app => {
     try {
       const username = req.body.name
       const password = req.body.password
-
+      log.info('user, pass', username, password)
       const user = await User.findOne({
         where: {
           [Op.or]: [{ name: username }, { email: username }]
