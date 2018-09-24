@@ -39,7 +39,7 @@ module.exports = app => {
     try {
       const username = req.body.name
       const password = req.body.password
-      log.info('user, pass', username, password)
+
       const user = await User.findOne({
         where: {
           [Op.or]: [{ name: username }, { email: username }]
