@@ -1,10 +1,10 @@
 const { check } = require('express-validator/check')
-const validateBody = require('../middlewares/validateBody')
-const isAuth = require('../middlewares/isAuth')
-const isNotInTeam = require('../middlewares/isNotInTeam')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields } = require('../utils/publicFields')
-const log = require('../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const isAuth = require('../../middlewares/isAuth')
+const isNotInTeam = require('../../middlewares/isNotInTeam')
+const errorHandler = require('../../utils/errorHandler')
+const { outputFields } = require('../../utils/publicFields')
+const log = require('../../utils/log')(module)
 
 /**
  * POST /team/:id/join

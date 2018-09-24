@@ -1,10 +1,10 @@
 const pick = require('lodash.pick')
 const jwt = require('jsonwebtoken')
-const isAuth = require('../middlewares/isAuth')
-const env = require('../../env')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields } = require('../utils/publicFields')
-const { isSpotlightFull } = require('../utils/isFull')
+const isAuth = require('../../middlewares/isAuth')
+const env = require('../../../env')
+const errorHandler = require('../../utils/errorHandler')
+const { outputFields } = require('../../utils/publicFields')
+const { isSpotlightFull } = require('../../utils/isFull')
 
 /**
  * GET /user

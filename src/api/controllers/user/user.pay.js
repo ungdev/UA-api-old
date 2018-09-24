@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 const { check } = require('express-validator/check')
-const validateBody = require('../middlewares/validateBody')
-const isAuth = require('../middlewares/isAuth')
-const env = require('../../env')
-const errorHandler = require('../utils/errorHandler')
+const validateBody = require('../../middlewares/validateBody')
+const isAuth = require('../../middlewares/isAuth')
+const env = require('../../../env')
+const errorHandler = require('../../utils/errorHandler')
 const etupay = require('node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -70,11 +70,8 @@ module.exports = app => {
 
       const basket = new Basket(
         'Inscription UTT Arena 2018',
-        req.user.fullname.split(' ')[0],
-        req.user.fullname
-          .split(' ')
-          .slice(1)
-          .join(' '),
+        req.user.firstname,
+        req.user.lastname,
         req.user.email,
         'checkout',
         req.user.id

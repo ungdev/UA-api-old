@@ -1,11 +1,11 @@
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const uuid = require('uuid')
-const validateBody = require('../middlewares/validateBody')
-const mail = require('../mail')
-const env = require('../../env')
-const errorHandler = require('../utils/errorHandler')
-const log = require('../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const mail = require('../../mail')
+const env = require('../../../env')
+const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')(module)
 
 /**
  * POST /user/reset

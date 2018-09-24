@@ -1,11 +1,11 @@
 const bcrypt = require('bcryptjs')
 const { check } = require('express-validator/check')
-const validateBody = require('../middlewares/validateBody')
-const isAuth = require('../middlewares/isAuth')
-const env = require('../../env')
-const errorHandler = require('../utils/errorHandler')
-const { outputFields, inputFields } = require('../utils/publicFields')
-const log = require('../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const isAuth = require('../../middlewares/isAuth')
+const env = require('../../../env')
+const errorHandler = require('../../utils/errorHandler')
+const { outputFields, inputFields } = require('../../utils/publicFields')
+const log = require('../../utils/log')(module)
 
 /**
  * PUT /user
@@ -28,10 +28,16 @@ module.exports = app => {
       .exists()
       .isAlphanumeric()
       .isLength({ min: 3, max: 90 }),
-    check('fullname')
+    check('lastname')
       .exists()
       .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
-      .isLength({ min: 3, max: 200 }),
+      .isLength({ min: 2, max: 200 }),
+    check('firstname')
+      .exists()
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .isLength({ min: 2, max: 200 }),
+    check('gender')
+      .exists(),
     check('password')
       .optional()
       .isLength({ min: 6 }),

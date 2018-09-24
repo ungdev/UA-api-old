@@ -1,14 +1,14 @@
 const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const uuid = require('uuid')
-const validateBody = require('../middlewares/validateBody')
-const isLoginEnabled = require('../middlewares/isLoginEnabled')
-const mail = require('../mail')
-const env = require('../../env')
-const random = require('../utils/random')
-const { outputFields } = require('../utils/publicFields')
-const errorHandler = require('../utils/errorHandler')
-const log = require('../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const isLoginEnabled = require('../../middlewares/isLoginEnabled')
+const mail = require('../../mail')
+const env = require('../../../env')
+const random = require('../../utils/random')
+const { outputFields } = require('../../utils/publicFields')
+const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')(module)
 
 const hash = require('util').promisify(bcrypt.hash)
 
@@ -33,10 +33,16 @@ module.exports = app => {
       .exists()
       .isAlphanumeric()
       .isLength({ min: 3, max: 90 }),
-    check('fullname')
+    check('lastname')
       .exists()
       .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
-      .isLength({ min: 3, max: 200 }),
+      .isLength({ min: 2, max: 200 }),
+    check('firstname')
+      .exists()
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .isLength({ min: 2, max: 200 }),
+    check('gender')
+      .exists(),
     check('password')
       .exists()
       .isLength({ min: 6 }),
