@@ -70,11 +70,8 @@ module.exports = app => {
 
       const basket = new Basket(
         'Inscription UTT Arena 2018',
-        req.user.fullname.split(' ')[0],
-        req.user.fullname
-          .split(' ')
-          .slice(1)
-          .join(' '),
+        req.user.firstname,
+        req.user.lastname,
         req.user.email,
         'checkout',
         req.user.id

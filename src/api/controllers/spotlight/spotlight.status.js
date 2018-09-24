@@ -18,14 +18,13 @@ const isAuth = require('../../middlewares/isAuth')
 module.exports = app => {
   app.get('/spotlights', [isAuth()])
   app.get('/spotlights', async (req, res) => {
-    const { Spotlight, Team, User } = req.app.locals.models
+    const { Spotlight, Team } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
         include: [
           {
-            model: Team,
-            include: [User]
+            model: Team
           }
         ]
       })
@@ -35,7 +34,7 @@ module.exports = app => {
 
         spotlight.isFull = isSpotlightFull(spotlight, true)
 
-        return pick(spotlight, ['id', 'name', 'isFull'])
+        return pick(spotlight, ['id', 'name', 'shortName', 'perTeam', 'isFull'])
       })
 
       return res
@@ -47,3 +46,4 @@ module.exports = app => {
     }
   })
 }
+

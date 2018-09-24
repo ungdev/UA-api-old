@@ -21,7 +21,7 @@ module.exports = app => {
     const { User } = req.app.locals.models
 
     // is captain or self-kick (= leave), else deny
-    if (req.user.team.captainId !== req.user.id && req.user.id !== req.params.userId) {
+    if (req.user.team.captainId !== req.user.id && req.user.id !== req.params.id) {
       log.warn(`user ${req.user.name} tried to kick without being captain`)
 
       return res
@@ -52,7 +52,7 @@ module.exports = app => {
         await req.user.team.destroy()
       } else {
         log.info(`user ${req.user.name} kicked ${user.name}`)
-        await req.user.team.removeUser(req.body.user)
+        await req.user.team.removeUser(req.params.id)
       }
 
       return res

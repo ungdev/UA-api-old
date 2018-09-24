@@ -21,28 +21,36 @@ const { isSpotlightFull } = require('../../utils/isFull')
  * }
  */
 module.exports = app => {
-  app.get('/spotlights/:id/teams', [isAuth()])
+  app.get('/teams', [isAuth()])
 
-  app.get('/spotlights/:id/teams', async (req, res) => {
-    const { Spotlight, Team } = req.app.locals.models
+  app.get('/teams', async (req, res) => {
+    const { Team, User } = req.app.locals.models
 
     try {
-      const spotlight = await Spotlight.findById(req.params.id, {
+      let teams = await Team.findAll({
         include: [
           {
-            model: Team
+            model: User
           }
         ]
       })
+      teams = teams.map(team => {
+        return {
+          id : team.id,
+          name: team.name,
+          captainId: team.captainId,
+          soloTeam: team.soloTeam,
+          spotlightId: team.spotlightId,
+          users: team.users.map(user => {
+            return {
+              id: user.id,
+              name: user.name,
+              role: user.role,
+          }})
+      }})
       return res
         .status(200)
-        .json({
-          spotlight: {
-            id: spotlight.id,
-            name: spotlight.name,
-            teams: spotlight.teams,
-          }
-        })
+        .json(teams)
         .end()
     } catch (err) {
       errorHandler(err, res)
