@@ -29,9 +29,7 @@
     "sequelize": "^4.37.10",
     "socket.io": "^2.1.1",
     "svr": "^0.7.0",
-    "uuid": "^3.2.1"
-  },
-  "devDependencies": {
+    "uuid": "^3.2.1",
     "prettier": "^1.13.4",
     "winston": "^2.4.2"
   },
