@@ -5,6 +5,8 @@ const log = require('./api/utils/log')(module)
 
 module.exports = async function database() {
   const database = `${env.ARENA_DB_TYPE}://${env.ARENA_DB_USER}:${env.ARENA_DB_PASSWORD}@${env.ARENA_DB_HOST}:${env.ARENA_DB_PORT}/${env.ARENA_DB_NAME}`
+  
+  log.info(`Trying to connect to database : ${env.ARENA_DB_TYPE}://USER:PASSWORD@${env.ARENA_DB_HOST}:${env.ARENA_DB_PORT}/${env.ARENA_DB_NAME}`)
   const sequelize = new Sequelize(database, {
     operatorsAliases: Sequelize.Op,
     logging: sql => log.debug(sql)
