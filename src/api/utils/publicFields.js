@@ -13,6 +13,17 @@ module.exports.outputFields = user =>
     'shirt',
     'plusone',
     'ethernet',
+    'tombola',
+    'kaliento',
+    'mouse',
+    'keyboard',
+    'headset',
+    'screen24',
+    'screen27',
+    'chair',
+    'gamingPC',
+    'streamingPC',
+    'laptop',
     'accepted',
     'team'
   ])
