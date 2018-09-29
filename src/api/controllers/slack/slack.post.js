@@ -31,19 +31,19 @@ module.exports = app => {
           channel = env.SLACK_CHANNEL_UA_TOURNOI_LOL
           break
         case '2':
-          channel = env.SLACK_CHANNEL_UA_TOURNOI_HS
+          channel = env.SLACK_CHANNEL_UA_TOURNOI_LOL
           break
         case '3':
           channel = env.SLACK_CHANNEL_UA_TOURNOI_FORTNITE
           break
         case '4':
-          channel = env.SLACK_CHANNEL_UA_TOURNOI_SSBU
-          break
-        case '5':
           channel = env.SLACK_CHANNEL_UA_TOURNOI_CS
           break
+        case '5':
+          channel = env.SLACK_CHANNEL_UA_TOURNOI_HS
+          break
         case '6':
-          channel = env.SLACK_CHANNEL_UA_TOURNOI_LOL
+          channel = env.SLACK_CHANNEL_UA_TOURNOI_SSBU
           break
         case '7':
           channel = env.SLACK_CHANNEL_UA_TOURNOI_LIBRE
