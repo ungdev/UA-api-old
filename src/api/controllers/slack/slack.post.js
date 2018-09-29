@@ -45,7 +45,7 @@ module.exports = app => {
         case '6':
           channel = env.SLACK_CHANNEL_UA_TOURNOI_SSBU
           break
-        case '7':
+        case 'libre':
           channel = env.SLACK_CHANNEL_UA_TOURNOI_LIBRE
           break
         default:
