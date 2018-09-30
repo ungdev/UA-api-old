@@ -14,7 +14,8 @@ module.exports.outputFields = user =>
     'plusone',
     'ethernet',
     'accepted',
-    'team'
+    'team',
+    'respo'
   ])
 
 module.exports.inputFields = user => pick(user, ['name', 'lastname', 'firstname', 'gender', 'email', 'password'])

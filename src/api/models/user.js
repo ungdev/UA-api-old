@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     transactionState: { type: DataTypes.STRING },
     registerToken: { type: DataTypes.STRING },
     resetToken: { type: DataTypes.STRING },
-    role: { type: DataTypes.STRING }
+    role: { type: DataTypes.STRING },
+    respo: { type: DataTypes.INTEGER, defaultValue: 0 }
   })
 }
