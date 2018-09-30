@@ -25,7 +25,8 @@ module.exports.outputFields = user =>
     'streamingPC',
     'laptop',
     'accepted',
-    'team'
+    'team',
+    'respo'
   ])
 
 module.exports.inputFields = user => pick(user, ['name', 'lastname', 'firstname', 'gender', 'email', 'password'])
