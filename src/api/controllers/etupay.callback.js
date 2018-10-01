@@ -53,7 +53,12 @@ module.exports = app => {
   app.post('/user/pay/', etupay.router)
 
   app.use('/user/pay/callback', async (req, res) => {
+    log.info('callback')
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
+    log.info('shouldSendMail')
+    log.info(shouldSendMail)
+    log.info('user')
+    log.info(user)
 
     if (shouldSendMail) {
       await sendPdf(user)
@@ -65,25 +70,20 @@ module.exports = app => {
       .end()
   })
 
-  app.get('/user/pay/success', async (req, res, next) => {
+  app.get('/user/pay/return', async (req, res, next) => {
+    log.info('return')
     if (req.query.payload) {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
-
+      log.info('shouldSendMail')
+      log.info(shouldSendMail)
+      log.info('user')
+      log.info(user)
       if (shouldSendMail) {
         await sendPdf(user)
       }
 
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
-    }
-
-    next()
-  })
-
-  app.get('/user/pay/error', async (req, res, next) => {
-    if (req.query.payload) {
-      await handlePaylod(req.app.locals.models.User, req.etupay)
-
-      return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      //return res.redirect(env.ARENA_ETUPAY_ERRORURL)
     }
 
     next()
