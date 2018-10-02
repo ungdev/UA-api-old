@@ -10,6 +10,7 @@ module.exports.outputFields = user =>
     'email',
     'isAdmin',
     'paid',
+    'paid_at',
     'shirt',
     'plusone',
     'ethernet',

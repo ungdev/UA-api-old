@@ -10,7 +10,6 @@ async function handlePaylod(User, payload) {
   try {
     const user = await User.findById(payload.serviceData)
 
-    const userHadPay = user.paid
 
     if (!user) {
       return res
@@ -18,10 +17,12 @@ async function handlePaylod(User, payload) {
         .json({ error: 'USER_NOT_FOUND' })
         .end()
     }
+    const userHadPay = user.paid
 
     user.transactionId = payload.transactionId
     user.transactionState = payload.step
     user.paid = payload.paid
+    user.paid_at = new Date()
 
     log.info(`user ${user.name} is at state ${user.transactionState}`)
 

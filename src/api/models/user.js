@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     password: { type: DataTypes.STRING },
     barcode: { type: DataTypes.STRING },
     paid: { type: DataTypes.BOOLEAN, defaultValue: false },
+    paid_at: { type: DataTypes.DATE, defaultValue: null },
     shirt: { type: DataTypes.ENUM(env.ARENA_SHIRT_SIZES.split(',')), defaultValue: 'none' },
     plusone: { type: DataTypes.BOOLEAN, defaultValue: false },
     ethernet: { type: DataTypes.BOOLEAN, defaultValue: false },
