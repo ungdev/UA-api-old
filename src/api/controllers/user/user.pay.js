@@ -73,19 +73,19 @@ module.exports = app => {
   app.post('/user/pay', async (req, res) => {
     try {
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
-      req.user.plusone = !!req.body.plusone
-      req.user.ethernet = !!req.body.ethernet
+      req.user.plusone = req.body.plusone ? req.body.plusone : false
+      req.user.ethernet = req.body.ethernet ? req.body.ethernet : false
       req.user.tombola = req.body.tombola ? req.body.tombola : 0
-      if (req.body.kaliento) req.user.kaliento = !!req.body.kaliento
-      if (req.body.mouse) req.user.mouse = !!req.body.mouse
-      if (req.body.keyboard) req.user.keyboard = !!req.body.keyboard
-      if (req.body.headset) req.user.headset = !!req.body.headset
-      if (req.body.screen24) req.user.screen24 = !!req.body.screen24
-      if (req.body.screen27) req.user.screen27 = !!req.body.screen27
-      if (req.body.chair) req.user.chair = !!req.body.chair
-      if (req.body.gamingPC) req.user.gamingPC = !!req.body.gamingPC
-      if (req.body.streamingPC) req.user.streamingPC = !!req.body.streamingPC
-      if (req.body.laptop) req.user.laptop = !!req.body.laptop
+      req.user.kaliento = req.body.kaliento ? req.body.kaliento : false
+      req.user.mouse = req.body.mouse ? req.body.mouse : false
+      req.user.keyboard = req.body.keyboard ? req.body.keyboard : false
+      req.user.headset = req.body.headset ? req.body.headset : false
+      req.user.screen24 = req.body.screen24 ? req.body.screen24 : false
+      req.user.screen27 = req.body.screen27 ? req.body.screen27 : false
+      req.user.chair = req.body.chair ? req.body.chair : false
+      req.user.gamingPC = req.body.gamingPC ? req.body.gamingPC : false
+      req.user.streamingPC = req.body.streamingPC ? req.body.streamingPC : false
+      req.user.laptop = req.body.laptop ? req.body.laptop : false
       req.user.shirt = 'none'
 
       if (req.body.shirtGender && req.body.shirtSize) {

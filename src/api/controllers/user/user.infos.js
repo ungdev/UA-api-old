@@ -80,7 +80,7 @@ module.exports = app => {
       if (user.team && user.team.users.length > 0) {
         user.team.users = user.team.users.map(outputFields)
       }
-      
+
       return res
         .status(200)
         .json({

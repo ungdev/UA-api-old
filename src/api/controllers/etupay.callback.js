@@ -24,22 +24,6 @@ async function handlePaylod(User, payload) {
     user.transactionState = payload.step
     user.paid = payload.paid
     if(user.paid) user.paid_at = moment().format()
-    else {
-      user.ethernet = false
-      user.plusone = false
-      user.kaliento = false
-      user.mouse = false
-      user.keyboard = false
-      user.headset = false
-      user.screen24 = false
-      user.screen27 = false
-      user.chair = false
-      user.gamingPC = false
-      user.streamingPC = false
-      user.laptop = false
-      user.tombola = 0
-      user.shirt = 'none'
-    }
 
     log.info(`user ${user.name} is at state ${user.transactionState}`)
 
@@ -69,9 +53,7 @@ async function handlePaylod(User, payload) {
  */
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
-    log.info('/user/pay/callback')
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
-    log.info('shouldSendMail', shouldSendMail)
 
     if (shouldSendMail) {
       //await sendPdf(user)
@@ -85,18 +67,14 @@ module.exports = app => {
   })
 
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
-    log.info('/user/pay/return')
     if (req.query.payload) {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
-      log.info('shouldSendMail', shouldSendMail)
       if (shouldSendMail) {
         //await sendPdf(user)
         log.info('SEND MAIL TO USER') //todo
       }
       if(user.transactionState === 'refused') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
-      log.info(`redirect to ${env.ARENA_ETUPAY_SUCCESSURL}`)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
-      //return res.redirect(env.ARENA_ETUPAY_ERRORURL)
     }
 
     next()

@@ -5,7 +5,6 @@ const cors = require('cors')
 const helmet = require('helmet')
 const controllers = require('./api/controllers')
 const error = require('./api/middlewares/error')
-const env = require('./env')
 const log = require('./api/utils/log')(module)
 
 module.exports = app => {
@@ -21,8 +20,6 @@ module.exports = app => {
   app.use(error.converter)
   app.use(error.notFound)
   app.use(error.handler)
-  log.info('ARENA_API_PORT')
-  log.info(env.ARENA_API_PORT)
 
   return app
 }

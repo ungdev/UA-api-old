@@ -17,10 +17,7 @@ module.exports = app => {
     const { Info } = req.app.locals.models
 
     try {
-      if(!req.body.title || !req.body.content || !req.params.id)
-        return res.status(400).json('Missing params').end()
-
-      const info = Info.create({
+      const info = await Info.create({
         title: req.body.title,
         content: req.body.content,
         spotlightId: req.params.id

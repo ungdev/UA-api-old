@@ -11,7 +11,7 @@ module.exports = app => {
 
       const info = await Info.findById(req.params.id)
       info.deleted = true
-      info.save()
+      await info.save()
       return res
         .status(200)
         .json(info)
