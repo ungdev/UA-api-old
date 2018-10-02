@@ -8,6 +8,7 @@ const etupay = require('node-etupay')({
 
 async function handlePaylod(User, payload) {
   try {
+    log.info(serviceData)
     const user = await User.findById(payload.serviceData)
 
     const userHadPay = user.paid
