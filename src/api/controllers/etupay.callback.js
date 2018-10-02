@@ -34,7 +34,7 @@ async function handlePaylod(User, payload) {
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
 
-    log.info(`callback error with ${body}`, err)
+    log.info(`handle payload error: ${body}`)
   }
 }
 
@@ -50,7 +50,8 @@ async function handlePaylod(User, payload) {
  * }
  */
 module.exports = app => {
-  app.use('/user/pay', etupay.router)
+  app.use('/user/pay/callback', etupay.router)
+  app.use('/user/pay/return', etupay.router)
   app.post('/user/pay/callback', async (req, res) => {
     log.info('callback')
     log.info('req.etupay')
@@ -59,7 +60,8 @@ module.exports = app => {
     log.info('shouldSendMail', shouldSendMail)
 
     if (shouldSendMail) {
-      await sendPdf(user)
+      //await sendPdf(user)
+      log.info('SEND SMS TO USER') //todo
     }
 
     return res
@@ -76,7 +78,8 @@ module.exports = app => {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
       log.info('shouldSendMail', shouldSendMail)
       if (shouldSendMail) {
-        await sendPdf(user)
+        //await sendPdf(user)
+        log.info('SEND SMS TO USER') //todo
       }
       log.info(`redirect to ${env.ARENA_ETUPAY_SUCCESSURL}`)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
