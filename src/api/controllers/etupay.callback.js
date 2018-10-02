@@ -8,7 +8,6 @@ const etupay = require('node-etupay')({
 
 async function handlePaylod(User, payload) {
   try {
-    log.info(payload.serviceData)
     const user = await User.findById(payload.serviceData)
 
     const userHadPay = user.paid
@@ -57,10 +56,7 @@ module.exports = app => {
     log.info('req.etupay')
     log.info(req.etupay ? 'req.etupay pas undefined !!' : 'undefined :(')
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
-    log.info('shouldSendMail')
-    log.info(shouldSendMail)
-    log.info('user')
-    log.info(user)
+    log.info('shouldSendMail', shouldSendMail)
 
     if (shouldSendMail) {
       await sendPdf(user)
@@ -78,14 +74,11 @@ module.exports = app => {
     log.info(req.etupay ? 'req.etupay pas undefined !!' : 'undefined :(')
     if (req.query.payload) {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
-      log.info('shouldSendMail')
-      log.info(shouldSendMail)
-      log.info('user')
-      log.info(user)
+      log.info('shouldSendMail', shouldSendMail)
       if (shouldSendMail) {
         await sendPdf(user)
       }
-
+      log.info(`redirect to ${env.ARENA_ETUPAY_SUCCESSURL}`)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
       //return res.redirect(env.ARENA_ETUPAY_ERRORURL)
     }
