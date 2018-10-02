@@ -51,14 +51,12 @@ async function handlePaylod(User, payload) {
  * }
  */
 module.exports = app => {
-  app.post('/user/pay/', etupay.router)
 
-  app.use('/user/pay/callback', async (req, res) => {
+  app.use('/user/pay/callback', etupay.router, async (req, res) => {
     log.info('callback')
     log.info('req.etupay')
-    log.info(res.body ? res.body.etupay : 'res.body undefined')
-    log.info(req.body ? req.body.etupay : 'req.body undefined')
-    const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, res.etupay)
+    log.info(req.etupay)
+    const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
     log.info('shouldSendMail')
     log.info(shouldSendMail)
     log.info('user')
