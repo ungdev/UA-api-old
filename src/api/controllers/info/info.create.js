@@ -1,11 +1,13 @@
 const errorHandler = require('../../utils/errorHandler')
 const isAdmin = require('../../middlewares/isAdmin')
+const isAuth = require('../../middlewares/isAuth')
 const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
 
 
 module.exports = app => {
   app.post('/infos/:id', [
+    isAuth(),
     isAdmin(),
     check('title')
       .exists(),
