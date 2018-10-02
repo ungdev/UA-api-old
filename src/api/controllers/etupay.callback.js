@@ -1,6 +1,6 @@
 const env = require('../../env')
 const log = require('../utils/log')(module)
-const etupay = require('node-etupay')({
+const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
   key: env.ARENA_ETUPAY_KEY
