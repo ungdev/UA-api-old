@@ -51,8 +51,8 @@ async function handlePaylod(User, payload) {
  * }
  */
 module.exports = app => {
-
-  app.use('/user/pay/callback', etupay.router, async (req, res) => {
+  app.use('/user/pay', etupay.router)
+  app.get('/user/pay/callback', async (req, res) => {
     log.info('callback')
     log.info('req.etupay')
     log.info(req.etupay)
