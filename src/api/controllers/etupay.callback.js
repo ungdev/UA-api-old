@@ -50,9 +50,7 @@ async function handlePaylod(User, payload) {
  * }
  */
 module.exports = app => {
-  app.use('/user/pay/callback', etupay.router)
-  app.use('/user/pay/return', etupay.router)
-  app.post('/user/pay/callback', async (req, res) => {
+  app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
     log.info('callback')
     log.info('req.etupay')
     log.info(req.etupay ? 'req.etupay pas undefined !!' : 'undefined :(')
@@ -70,7 +68,7 @@ module.exports = app => {
       .end()
   })
 
-  app.get('/user/pay/return', async (req, res, next) => {
+  app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     log.info('return')
     log.info('req.etupay')
     log.info(req.etupay ? 'req.etupay pas undefined !!' : 'undefined :(')
