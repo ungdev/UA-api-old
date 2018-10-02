@@ -1,6 +1,7 @@
 const env = require('../../env')
 const log = require('../utils/log')(module)
-const etupay = require('node-etupay')({
+const moment = require('moment')
+const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
   key: env.ARENA_ETUPAY_KEY
@@ -10,7 +11,6 @@ async function handlePaylod(User, payload) {
   try {
     const user = await User.findById(payload.serviceData)
 
-    const userHadPay = user.paid
 
     if (!user) {
       return res
@@ -18,10 +18,12 @@ async function handlePaylod(User, payload) {
         .json({ error: 'USER_NOT_FOUND' })
         .end()
     }
+    const userHadPay = user.paid
 
     user.transactionId = payload.transactionId
     user.transactionState = payload.step
     user.paid = payload.paid
+    if(user.paid) user.paid_at = moment().format()
 
     log.info(`user ${user.name} is at state ${user.transactionState}`)
 
@@ -34,7 +36,7 @@ async function handlePaylod(User, payload) {
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
 
-    log.info(`callback error with ${body}`, err)
+    log.info(`handle payload error: ${body}`)
   }
 }
 
@@ -50,13 +52,12 @@ async function handlePaylod(User, payload) {
  * }
  */
 module.exports = app => {
-  app.post('/user/pay/', etupay.router)
-
-  app.use('/user/pay/callback', async (req, res) => {
+  app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
 
     if (shouldSendMail) {
-      await sendPdf(user)
+      //await sendPdf(user)
+      log.info('SEND MAIL TO USER') //todo
     }
 
     return res
@@ -65,25 +66,15 @@ module.exports = app => {
       .end()
   })
 
-  app.get('/user/pay/success', async (req, res, next) => {
+  app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
-
       if (shouldSendMail) {
-        await sendPdf(user)
+        //await sendPdf(user)
+        log.info('SEND MAIL TO USER') //todo
       }
-
+      if(user.transactionState === 'refused') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
-    }
-
-    next()
-  })
-
-  app.get('/user/pay/error', async (req, res, next) => {
-    if (req.query.payload) {
-      await handlePaylod(req.app.locals.models.User, req.etupay)
-
-      return res.redirect(env.ARENA_ETUPAY_ERRORURL)
     }
 
     next()

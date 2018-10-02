@@ -5,7 +5,6 @@ const cors = require('cors')
 const helmet = require('helmet')
 const controllers = require('./api/controllers')
 const error = require('./api/middlewares/error')
-const env = require('./env')
 const log = require('./api/utils/log')(module)
 
 module.exports = app => {

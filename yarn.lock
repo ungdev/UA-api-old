@@ -10,6 +10,13 @@
   version "10.9.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.0.tgz#d2824d342b1d733e22ef169708bd254924db16bd"
 
+"@ung/node-etupay@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ung/node-etupay/-/node-etupay-2.0.0.tgz#ac914e277f8efd54cc4a07e1650848acbbb67ef0"
+  dependencies:
+    atob "^2.0.3"
+    btoa "^1.1.2"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -954,7 +961,7 @@ express-validator@^5.2.0:
     lodash "^4.17.10"
     validator "^10.4.0"
 
-express@^4.14.1, express@^4.16.3:
+express@^4.16.3:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
   dependencies:
@@ -2037,14 +2044,6 @@ nice-try@^1.0.4:
 nocache@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/nocache/-/nocache-2.0.0.tgz#202b48021a0c4cbde2df80de15a17443c8b43980"
-
-node-etupay@ungdev/node-etupay:
-  version "1.0.0"
-  resolved "https://codeload.github.com/ungdev/node-etupay/tar.gz/1949c8150dfe09ae26d68af8316cfaee4fdd614f"
-  dependencies:
-    atob "^2.0.3"
-    btoa "^1.1.2"
-    express "^4.14.1"
 
 node-pre-gyp@^0.10.0:
   version "0.10.3"

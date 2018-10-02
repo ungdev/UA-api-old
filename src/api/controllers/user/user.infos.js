@@ -94,7 +94,18 @@ module.exports = app => {
             partner: env.ARENA_PRICES_PARTNER,
             default: env.ARENA_PRICES_DEFAULT,
             ethernet: env.ARENA_PRICES_ETHERNET,
-            shirt: env.ARENA_PRICES_SHIRT
+            shirt: env.ARENA_PRICES_SHIRT,
+            laptop: env.ARENA_PRICES_LAPTOP,
+            screen27: env.ARENA_PRICES_SCREEN27,
+            kaliento: env.ARENA_PRICES_KALIENTO,
+            mouse: env.ARENA_PRICES_MOUSE,
+            headset: env.ARENA_PRICES_HEADSET,
+            keyboard: env.ARENA_PRICES_KEYBOARD,
+            chair: env.ARENA_PRICES_CHAIR,
+            streamingPC: env.ARENA_PRICES_STREAMING_PC,
+            gamingPC: env.ARENA_PRICES_GAMING_PC,
+            screen24: env.ARENA_PRICES_SCREEN24,
+            tombola: env.ARENA_PRICES_TOMBOLA,
           }
         })
         .end()

@@ -11,9 +11,6 @@ module.exports = function(sequelize) {
   Team.belongsTo(Spotlight)
   Spotlight.hasMany(Team)
 
-  Info.belongsTo(Spotlight)
-  Spotlight.hasMany(Info)
-
   User.belongsToMany(Team, { through: AskingUser, as: 'RequestedTeam' })
   Team.belongsToMany(User, { through: AskingUser, as: 'AskingUser' })
 

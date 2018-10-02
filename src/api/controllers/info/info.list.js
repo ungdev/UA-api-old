@@ -16,7 +16,8 @@ module.exports = app => {
           ['createdAt', 'DESC'],
         ],
         where: {
-          spotlightId: req.params.id
+          spotlightId: req.params.id,
+          deleted: false
         }
       })
       infos = infos.slice(req.params.start, req.params.end)
