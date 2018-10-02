@@ -1,5 +1,6 @@
 const env = require('../../env')
 const log = require('../utils/log')(module)
+const moment = require('moment')
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -22,7 +23,23 @@ async function handlePaylod(User, payload) {
     user.transactionId = payload.transactionId
     user.transactionState = payload.step
     user.paid = payload.paid
-    if(user.paid) user.paid_at = new Date()
+    if(user.paid) user.paid_at = moment().format()
+    else {
+      user.ethernet = false
+      user.plusone = false
+      user.kaliento = false
+      user.mouse = false
+      user.keyboard = false
+      user.headset = false
+      user.screen24 = false
+      user.screen27 = false
+      user.chair = false
+      user.gamingPC = false
+      user.streamingPC = false
+      user.laptop = false
+      user.tombola = 0
+      user.shirt = 'none'
+    }
 
     log.info(`user ${user.name} is at state ${user.transactionState}`)
 
