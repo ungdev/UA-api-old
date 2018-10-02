@@ -21,6 +21,8 @@ module.exports = app => {
   app.use(error.converter)
   app.use(error.notFound)
   app.use(error.handler)
+  log.info('ARENA_API_PORT')
+  log.info(env.ARENA_API_PORT)
 
   return app
 }
