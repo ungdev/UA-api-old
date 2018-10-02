@@ -57,7 +57,6 @@ module.exports = app => {
     log.info('callback')
     log.info('req.etupay')
     log.info(res.etupay)
-    log.info(res)
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, res.etupay)
     log.info('shouldSendMail')
     log.info(shouldSendMail)
