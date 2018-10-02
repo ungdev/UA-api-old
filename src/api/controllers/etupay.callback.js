@@ -55,7 +55,7 @@ module.exports = app => {
   app.post('/user/pay/callback', async (req, res) => {
     log.info('callback')
     log.info('req.etupay')
-    log.info(req.etupay)
+    log.info(req.etupay ? 'req.etupay pas undefined !!' : 'undefined :(')
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
     log.info('shouldSendMail')
     log.info(shouldSendMail)
@@ -75,7 +75,7 @@ module.exports = app => {
   app.get('/user/pay/return', async (req, res, next) => {
     log.info('return')
     log.info('req.etupay')
-    log.info(req.etupay)
+    log.info(req.etupay ? 'req.etupay pas undefined !!' : 'undefined :(')
     if (req.query.payload) {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
       log.info('shouldSendMail')
