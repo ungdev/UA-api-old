@@ -1,6 +1,7 @@
 const env = require('../../env')
 const log = require('../utils/log')(module)
 const moment = require('moment')
+const sendPdf = require('../utils/sendPDF')
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -56,8 +57,8 @@ module.exports = app => {
     const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
 
     if (shouldSendMail) {
-      //await sendPdf(user)
-      log.info('SEND MAIL TO USER') //todo
+      await sendPdf(user)
+      log.info('MAIL SENT TO USER')
     }
 
     return res
@@ -71,7 +72,7 @@ module.exports = app => {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
       if (shouldSendMail) {
         //await sendPdf(user)
-        log.info('SEND MAIL TO USER') //todo
+        log.info('MAIL SENT TO USER') //todo
       }
       if(user.transactionState === 'refused') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
