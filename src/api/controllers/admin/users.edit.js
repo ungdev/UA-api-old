@@ -1,4 +1,5 @@
 const isAdmin = require('../../middlewares/isAdmin')
+const isAuth = require('../../middlewares/isAuth')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
@@ -8,7 +9,7 @@ const errorHandler = require('../../utils/errorHandler')
  * 
  */
 module.exports = app => {
-  app.put('/users/:id', [isAdmin()])
+  app.put('/users/:id', [isAuth(), isAdmin()])
 
   app.put('/users/:id', async (req, res) => {
     const { User } = req.app.locals.models
