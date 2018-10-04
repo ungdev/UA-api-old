@@ -62,5 +62,38 @@ module.exports = app => {
       errorHandler(err, res)
     }
   })
+
+  app.post('/publicSlack', async (req, res) => {
+
+    try {
+      if(!req.body.user ||
+        !req.body.user.lastname ||
+        !req.body.user.firstname ||
+        !req.body.user.topic ||
+        !req.body.user.phone ||
+        !req.body.user.email ||
+        !req.body.user.message)
+        return res
+        .status(400)
+        .json({error: 'INVALID_FORM'})
+        .end()
+      let { user } = req.body
+      user.topic = user.topic.label
+      let text = `Message depuis le formulaire de contacte du site :\n
+          De: ${user.firstname} ${user.lastname}\n
+          Mail: ${user.email}\n
+          Téléphone: ${user.phone}\n
+          Sujet: ${user.topic}\n
+          Message: ${user.message}`
+      slack.post(env.SLACK_CHANNEL_UA_APP, { text }, { headers: { 'Content-type': 'application/json' } })
+      return res
+        .status(200)
+        .json('OK')
+        .end()
+      
+    } catch (err) {
+      errorHandler(err, res)
+    }
+  })
 }
 
