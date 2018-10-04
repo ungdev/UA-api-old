@@ -2,7 +2,7 @@ const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const axios = require('axios')
-
+const log = require('../../utils/log')(module)
 const slack = axios.create({ baseURL: env.SLACK_URL })
 /**
  * GET /spotlights
@@ -85,7 +85,8 @@ module.exports = app => {
           Téléphone: ${user.phone}\n
           Sujet: ${user.topic}\n
           Message: ${user.message}`
-      slack.post(env.SLACK_CHANNEL_UA_APP, { text }, { headers: { 'Content-type': 'application/json' } })
+      const result = await slack.post(env.SLACK_CHANNEL_UA_APP, { text }, { headers: { 'Content-type': 'application/json' } })
+      log.info(result.status)
       return res
         .status(200)
         .json('OK')
