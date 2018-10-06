@@ -5,6 +5,7 @@ const isInTeam = require('../../middlewares/isInTeam')
 const isCaptain = require('../../middlewares/isCaptain')
 const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
+const moment = require('moment')
 
 /**
  * POST /team/:id/accept
@@ -55,6 +56,8 @@ module.exports = app => {
       })
 
       await req.user.team.addUser(user)
+      user.joined_at = moment().format()
+      await user.save()
 
       log.info(`user ${req.user.name} accepted user ${user.name}`)
 
