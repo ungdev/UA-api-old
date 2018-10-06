@@ -5,6 +5,7 @@ const isNotInTeam = require('../../middlewares/isNotInTeam')
 const { isSpotlightFull } = require('../../utils/isFull')
 const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
+const moment = require('moment')
 
 /**
  * POST /team
@@ -57,6 +58,8 @@ module.exports = app => {
       })
 
       await req.user.setTeam(team)
+      req.user.joined_at = moment().format()
+      await req.user.save()
 
       log.info(`user ${req.user.name} created team ${req.body.name}`)
 
