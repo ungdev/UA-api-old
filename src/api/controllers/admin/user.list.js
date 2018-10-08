@@ -14,59 +14,23 @@ module.exports = app => {
   app.get('/admin/users', [isAuth(), isAdmin()])
 
   app.get('/admin/users', async (req, res) => {
-    const { User, Team, Spotlight } = req.app.locals.models
+    const { User } = req.app.locals.models
 
     try {
-      let spotlights = await Spotlight.findAll({
-        include: [
-          {
-            model: Team,
-            include: [
-              {
-                model: User
-              }
-            ]
-          }
-        ]
-      })
-      spotlights = spotlights.map(spotlight => {
-        spotlight.teams = spotlight.teams.map(team => {
-          team.users = team.users.map(user => {
-            return {
-              id: user.id,
-              name: user.name,
-              paid: user.paid
-            }
-          })
-          return {
-            id: team.id,
-            users:team.users
-          }
-        })
+      let users = await User.findAll({})
+      users = users.map(user => {
         return {
-          id: spotlight.id,
-          teams:spotlight.teams
-        }
-      })
-
-      let libre = await User.findAll({
-        where: {
-          teamId: null,
-          plusOne: false
-        }
-      })
-
-      libre = libre.map(user => {
-        return{
           id: user.id,
           name: user.name,
-          paid: user.paid
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          paid: user.paid,
         }
       })
-
       return res
         .status(200)
-        .json({ spotlights, libre })
+        .json(users)
         .end()
     } catch (err) {
       errorHandler(err, res)
