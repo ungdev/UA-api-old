@@ -18,7 +18,7 @@ module.exports = async function isInSpotlight(teamId, req) {
   
   const unpaidUser = team.users.find(user => !user.paid)
   if(unpaidUser) return false
-  if(!isSpotlightFull(spotlight))return true //if spotlight isn't full, the team must be in the spotlight
+  if(!isSpotlightFull(spotlight)) return true //if spotlight isn't full, the team must be in the spotlight
 
 
   spotlight.teams = spotlight.teams.map(team => {
