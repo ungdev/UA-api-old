@@ -2,7 +2,7 @@ const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const axios = require('axios')
-
+const log = require('../../utils/log')(module)
 const slack = axios.create({ baseURL: env.SLACK_URL })
 /**
  * GET /spotlights
@@ -53,6 +53,40 @@ module.exports = app => {
           break
       }
       slack.post(channel, { text: req.body.message }, { headers: { 'Content-type': 'application/json' } })
+      return res
+        .status(200)
+        .json('OK')
+        .end()
+      
+    } catch (err) {
+      errorHandler(err, res)
+    }
+  })
+
+  app.post('/publicSlack', async (req, res) => {
+
+    try {
+      if(!req.body.user ||
+        !req.body.user.lastname ||
+        !req.body.user.firstname ||
+        !req.body.user.topic ||
+        !req.body.user.phone ||
+        !req.body.user.email ||
+        !req.body.user.message)
+        return res
+        .status(400)
+        .json({error: 'INVALID_FORM'})
+        .end()
+      let { user } = req.body
+      user.topic = user.topic.label
+      let text = `Message depuis le formulaire de contacte du site :\n
+          De: ${user.firstname} ${user.lastname}\n
+          Mail: ${user.email}\n
+          Téléphone: ${user.phone}\n
+          Sujet: ${user.topic}\n
+          Message: ${user.message}`
+      const result = await slack.post(env.SLACK_CHANNEL_UA_APP, { text }, { headers: { 'Content-type': 'application/json' } })
+      log.info(result.status)
       return res
         .status(200)
         .json('OK')

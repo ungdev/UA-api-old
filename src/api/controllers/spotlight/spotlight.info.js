@@ -1,6 +1,3 @@
-const pick = require('lodash.pick')
-const env = require('../../../env')
-const { isSpotlightFull } = require('../../utils/isFull')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 

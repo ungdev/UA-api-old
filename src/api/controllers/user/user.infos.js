@@ -5,6 +5,7 @@ const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const { outputFields } = require('../../utils/publicFields')
 const { isSpotlightFull } = require('../../utils/isFull')
+const isInSpotlight = require('../../utils/isInSpotlight')
 
 /**
  * GET /user
@@ -40,7 +41,7 @@ module.exports = app => {
       })
 
       // clean teams
-      teams = teams.map(team => {
+      teams = await Promise.all(teams.map(async team => {
         team = team.toJSON()
 
         // AskingUser = users on AskingUsers
@@ -57,9 +58,22 @@ module.exports = app => {
 
           delete team.AskingUser
         }
-
+        team.isInSpotlight = await isInSpotlight(team.id, req)
         return team
+      }))
+
+      // Generate new token
+      const token = jwt.sign({ id: req.user.id }, env.ARENA_API_SECRET, {
+        expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
+
+      let user = req.user.toJSON()
+
+      // clean user team
+      if (user.team && user.team.users.length > 0) {
+        user.team.users = user.team.users.map(outputFields)
+        user.team.isInSpotlight = await isInSpotlight(user.team.id, req)
+      }
 
       spotlights = spotlights.map(spotlight => {
         spotlight = spotlight.toJSON()
@@ -68,23 +82,11 @@ module.exports = app => {
 
         return spotlight
       })
-
-      // Generate new token
-      const token = jwt.sign({ id: req.user.id }, env.ARENA_API_SECRET, {
-        expiresIn: env.ARENA_API_SECRET_EXPIRES
-      })
-
-      const user = req.user.toJSON()
-
-      // clean user team
-      if (user.team && user.team.users.length > 0) {
-        user.team.users = user.team.users.map(outputFields)
-      }
-
+      user = outputFields(user)
       return res
         .status(200)
         .json({
-          user: outputFields(user),
+          user,
           token,
           spotlights: spotlights,
           teams,
