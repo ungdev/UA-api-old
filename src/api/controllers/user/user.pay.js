@@ -39,6 +39,9 @@ module.exports = app => {
     check('ethernet')
       .exists()
       .isBoolean(),
+    check('ethernet7')
+      .exists()
+      .isBoolean(),
     check('tombola')
       .optional(),
     check('shirtGender')
@@ -75,6 +78,7 @@ module.exports = app => {
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
       req.user.plusone = req.body.plusone ? req.body.plusone : false
       req.user.ethernet = req.body.ethernet ? req.body.ethernet : false
+      req.user.ethernet7 = req.body.ethernet7 ? req.body.ethernet7 : false
       req.user.tombola = req.body.tombola ? req.body.tombola : 0
       req.user.kaliento = req.body.kaliento ? req.body.kaliento : false
       req.user.mouse = req.body.mouse ? req.body.mouse : false
@@ -118,7 +122,8 @@ module.exports = app => {
       } else {
         basket.addItem('Place UTT Arena', euro * price, 1)
       }
-      if (req.user.ethernet) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET, 1)
+      if (req.user.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
+      if (req.user.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
       if (req.user.kaliento) basket.addItem('Location Kaliento', euro * env.ARENA_PRICES_KALIENTO, 1)
       if (req.user.mouse) basket.addItem('Location Souris', euro * env.ARENA_PRICES_MOUSE, 1)
       if (req.user.keyboard) basket.addItem('Location Clavier', euro * env.ARENA_PRICES_KEYBOARD, 1)

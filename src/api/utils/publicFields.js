@@ -14,6 +14,7 @@ module.exports.outputFields = user =>
     'shirt',
     'plusone',
     'ethernet',
+    'ethernet7',
     'tombola',
     'kaliento',
     'mouse',

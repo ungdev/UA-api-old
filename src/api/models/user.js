@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     shirt: { type: DataTypes.ENUM(env.ARENA_SHIRT_SIZES.split(',')), defaultValue: 'none' },
     plusone: { type: DataTypes.BOOLEAN, defaultValue: false },
     ethernet: { type: DataTypes.BOOLEAN, defaultValue: false },
+    ethernet7: { type: DataTypes.BOOLEAN, defaultValue: false },
     kaliento: { type: DataTypes.BOOLEAN, defaultValue: false },
     mouse: { type: DataTypes.BOOLEAN, defaultValue: false },
     keyboard: { type: DataTypes.BOOLEAN, defaultValue: false },
