@@ -71,7 +71,7 @@ module.exports = app => {
     if (req.query.payload) {
       const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.etupay)
       if (shouldSendMail) {
-        //await sendPdf(user)
+        await sendPdf(user)
         log.info('MAIL SENT TO USER') //todo
       }
       if(user.transactionState === 'refused') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
