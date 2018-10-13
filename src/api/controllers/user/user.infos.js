@@ -96,6 +96,7 @@ module.exports = app => {
             partner: env.ARENA_PRICES_PARTNER,
             default: env.ARENA_PRICES_DEFAULT,
             ethernet: env.ARENA_PRICES_ETHERNET,
+            ethernet7: env.ARENA_PRICES_ETHERNET7,
             shirt: env.ARENA_PRICES_SHIRT,
             laptop: env.ARENA_PRICES_LAPTOP,
             screen27: env.ARENA_PRICES_SCREEN27,
