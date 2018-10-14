@@ -84,8 +84,8 @@ function generatePdf(user, barcode) {
     if(scoup.length > 0) scoup = scoup.substr(2, scoup.length)
     if(user.shirt === 'none') user.shirt = 'aucun'
     else {
-      const gen = user.shirt.substr(1, 1) === 'h' ? 'Homme' : 'Femme'
-      const size = user.shirt.substr(2, 1).toUpperCase()
+      const gen = user.shirt.substr(0, 1) === 'h' ? 'Homme' : 'Femme'
+      const size = user.shirt.substr(1, user.shirt.length).toUpperCase()
       user.shirt = `${gen} ${size}`
     }
     doc
