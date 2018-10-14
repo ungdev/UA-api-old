@@ -13,7 +13,7 @@ const etupay = require('@ung/node-etupay')({
 const Basket = etupay.Basket
 
 const euro = 100
-const gender = { M: 'Homme', F: 'Femme' }
+const gender = { H: 'Homme', F: 'Femme' }
 
 /**
  * GET /user/pay
@@ -46,7 +46,7 @@ module.exports = app => {
       .optional(),
     check('shirtGender')
       .optional()
-      .isIn(['M', 'F']),
+      .isIn(['H', 'F']),
     check('shirtSize')
       .optional()
       .isIn(['XS', 'S', 'M', 'L', 'XL']),
@@ -137,8 +137,8 @@ module.exports = app => {
       if(req.user.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, req.user.tombola)
       if (req.user.shirt !== 'none') {
         basket.addItem(
-          `T-Shirt ${sex[req.body.shirtGender]} ${req.body.shirtSize}`,
-          euro * config.prices.shirt,
+          `T-Shirt ${gender[req.body.shirtGender]} ${req.body.shirtSize}`,
+          euro * env.ARENA_PRICES_SHIRT,
           1
         )
       }
