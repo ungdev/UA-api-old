@@ -82,11 +82,17 @@ function generatePdf(user, barcode) {
     if(user.gamingPC) scoup = `${scoup}, PC gaming`
     if(user.streamingPC) scoup = `${scoup}, PC streaming`
     if(scoup.length > 0) scoup = scoup.substr(2, scoup.length)
+    if(user.shirt === 'none') user.shirt = 'aucun'
+    else {
+      const gen = user.shirt.substr(1, 1) === 'h' ? 'Homme' : 'Femme'
+      const size = user.shirt.substr(2, 1).toUpperCase()
+      user.shirt = `${gen} ${size}`
+    }
     doc
         .fontSize(20)
         .text(`Nom: ${user.lastname}`, 30, 400)
         .text(`Prénom: ${user.firstname}`, 30, 420)
-        .text(`T-Shirt: ${shirt[user.shirt || 'none']}`, 30, 440)
+        .text(`T-Shirt: ${user.shirt}`, 30, 440)
         .text(`Câble 5m: ${user.ethernet ? 'oui': 'non'}`, 30, 460)
         .text(`Câble 7m: ${user.ethernet7 ? 'oui': 'non'}`, 30, 480)
         .text(`Matériel: ${scoup}`, 30, 500)
