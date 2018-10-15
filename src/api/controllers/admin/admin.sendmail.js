@@ -9,6 +9,7 @@ const errorHandler = require('../../utils/errorHandler')
  */
 module.exports = app => {
 
+  app.get('/mail/:name', [isAuth(), isAdmin()])
   app.get('/mail/:name', async (req, res) => {
     const { User } = req.app.locals.models
 
