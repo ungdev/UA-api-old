@@ -35,11 +35,11 @@ module.exports = app => {
       .isLength({ min: 3, max: 90 }),
     check('lastname')
       .exists()
-      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .isAlphanumeric()
       .isLength({ min: 2, max: 200 }),
     check('firstname')
       .exists()
-      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .isAlphanumeric()
       .isLength({ min: 2, max: 200 }),
     check('gender')
       .exists(),
