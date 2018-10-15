@@ -31,15 +31,15 @@ module.exports = app => {
   app.post('/user', [
     check('name')
       .exists()
-      .isAlphanumeric()
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽçêëù \-]+/i)
       .isLength({ min: 3, max: 90 }),
     check('lastname')
       .exists()
-      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽçêëù \-]+/i)
       .isLength({ min: 2, max: 200 }),
     check('firstname')
       .exists()
-      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ \-]+/i)
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽçêëù \-]+/i)
       .isLength({ min: 2, max: 200 }),
     check('gender')
       .exists(),
