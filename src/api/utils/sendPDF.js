@@ -7,37 +7,8 @@ const PDFDocument = require('pdfkit')
 const bwipjs = require('bwip-js')
 const transporter = require('nodemailer').createTransport(env.ARENA_MAIL_SMTP)
 
-const shirt = {
-  none: 'Non',
-  fxs : 'Femme — XS',
-  fs  : 'Femme — S',
-  fm  : 'Femme — M',
-  fl  : 'Femme — L',
-  fxl : 'Femme — XL',
-  mxs : 'Homme — XS',
-  ms  : 'Homme — S',
-  mm  : 'Homme — M',
-  ml  : 'Homme — L',
-  mxl : 'Homme — XL'
-}
 
-const logoPath = path.join(__dirname, './', 'assets', 'ua2018.png')
-let logo = fs.readFileSync(logoPath, 'base64')
-logo = `data:image/jpeg;base64,${logo}`
-
-const rogPath = path.join(__dirname, './', 'assets', 'asusrog.png')
-let rog = fs.readFileSync(rogPath, 'base64')
-rog = `data:image/png;base64,${rog}`
-
-let meltdown = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'meltdown.png'), 'base64')}`
-let rc3 = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'rc3.jpg'), 'base64')}`
-let scoupImg = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'scoup.png'), 'base64')}`
-let silverstone = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'silverstone.png'), 'base64')}`
-let noctua = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'noctua.png'), 'base64')}`
-let compumsa = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'compumsa.png'), 'base64')}`
-let tekliss = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'tekliss.png'), 'base64')}`
-let tcm = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'tcm.png'), 'base64')}`
-
+let fond = `data:image/png;base64,${fs.readFileSync(path.join(__dirname, './', 'assets', 'billet-ua.png'), 'base64')}`
 const mailMessage = `Vous avez acheté votre place pour l'UTT Arena 2018
 Vous trouverez la place en format numérique en pièce jointe. Veuillez conserver la place : elle sera nécessaire pour entrer à l'UTT Arena.
 À bientôt pour l'UTT Arena !
@@ -69,7 +40,7 @@ function generatePdf(user, barcode) {
 
     const doc = new PDFDocument()
 
-    doc.image(logo, (doc.page.width - 277) / 2, 20, { width: 277, height: 397 })
+    doc.image(fond, 0, 0, { width: doc.page.width, height: doc.page.height })
     let scoup = ''
     if(user.kaliento) scoup = `${scoup}, kaliento`
     if(user.mouse) scoup = `${scoup}, souris`
@@ -89,27 +60,17 @@ function generatePdf(user, barcode) {
       user.shirt = `${gen} ${size}`
     }
     doc
-        .fontSize(20)
-        .text(`Nom: ${user.lastname}`, 30, 400)
-        .text(`Prénom: ${user.firstname}`, 30, 420)
-        .text(`T-Shirt: ${user.shirt}`, 30, 440)
-        .text(`Câble 5m: ${user.ethernet ? 'oui': 'non'}`, 30, 460)
-        .text(`Câble 7m: ${user.ethernet7 ? 'oui': 'non'}`, 30, 480)
-        .text(`Matériel: ${scoup}`, 30, 500)
-        .text(`Tombola: ${user.tombola}`, 30, 520)
-        .text(`${user.plusone ? 'Place Accompagnateur' : 'Place Joueur'}`, 30, 540)
+        .font(__dirname + '/assets/ua-2018.ttf')
+        .fontSize(30)
+        .text(`${user.lastname} ${user.firstname}`, 204, 240)
+        .text(`${user.plusone ? 'Accompagnateur' : 'Joueur'}`, 120, 276)
+        .text(`${user.shirt}`, 140, 312)
+        .text(`${user.ethernet ? 'oui': 'non'}`, 165, 349)
+        .text(`${user.ethernet7 ? 'oui': 'non'}`, 165, 386)
+        .text(`${user.tombola}`, 153, 421)
+        .text(`${scoup}`, 158, 457)
 
     //doc.image(barcode, 215, 500)
-
-    doc.image(rog, 480, 450, { width: 100 })
-    doc.image(meltdown, 260, 560, { width: 100 })
-    doc.image(scoupImg, 20, 580, { height: 80 })
-    doc.image(rc3, 370, 710, { height: 75 })
-    doc.image(noctua, 20, 670, { width: 100 })
-    doc.image(compumsa, 130, 670, { height: 50 })
-    doc.image(tekliss, 370, 560, { height: 60 })
-    doc.image(tcm, 400, 630, { height: 70 })
-    doc.image(silverstone, 130, 730, { height: 50 })
 
     const buffers = []
 
