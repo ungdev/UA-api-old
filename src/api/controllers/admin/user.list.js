@@ -7,26 +7,17 @@ const isAuth = require('../../middlewares/isAuth')
  *
  * Response:
  * [
- *    {
- *      id, name, isAdmin, firstname, lastname, mail, team, spotlightId
- *    },
- *    ...
+ *    
  * ]
  */
 module.exports = app => {
-  app.get('/users', [isAuth(), isAdmin()])
+  app.get('/admin/users', [isAuth(), isAdmin()])
 
-  app.get('/users', async (req, res) => {
-    const { User, Team } = req.app.locals.models
+  app.get('/admin/users', async (req, res) => {
+    const { User } = req.app.locals.models
 
     try {
-      let users = await User.findAll({
-        include: [
-          {
-            model: Team
-          }
-        ]
-      })
+      let users = await User.findAll({})
       users = users.map(user => {
         return {
           id: user.id,
@@ -34,11 +25,7 @@ module.exports = app => {
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          respo: user.respo,
-          isAdmin: user.isAdmin,
           paid: user.paid,
-          team: user.team ? user.team.name : '/',
-          spotlightId: user.team ? user.team.spotlightId : '/'
         }
       })
       return res
