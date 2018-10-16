@@ -13,7 +13,7 @@ async function leaveTeam(user, Team, User) {
     if (team.captainId === user.id) {
       log.info(`user ${user.name} left ${team.name} and destroyed it, as captain`)
       let users = await User.findAll({ where: { teamId: team.id } })
-      for(let u of users) {
+      for (let u of users) {
         u.joined_at = null
         u.teamId = null
         await u.save()
