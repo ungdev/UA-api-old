@@ -74,13 +74,7 @@ async function handlePaylod(User, Team, payload) {
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
     const { shouldSendMail, user, error } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
-    if(error) return res.status(400).json(error).end()
-    if (!user) {
-      return res
-        .status(404)
-        .json({ error: 'USER_NOT_FOUND' })
-        .end()
-    }
+    if(error) return res.status(200).end()
     if (shouldSendMail) {
       await sendPdf(user)
       log.info('MAIL SENT TO USER')
@@ -95,7 +89,7 @@ module.exports = app => {
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
       const { shouldSendMail, user, error } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
-      if(error) return res.status(400).json(error).end()
+      if(error) return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       if (!user) {
         return res
           .status(404)
