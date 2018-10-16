@@ -49,7 +49,7 @@ module.exports = app => {
 
       if (req.user.team.captainId === req.params.id) {
         log.info(`user ${req.user.name} left ${req.user.team.name} and destroyed it, as captain`)
-        let users = await User.findAll({where: { teamId: req.user.team.id}})
+        let users = await User.findAll({where: { teamId: req.user.team.id } })
         for(let u of users) {
           u.joined_at = null
           u.teamId = null
