@@ -36,6 +36,7 @@ module.exports = app => {
           email: user.email,
           respo: user.respo,
           isAdmin: user.isAdmin,
+          paid: user.paid,
           team: user.team ? user.team.name : '/',
           spotlightId: user.team ? user.team.spotlightId : '/'
         }
