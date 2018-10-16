@@ -77,8 +77,8 @@ module.exports = app => {
     try {
       if (req.user.paid) return res.status(404).json('ALREADY PAID').end()
       if (req.body.plusone) {
-        const visitors = await req.app.locals.models.User.findAll({ where: { plusone: true } })
-        if (visitors.length >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
+        const count = await req.app.locals.models.User.count({ where: { plusone: true } })
+        if (count >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
       }
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
       req.user.plusone = req.body.plusone ? req.body.plusone : false
