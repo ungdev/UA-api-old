@@ -75,6 +75,11 @@ module.exports = app => {
 
   app.post('/user/pay', async (req, res) => {
     try {
+      if (req.user.paid) return res.status(404).json('ALREADY PAID').end()
+      if (req.body.plusone) {
+        const count = await req.app.locals.models.User.count({ where: { plusone: true } })
+        if (count >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
+      }
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
       req.user.plusone = req.body.plusone ? req.body.plusone : false
       req.user.ethernet = req.body.ethernet ? req.body.ethernet : false
@@ -134,7 +139,7 @@ module.exports = app => {
       if (req.user.gamingPC) basket.addItem('Location PC Gaming', euro * env.ARENA_PRICES_GAMING_PC, 1)
       if (req.user.streamingPC) basket.addItem('Location PC Streaming', euro * env.ARENA_PRICES_STREAMING_PC, 1)
       if (req.user.laptop) basket.addItem('Location PC Portable', euro * env.ARENA_PRICES_LAPTOP, 1)
-      if(req.user.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, req.user.tombola)
+      if (req.user.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, req.user.tombola)
       if (req.user.shirt !== 'none') {
         basket.addItem(
           `T-Shirt ${gender[req.body.shirtGender]} ${req.body.shirtSize}`,
