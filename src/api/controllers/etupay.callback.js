@@ -34,12 +34,7 @@ async function handlePaylod(User, Team, payload) {
     const user = await User.findById(payload.serviceData, { include: [Team] })
 
 
-    if (!user) {
-      return res
-        .status(404)
-        .json({ error: 'USER_NOT_FOUND' })
-        .end()
-    }
+    if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
     const userHadPay = user.paid
 
     user.transactionId = payload.transactionId
@@ -54,12 +49,14 @@ async function handlePaylod(User, Team, payload) {
 
     return {
       shouldSendMail: user.paid && !userHadPay,
-      user
+      user,
+      error: null
     }
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
 
     log.info(`handle payload error: ${body}`)
+    return { user: null, shouldSendMail: false, error: body}
   }
 }
 
@@ -76,8 +73,14 @@ async function handlePaylod(User, Team, payload) {
  */
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
-    const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
-
+    const { shouldSendMail, user, error } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+    if(error) return res.status(400).json(error).end()
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: 'USER_NOT_FOUND' })
+        .end()
+    }
     if (shouldSendMail) {
       await sendPdf(user)
       log.info('MAIL SENT TO USER')
@@ -91,7 +94,14 @@ module.exports = app => {
 
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
-      const { shouldSendMail, user } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+      const { shouldSendMail, user, error } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+      if(error) return res.status(400).json(error).end()
+      if (!user) {
+        return res
+          .status(404)
+          .json({ error: 'USER_NOT_FOUND' })
+          .end()
+      }
       if (shouldSendMail) {
         await sendPdf(user)
         log.info('MAIL SENT TO USER') //todo
