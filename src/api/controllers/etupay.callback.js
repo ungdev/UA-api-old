@@ -7,11 +7,11 @@ const etupay = require('@ung/node-etupay')({
   url: env.ARENA_ETUPAY_URL,
   key: env.ARENA_ETUPAY_KEY
 })
-async function leaveTeam(user) {
-  let team = { user }
-  if(user.team){
+async function leaveTeam(user, Team) {
+  let team = await Team.findById(user.teamId)
+  if(team){
     log.info('IICICICICICICICICICI')
-    log.info(team, team.captainId, user.id, team.captainId === user.id)
+    log.info(team.captainId, user.id, team.captainId === user.id)
     if (team.captainId === user.id) {
       log.info(`user ${user.name} left ${team.name} and destroyed it, as captain`)
       let users = await User.findAll({ where: { teamId: team.id } })
@@ -44,7 +44,7 @@ async function handlePaylod(User, Team, payload) {
     user.transactionState = payload.step
     user.paid = payload.paid
     if(user.paid) user.paid_at = moment().format()
-    if(user.plusone) await leaveTeam(user)
+    if(user.plusone) await leaveTeam(user, Team)
 
     log.info(`user ${user.name} is at state ${user.transactionState}`)
 
