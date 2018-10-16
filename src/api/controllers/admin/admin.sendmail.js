@@ -1,3 +1,5 @@
+const isAdmin = require('../../middlewares/isAdmin')
+const isAuth = require('../../middlewares/isAuth')
 const sendPDF = require('../../utils/sendPDF')
 const errorHandler = require('../../utils/errorHandler')
 
