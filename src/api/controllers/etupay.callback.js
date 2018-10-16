@@ -9,7 +9,7 @@ const etupay = require('@ung/node-etupay')({
 })
 async function leaveTeam(user, Team, User) {
   let team = await Team.findById(user.teamId)
-  if(team){
+  if (team){
     if (team.captainId === user.id) {
       log.info(`user ${user.name} left ${team.name} and destroyed it, as captain`)
       let users = await User.findAll({ where: { teamId: team.id } })
@@ -30,7 +30,7 @@ async function leaveTeam(user, Team, User) {
   }
 
 }
-async function handlePaylod(User, Team, payload) {
+async function handlePayload(User, Team, payload) {
   try {
     const user = await User.findById(payload.serviceData, { include: [Team] })
 
@@ -74,7 +74,7 @@ async function handlePaylod(User, Team, payload) {
  */
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
-    const { shouldSendMail, user, error } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+    const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
     if(error) return res.status(200).end()
     if (shouldSendMail) {
       await sendPdf(user)
@@ -89,7 +89,7 @@ module.exports = app => {
 
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
-      const { shouldSendMail, user, error } = await handlePaylod(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+      const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
       if(error) return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       if (!user) {
         return res
