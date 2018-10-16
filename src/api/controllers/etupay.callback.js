@@ -10,8 +10,6 @@ const etupay = require('@ung/node-etupay')({
 async function leaveTeam(user, Team, User) {
   let team = await Team.findById(user.teamId)
   if(team){
-    log.info('IICICICICICICICICICI')
-    log.info(team.captainId, user.id, team.captainId === user.id)
     if (team.captainId === user.id) {
       log.info(`user ${user.name} left ${team.name} and destroyed it, as captain`)
       let users = await User.findAll({ where: { teamId: team.id } })
