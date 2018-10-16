@@ -4,6 +4,7 @@ const validateBody = require('../../middlewares/validateBody')
 const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -75,6 +76,12 @@ module.exports = app => {
 
   app.post('/user/pay', async (req, res) => {
     try {
+      if(req.user.paid) return res.status(404).json('ALREADY PAID').end()
+      if(req.body.plusone && req.body.plusone === 1) {
+        const visitors = req.app.locals.models.User.findAll({ where: { plusone: 1 } })
+        log.info(visitors.length, env.ARENA_VISITOR_LIMIT)
+        if(visitors.length >= env.ARENA_VISITOR_LIMIT) return res.status(404).json('VISITOR_FULL').end()
+      }
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
       req.user.plusone = req.body.plusone ? req.body.plusone : false
       req.user.ethernet = req.body.ethernet ? req.body.ethernet : false
