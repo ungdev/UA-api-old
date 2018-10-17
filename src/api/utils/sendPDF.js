@@ -17,11 +17,11 @@ Toute l'équipe organisatrice`
 const htmlMessage = fs.readFileSync(path.join(__dirname, 'template.html'))
 
 function generateBarcode(user) {
-  log.info('USER BARCODE', user.barcode)
   return new Promise((resolve, reject) => {
+    
     bwipjs.toBuffer({
       bcid: 'ean13',
-      text: user.barcode,
+      text: user.barcode.substr(0, 12),
       height: 10,
       includetext: false
     }, function (err, png) {
@@ -29,7 +29,6 @@ function generateBarcode(user) {
         log.info(err)
         reject(err)
       }
-
       resolve(png)
     })
   })
@@ -70,7 +69,7 @@ function generatePdf(user, barcode) {
         .text(`${user.tombola}`, 153, 421)
         .text(`${scoup}`, 158, 457)
 
-    //doc.image(barcode, 215, 500)
+    doc.image(barcode, 364, 152, { height: 49 } )
 
     const buffers = []
 
@@ -83,9 +82,7 @@ function generatePdf(user, barcode) {
 }
 
 module.exports = async (user) => {
-  //const barcode = await generateBarcode(user)
-  const barcode = 01234
-  log.info('before generation')
+  const barcode = await generateBarcode(user)
   const pdf = await generatePdf(user, barcode)
   
   log.info(`[generatePdf] sending mail to ${user.email}`)
