@@ -18,7 +18,7 @@ module.exports = app => {
     const { User, Team, Spotlight } = req.app.locals.models
 
     try {
-      let totalPlayers = await User.count()
+      let totalUsers = await User.count()
       let totalPaidVisitors = await User.count({
           where:{ paid: 1, plusone: 1}
       })
@@ -34,7 +34,7 @@ module.exports = app => {
       const totalFullTeams = teams.filter(team => isTeamFull(team, team.spotlight.perTeam, false)).length
       return res
         .status(200)
-        .json({ totalPlayers, totalPaidPlayers, totalPaidVisitors, totalUnpaid, totalTeams, totalPaidTeams, totalFullTeams })
+        .json({ totalUsers, totalPaidPlayers, totalPaidVisitors, totalUnpaid, totalTeams, totalPaidTeams, totalFullTeams })
         .end()
     } catch (err) {
       errorHandler(err, res)
