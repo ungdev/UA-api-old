@@ -40,6 +40,7 @@ module.exports = app => {
       .exists(),
     check('password')
       .optional()
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽçêëù \-]+/i)
       .isLength({ min: 6 }),
     check('email')
       .exists()

@@ -28,8 +28,10 @@ module.exports = app => {
   app.put('/user/login', [
     check('name')
       .exists()
-      .isAlphanumeric(),
-    check('password').exists(),
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽçêëù \-]+/i),
+    check('password')
+      .exists()
+      .matches(/[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽçêëù \-]+/i),
     validateBody()
   ])
 
