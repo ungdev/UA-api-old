@@ -96,5 +96,10 @@ module.exports = app => {
       errorHandler(err, res)
     }
   })
+
+  app.post("/slack/update", async (req, res) => {
+    log.info(req.params)
+    return res.status(200).json({ challenge: req.body.challenge })
+  })
 }
 
