@@ -96,13 +96,10 @@ module.exports = app => {
       errorHandler(err, res)
     }
   })
-<<<<<<< HEAD
 
   app.post("/slack/update", async (req, res) => {
     log.info(req.params)
     return res.status(200).json({ challenge: req.body.challenge })
   })
-=======
->>>>>>> parent of b27c989... ADD : start threading feature from slack to mail
 }
 
