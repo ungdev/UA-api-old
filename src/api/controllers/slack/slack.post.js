@@ -104,7 +104,7 @@ module.exports = app => {
   })
 
   app.post("/slack/update", async (req, res) => {
-    log.info(req.body)
+    log.info(req.params)
     return res.status(200).json({ challenge: req.body.challenge })
   })
 }
