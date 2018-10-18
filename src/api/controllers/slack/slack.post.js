@@ -1,8 +1,8 @@
-const env = require('../../../env')
-const errorHandler = require('../../utils/errorHandler')
-const isAuth = require('../../middlewares/isAuth')
-const axios = require('axios')
-const log = require('../../utils/log')(module)
+const env = require("../../../env")
+const errorHandler = require("../../utils/errorHandler")
+const isAuth = require("../../middlewares/isAuth")
+const axios = require("axios")
+const log = require("../../utils/log")(module)
 const slack = axios.create({ baseURL: env.SLACK_URL })
 /**
  * GET /spotlights
@@ -16,67 +16,70 @@ const slack = axios.create({ baseURL: env.SLACK_URL })
  * }
  */
 module.exports = app => {
-  app.post('/slack', [isAuth()])
-  app.post('/slack', async (req, res) => {
-
+  app.post("/slack", [isAuth()])
+  app.post("/slack", async (req, res) => {
     try {
-      if(!req.body.message || !req.body.toChannel)
+      if (!req.body.message || !req.body.toChannel)
         return res
-        .status(400)
-        .json({error: 'missing params'})
-        .end()
-      let channel = ''
-      switch(req.body.toChannel) {
-        case '1':
+          .status(400)
+          .json({ error: "missing params" })
+          .end()
+      let channel = ""
+      switch (req.body.toChannel) {
+        case "1":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_LOL
           break
-        case '2':
+        case "2":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_LOL
           break
-        case '3':
+        case "3":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_FORTNITE
           break
-        case '4':
+        case "4":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_CS
           break
-        case '5':
+        case "5":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_HS
           break
-        case '6':
+        case "6":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_SSBU
           break
-        case 'libre':
+        case "libre":
           channel = env.SLACK_CHANNEL_UA_TOURNOI_LIBRE
           break
         default:
           channel = env.SLACK_CHANNEL_UA_APP
           break
       }
-      slack.post(channel, { text: req.body.message }, { headers: { 'Content-type': 'application/json' } })
+      slack.post(
+        channel,
+        { text: req.body.message },
+        { headers: { "Content-type": "application/json" } }
+      )
       return res
         .status(200)
-        .json('OK')
+        .json("OK")
         .end()
-      
     } catch (err) {
       errorHandler(err, res)
     }
   })
 
-  app.post('/publicSlack', async (req, res) => {
-
+  app.post("/publicSlack", async (req, res) => {
     try {
-      if(!req.body.user ||
+      if (
+        !req.body.user ||
         !req.body.user.lastname ||
         !req.body.user.firstname ||
         !req.body.user.topic ||
         !req.body.user.phone ||
         !req.body.user.email ||
-        !req.body.user.message)
+        !req.body.user.message
+      )
         return res
-        .status(400)
-        .json({error: 'INVALID_FORM'})
-        .end()
+          .status(400)
+          .json({ error: "INVALID_FORM" })
+          .end()
       let { user } = req.body
       user.topic = user.topic.label
       let text = `Message depuis le formulaire de contacte du site :\n
@@ -85,16 +88,23 @@ module.exports = app => {
           Téléphone: ${user.phone}\n
           Sujet: ${user.topic}\n
           Message: ${user.message}`
-      const result = await slack.post(env.SLACK_CHANNEL_UA_APP, { text }, { headers: { 'Content-type': 'application/json' } })
+      const result = await slack.post(
+        env.SLACK_CHANNEL_UA_APP,
+        { text },
+        { headers: { "Content-type": "application/json" } }
+      )
       log.info(result.status)
       return res
         .status(200)
-        .json('OK')
+        .json("OK")
         .end()
-      
     } catch (err) {
       errorHandler(err, res)
     }
   })
-}
 
+  app.post("/slack/update", async (req, res) => {
+    log.info(req.body.challenge)
+    return res.status(200).json({ challenge })
+  })
+}
