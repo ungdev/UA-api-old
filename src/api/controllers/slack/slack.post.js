@@ -107,6 +107,6 @@ module.exports = app => {
   // app.use(bodyParser.urlencoded({ extended: false }))
   app.post("/slack/update", async (req, res) => {
     log.info(req.body)
-    return res.status(200).json({ challenge: req.body.challenge, text: req.body.event.text })
+    return res.status(200).json({ challenge: req.body.challenge })
   })
 }
