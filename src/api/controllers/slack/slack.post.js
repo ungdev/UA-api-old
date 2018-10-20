@@ -4,6 +4,7 @@ const isAuth = require("../../middlewares/isAuth")
 const axios = require("axios")
 const log = require("../../utils/log")(module)
 const slack = axios.create({ baseURL: env.SLACK_URL })
+const bodyParser = require('body-parser')
 /**
  * GET /spotlights
  * {
@@ -104,9 +105,9 @@ module.exports = app => {
   })
 
   // parse application/x-www-form-urlencoded
-  // app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.urlencoded({ extended: false }))
   app.post("/slack/update", async (req, res) => {
-    log.info(res)
+    log.info(req.body)
     return res.status(200).json({ challenge: req.body.challenge })
   })
 }
