@@ -32,10 +32,12 @@ async function leaveTeam(user, Team, User) {
 }
 async function handlePayload(User, Team, payload) {
   try {
+    log.info(payload)
     const user = await User.findById(payload.serviceData, { include: [Team] })
 
 
     if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
+    if(user.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
     const userHadPay = user.paid
 
     user.transactionId = payload.transactionId
@@ -90,7 +92,10 @@ module.exports = app => {
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
       const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
-      if (error) return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      if (error) {
+        if(error === 'ALREADY_PAID') return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
+        else return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      }
       if (!user) {
         return res
           .status(404)
