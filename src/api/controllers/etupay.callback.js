@@ -2,6 +2,7 @@ const env = require('../../env')
 const log = require('../utils/log')(module)
 const moment = require('moment')
 const sendPdf = require('../utils/sendPDF')
+const Base64 = require('js-base64').Base64
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -34,9 +35,9 @@ async function handlePayload(models, payload) {
   let { User, Team, Order } = models
   try {
     log.info('PAYLOAD:', payload)
-    const params = payload.serviceData.split('/')
-    const isInscription = params[0] === 1
-    const user = await User.findById(params[2], { include: [Team] })
+    const data = JSON.parse(Base64.decode(payload.serviceData))
+    const isInscription = data.isInscription
+    const user = await User.findById(data.userId, { include: [Team] })
 
 
     if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
@@ -61,7 +62,7 @@ async function handlePayload(models, payload) {
       }
     }
     else {
-      let order = await Order.findById(params[1])
+      let order = await Order.findById(data.orderId)
       log.info(order)
     }
   } catch (err) {

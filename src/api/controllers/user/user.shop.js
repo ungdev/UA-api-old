@@ -3,6 +3,7 @@ const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
 const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
+const Base64 = require('js-base64').Base64
 const errorHandler = require('../../utils/errorHandler')
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
@@ -95,6 +96,7 @@ module.exports = app => {
       }
       //save order
       const finalOrder = await req.app.locals.models.Order.create(order)
+      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: false, orderId: finalOrder.id }))
 
       const basket = new Basket(
         'Achats supplémentaires UTT Arena 2018',
@@ -102,7 +104,7 @@ module.exports = app => {
         req.user.lastname,
         req.user.email,
         'checkout',
-        `0/${finalOrder.id}/${req.user.id}`
+        data
       )
       if (order.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
       if (order.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
