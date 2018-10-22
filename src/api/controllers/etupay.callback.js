@@ -73,7 +73,7 @@ async function handlePayload(models, payload) {
       if(order.paid) order.paid_at = moment().format()
       log.info(`user ${user.name} is at state ${order.transactionState} for his order ${order.id}`)
       await order.save()
-  
+      order.setUser(user)
       return {
         shouldSendMail: false,
         user,
