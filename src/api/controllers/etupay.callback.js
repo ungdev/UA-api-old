@@ -37,7 +37,7 @@ async function handlePayload(User, Team, payload) {
     const isInscription = payload.serviceData.substr(0, 1) === '1'
     log.info('id: ', id)
     log.info('isInscription: ', isInscription)
-    const user = await User.findById(data.id, { include: [Team] })
+    const user = await User.findById(id, { include: [Team] })
 
 
     if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
