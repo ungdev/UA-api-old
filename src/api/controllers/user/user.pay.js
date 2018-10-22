@@ -75,7 +75,7 @@ module.exports = app => {
 
   app.post('/user/pay', async (req, res) => {
     try {
-      if (req.user.paid) return res.status(404).json('ALREADY PAID').end()
+      if (req.user.paid) return res.status(404).json('ALREADY_PAID').end()
       if (req.body.plusone) {
         const count = await req.app.locals.models.User.count({ where: { plusone: true } })
         if (count >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
@@ -115,7 +115,7 @@ module.exports = app => {
         req.user.lastname,
         req.user.email,
         'checkout',
-        req.user.id
+        JSON.stringify({ id: req.user.id, isInscription: true })
       )
 
       if (req.body.plusone) {

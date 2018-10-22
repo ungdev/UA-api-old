@@ -33,7 +33,9 @@ async function leaveTeam(user, Team, User) {
 async function handlePayload(User, Team, payload) {
   try {
     log.info(payload)
-    const user = await User.findById(payload.serviceData, { include: [Team] })
+    const data = JSON.parse(payload.serviceData)
+    log.info(data)
+    const user = await User.findById(data.id, { include: [Team] })
 
 
     if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
