@@ -36,6 +36,7 @@ async function handlePayload(models, payload) {
   try {
     log.info('PAYLOAD:', payload)
     const data = JSON.parse(Base64.decode(payload.serviceData))
+    log.info(data)
     const isInscription = data.isInscription
     const user = await User.findById(data.userId, { include: [Team] })
 
@@ -64,6 +65,20 @@ async function handlePayload(models, payload) {
     else {
       let order = await Order.findById(data.orderId)
       log.info(order)
+      if(order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
+
+      order.transactionId = payload.transactionId
+      order.transactionState = payload.step
+      order.paid = payload.paid
+      if(order.paid) order.paid_at = moment().format()
+      log.info(`user ${user.name} is at state ${user.transactionState} for his order ${order.id}`)
+      await order.save()
+  
+      return {
+        shouldSendMail: false,
+        user,
+        error: null
+      }
     }
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
@@ -87,7 +102,7 @@ async function handlePayload(models, payload) {
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
     const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
-    if (error) return res.status(200).end()
+    if (error) return res.status(200).json(error).end()
     if (shouldSendMail) {
       await sendPdf(user)
       log.info('MAIL SENT TO USER')
