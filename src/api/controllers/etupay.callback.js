@@ -41,9 +41,9 @@ async function handlePayload(models, payload) {
     const user = await User.findById(data.userId, { include: [Team] })
 
 
-    if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
+    if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER', transactionState: 'error' }
     if (isInscription) {
-      if(user.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
+      if(user.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID', transactionState: 'error' }
       const userHadPay = user.paid
   
       user.transactionId = payload.transactionId
@@ -59,7 +59,8 @@ async function handlePayload(models, payload) {
       return {
         shouldSendMail: user.paid && !userHadPay,
         user,
-        error: null
+        error: null,
+        transactionState: user.transactionState
       }
     }
     else {
@@ -77,14 +78,15 @@ async function handlePayload(models, payload) {
       return {
         shouldSendMail: false,
         user,
-        error: null
+        error: null,
+        transactionState: order.transactionState
       }
     }
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
 
     log.info(`handle payload error: ${body}`)
-    return { user: null, shouldSendMail: false, error: body}
+    return { user: null, shouldSendMail: false, error: body, transactionState: 'error' }
   }
 }
 
@@ -116,7 +118,7 @@ module.exports = app => {
 
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
-      const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
+      const { shouldSendMail, user, error, transactionState } = await handlePayload(req.app.locals.models, req.etupay)
       if (error) {
         if(error === 'ALREADY_PAID') return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
         else return res.redirect(env.ARENA_ETUPAY_ERRORURL)
@@ -131,7 +133,7 @@ module.exports = app => {
         await sendPdf(user)
         log.info('MAIL SENT TO USER') //todo
       }
-      if(user.transactionState === 'refused') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      if(transactionState !== 'paid') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
     }
 
