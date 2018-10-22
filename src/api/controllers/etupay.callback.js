@@ -32,9 +32,9 @@ async function leaveTeam(user, Team, User) {
 }
 async function handlePayload(User, Team, payload) {
   try {
-    log.info(payload)
+    log.info('payload :', payload)
     const data = JSON.parse(payload.serviceData)
-    log.info(data)
+    log.info('data: ', data)
     const user = await User.findById(data.id, { include: [Team] })
 
 

@@ -108,14 +108,14 @@ module.exports = app => {
       )
 
       let price = partnerPrice ? env.ARENA_PRICES_PARTNER : env.ARENA_PRICES_DEFAULT
-
+        const data = { id: req.user.id, isInscription: true }
       const basket = new Basket(
         'Inscription UTT Arena 2018',
         req.user.firstname,
         req.user.lastname,
         req.user.email,
         'checkout',
-        JSON.stringify({ id: req.user.id, isInscription: true })
+        JSON.stringify(data)
       )
 
       if (req.body.plusone) {
