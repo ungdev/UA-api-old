@@ -34,37 +34,40 @@ async function leaveTeam(user, Team, User) {
 async function handlePayload(models, payload) {
   let { User, Team, Order } = models
   try {
-    log.info('PAYLOAD:', payload)
     const data = JSON.parse(Base64.decode(payload.serviceData))
-    log.info(data)
-    const isInscription = data.isInscription
-    const user = await User.findById(data.userId, { include: [Team] })
+    const { orderId, isInscription, userId } = data
+    const user = await User.findById(userId, { include: [Team] })
 
 
     if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER', transactionState: 'error' }
     if (isInscription) {
-      if(user.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID', transactionState: 'error' }
-      const userHadPay = user.paid
+      let order = await Order.findById(orderId)
+      if(user.paid || order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID', transactionState: 'error' }
   
-      user.transactionId = payload.transactionId
-      user.transactionState = payload.step
-      user.paid = payload.paid
-      if(user.paid) user.paid_at = moment().format()
-      if(user.plusone) await leaveTeam(user, Team, User)
+      order.transactionId = payload.transactionId
+      order.transactionState = payload.step
+      order.paid = payload.paid
+      if(order.paid) {
+        user.paid = order.paid
+        order.paid_at = moment().format()
+      }
+      user.plusone = order.plusone
+      if(order.plusone) await leaveTeam(user, Team, User)
   
-      log.info(`user ${user.name} is at state ${user.transactionState}`)
+      log.info(`user ${user.name} is at state ${user.transactionState} for his order ${order.id}`)
   
       await user.save()
+      await order.save()
   
       return {
-        shouldSendMail: user.paid && !userHadPay,
+        shouldSendMail: true,
         user,
         error: null,
-        transactionState: user.transactionState
+        transactionState: order.transactionState
       }
     }
     else {
-      let order = await Order.findById(data.orderId)
+      let order = await Order.findById(orderId)
       if(order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
 
       order.transactionId = payload.transactionId
@@ -73,7 +76,6 @@ async function handlePayload(models, payload) {
       if(order.paid) order.paid_at = moment().format()
       log.info(`user ${user.name} is at state ${order.transactionState} for his order ${order.id}`)
       await order.save()
-      order.setUser(user)
       return {
         shouldSendMail: false,
         user,
@@ -103,8 +105,10 @@ async function handlePayload(models, payload) {
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
     const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
-    if (error) return res.status(200).json(error).end()
+    if (error) return res.status(200).end()
     if (shouldSendMail) {
+      const { User, Team, Order } = req.app.locals.models
+      user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
       await sendPdf(user)
       log.info('MAIL SENT TO USER')
     }
@@ -129,6 +133,8 @@ module.exports = app => {
           .end()
       }
       if (shouldSendMail) {
+        const { User, Team, Order } = req.app.locals.models
+        user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
         await sendPdf(user)
         log.info('MAIL SENT TO USER') //todo
       }

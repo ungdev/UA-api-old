@@ -10,25 +10,10 @@ module.exports.outputFields = user =>
     'email',
     'isAdmin',
     'paid',
-    'paid_at',
-    'shirt',
     'plusone',
-    'ethernet',
-    'ethernet7',
-    'tombola',
-    'kaliento',
-    'mouse',
-    'keyboard',
-    'headset',
-    'screen24',
-    'screen27',
-    'chair',
-    'gamingPC',
-    'streamingPC',
-    'laptop',
-    'accepted',
     'team',
-    'respo'
+    'respo',
+    'orders',
   ])
 
 module.exports.inputFields = user => pick(user, ['name', 'lastname', 'firstname', 'gender', 'email', 'password'])

@@ -93,8 +93,9 @@ module.exports = app => {
         order.shirt = req.body.shirtGender.toLowerCase() + req.body.shirtSize.toLowerCase()
       }
       //save order
-      const finalOrder = await req.app.locals.models.Order.create(order)
-      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: false, orderId: finalOrder.id }))
+      order = await req.app.locals.models.Order.create(order)
+      order.setUser(req.user)
+      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: false, orderId: order.id }))
 
       const basket = new Basket(
         'Achats supplémentaires UTT Arena 2018',

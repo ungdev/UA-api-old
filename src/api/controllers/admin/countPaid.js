@@ -15,18 +15,18 @@ module.exports = app => {
   app.get('/admin/paids', [isAuth(), isAdmin()])
 
   app.get('/admin/paids', async (req, res) => {
-    const { User, Team, Spotlight } = req.app.locals.models
+    const { User, Team, Spotlight, Order } = req.app.locals.models
 
     try {
       let totalUsers = await User.count()
-      let totalPaidVisitors = await User.count({
-          where:{ paid: 1, plusone: 1}
+      let totalPaidVisitors = await Order.count({
+          where:{ paid: 1, place: 1, plusone: 1 }
       })
-      let totalPaidPlayers = await User.count({
-          where: { paid: 1, plusone: 0}
+      let totalPaidPlayers = await Order.count({
+          where: { paid: 1, place: 1, plusone: 0 }
       })
       let totalUnpaid = await User.count({
-          where: { paid: 0}
+          where: { paid: 0 }
       })
       let totalTeams = await Team.count()
       const teams = await Team.findAll({ include: [Spotlight, User] })

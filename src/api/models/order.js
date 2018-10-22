@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     paid_at: { type: DataTypes.STRING, defaultValue: null },
     transactionId: { type: DataTypes.INTEGER, defaultValue: 0 },
     transactionState: { type: DataTypes.STRING },
+    place: { type: DataTypes.BOOLEAN, defaultValue: false },
     shirt: { type: DataTypes.STRING, defaultValue: 'none' },
     plusone: { type: DataTypes.BOOLEAN, defaultValue: false },
     ethernet: { type: DataTypes.BOOLEAN, defaultValue: false },
