@@ -65,7 +65,6 @@ async function handlePayload(models, payload) {
     }
     else {
       let order = await Order.findById(data.orderId)
-      log.info(order)
       if(order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
 
       order.transactionId = payload.transactionId
