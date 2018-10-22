@@ -4,6 +4,7 @@ const validateBody = require('../../middlewares/validateBody')
 const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
+const log = require('../../utils/log')(module)
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -108,14 +109,15 @@ module.exports = app => {
       )
 
       let price = partnerPrice ? env.ARENA_PRICES_PARTNER : env.ARENA_PRICES_DEFAULT
-        const data = { id: req.user.id, isInscription: true }
+      const data = JSON.stringify({ id: req.user.id, isInscription: true })
+      log.info('HERE IS DATA :', data)
       const basket = new Basket(
         'Inscription UTT Arena 2018',
         req.user.firstname,
         req.user.lastname,
         req.user.email,
         'checkout',
-        JSON.stringify(data)
+        data
       )
 
       if (req.body.plusone) {
