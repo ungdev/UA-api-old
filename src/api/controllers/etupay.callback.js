@@ -71,7 +71,7 @@ async function handlePayload(models, payload) {
       order.transactionState = payload.step
       order.paid = payload.paid
       if(order.paid) order.paid_at = moment().format()
-      log.info(`user ${user.name} is at state ${user.transactionState} for his order ${order.id}`)
+      log.info(`user ${user.name} is at state ${order.transactionState} for his order ${order.id}`)
       await order.save()
   
       return {
@@ -132,6 +132,7 @@ module.exports = app => {
         await sendPdf(user)
         log.info('MAIL SENT TO USER') //todo
       }
+      log.info('transactionState :', transactionState)
       if(transactionState !== 'paid') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
     }
