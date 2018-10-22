@@ -133,7 +133,11 @@ module.exports = app => {
         log.info('MAIL SENT TO USER') //todo
       }
       log.info('transactionState :', transactionState)
-      if(transactionState !== 'paid') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      if(transactionState !== 'paid') {
+        log.info('REDIRECT TO ', env.ARENA_ETUPAY_ERRORURL)
+        return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      }
+      log.info('REDIRECT TO ', env.ARENA_ETUPAY_SUCCESSURL)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
     }
 
