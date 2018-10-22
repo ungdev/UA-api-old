@@ -72,7 +72,8 @@ module.exports = app => {
 
   app.post('/user/shop', async (req, res) => {
     try {
-      // step 1 : save user's payment profile (place type, shirt, ethernet cable)
+      let hasUnpaidOrder = req.app.locals.models.Order.findOne({ where: { paid: 0 } })
+      if(hasUnpaidOrder) return res.status(404).json({ error: 'UNPAID_ORDER' }).end()
       let order = {}
       order.ethernet = req.body.ethernet ? req.body.ethernet : false
       order.ethernet7 = req.body.ethernet7 ? req.body.ethernet7 : false
@@ -93,7 +94,7 @@ module.exports = app => {
         order.shirt = req.body.shirtGender.toLowerCase() + req.body.shirtSize.toLowerCase()
       }
       //save order
-
+      const finalOrder = await req.app.locals.models.Order.create(order)
 
       const basket = new Basket(
         'Achats supplémentaires UTT Arena 2018',
@@ -101,7 +102,7 @@ module.exports = app => {
         req.user.lastname,
         req.user.email,
         'checkout',
-        req.user.id
+        `0/${finalOrder.id}/${req.user.id}`
       )
       if (order.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
       if (order.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
