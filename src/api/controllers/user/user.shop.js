@@ -73,7 +73,7 @@ module.exports = app => {
 
   app.post('/user/shop', async (req, res) => {
     try {
-      let hasUnpaidOrder = req.app.locals.models.Order.findOne({ where: { paid: 0 } })
+      let hasUnpaidOrder = await req.app.locals.models.Order.findOne({ where: { paid: 0 } })
       log.info('HAS UNPAID ORDER', hasUnpaidOrder)
       if(hasUnpaidOrder) return res.status(404).json({ error: 'UNPAID_ORDER' }).end()
       let order = {}
