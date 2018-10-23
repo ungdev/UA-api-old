@@ -54,7 +54,7 @@ async function handlePayload(models, payload) {
       user.plusone = order.plusone
       if(order.plusone) await leaveTeam(user, Team, User)
   
-      log.info(`user ${user.name} is at state ${user.transactionState} for his order ${order.id}`)
+      log.info(`user ${user.name} is at state ${order.transactionState} for his order ${order.id}`)
   
       await user.save()
       await order.save()
