@@ -121,7 +121,7 @@ module.exports = app => {
 
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
-      const { shouldSendMail, user, error, transactionState } = await handlePayload(req.app.locals.models, req.etupay)
+      let { shouldSendMail, user, error, transactionState } = await handlePayload(req.app.locals.models, req.etupay)
       if (error) {
         if(error === 'ALREADY_PAID') return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
         else return res.redirect(env.ARENA_ETUPAY_ERRORURL)
