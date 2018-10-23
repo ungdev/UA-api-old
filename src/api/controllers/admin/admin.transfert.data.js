@@ -10,7 +10,7 @@ const errorHandler = require('../../utils/errorHandler')
  */
 module.exports = app => {
 
-  //app.get('/admin/data', [isAuth(), isAdmin()])
+  app.get('/admin/data', [isAuth(), isAdmin()])
   app.get('/admin/data', async (req, res) => {
     const { User, Order } = req.app.locals.models
     try {
