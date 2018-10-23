@@ -118,7 +118,7 @@ module.exports = app => {
       if (order.streamingPC) basket.addItem('Location PC Streaming', euro * env.ARENA_PRICES_STREAMING_PC, 1)
       if (order.laptop) basket.addItem('Location PC Portable', euro * env.ARENA_PRICES_LAPTOP, 1)
       if (order.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, order.tombola)
-      if (req.user.shirt !== 'none') {
+      if (order.shirt !== 'none') {
         basket.addItem(
           `T-Shirt ${gender[req.body.shirtGender]} ${req.body.shirtSize}`,
           euro * env.ARENA_PRICES_SHIRT,
