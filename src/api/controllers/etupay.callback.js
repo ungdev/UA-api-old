@@ -104,7 +104,7 @@ async function handlePayload(models, payload) {
  */
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
-    const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
+    let { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
     if (error) return res.status(200).end()
     if (shouldSendMail) {
       const { User, Team, Order } = req.app.locals.models
