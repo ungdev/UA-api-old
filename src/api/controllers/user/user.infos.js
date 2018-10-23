@@ -24,7 +24,7 @@ module.exports = app => {
   app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
-    const { User, Spotlight, Team, AskingUser } = req.app.locals.models
+    const { User, Spotlight, Team, AskingUser, Order } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
@@ -83,6 +83,7 @@ module.exports = app => {
         return spotlight
       })
       user = outputFields(user)
+      user.orders = await Order.findAll({ where: { userId: user.id } })
       return res
         .status(200)
         .json({

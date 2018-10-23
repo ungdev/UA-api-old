@@ -3,9 +3,8 @@ const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
 const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
-const errorHandler = require('../../utils/errorHandler')
-const log = require('../../utils/log')(module)
 const Base64 = require('js-base64').Base64
+const errorHandler = require('../../utils/errorHandler')
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -32,12 +31,9 @@ const gender = { H: 'Homme', F: 'Femme' }
  * }
  */
 module.exports = app => {
-  app.post('/user/pay', [isAuth('user-pay')])
+  app.post('/user/shop', [isAuth('user-pay')])
 
   app.post('/user/pay', [
-    check('plusone')
-      .exists()
-      .isBoolean(),
     check('ethernet')
       .exists()
       .isBoolean(),
@@ -75,17 +71,9 @@ module.exports = app => {
     validateBody()
   ])
 
-  app.post('/user/pay', async (req, res) => {
+  app.post('/user/shop', async (req, res) => {
     try {
-      const { Order } = req.app.locals.models
-      if (req.user.paid) return res.status(404).json('ALREADY_PAID').end()
-      if (req.body.plusone) {
-        const count = await Order.count({ where: { plusone: true, paid: true } })
-        if (count >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
-      }
-      // step 1 : save user's payment profile (place type, shirt, ethernet cable)
-      let order = { place: true }
-      order.plusone = req.body.plusone ? req.body.plusone : false
+      let order = {}
       order.ethernet = req.body.ethernet ? req.body.ethernet : false
       order.ethernet7 = req.body.ethernet7 ? req.body.ethernet7 : false
       order.tombola = req.body.tombola ? req.body.tombola : 0
@@ -104,33 +92,19 @@ module.exports = app => {
       if (req.body.shirtGender && req.body.shirtSize) {
         order.shirt = req.body.shirtGender.toLowerCase() + req.body.shirtSize.toLowerCase()
       }
-      order = await Order.create(order)
+      //save order
+      order = await req.app.locals.models.Order.create(order)
       order.setUser(req.user)
+      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: false, orderId: order.id }))
 
-      // step 2 : determine price (based on profile + mail)
-      const partnerPrice = env.ARENA_PRICES_PARTNER_MAILS.split(',').some(partner =>
-        req.user.email.toLowerCase().endsWith(partner)
-      )
-      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: true, orderId: order.id }))
-      let price = partnerPrice ? env.ARENA_PRICES_PARTNER : env.ARENA_PRICES_DEFAULT
       const basket = new Basket(
-        'Inscription UTT Arena 2018',
+        'Achats supplémentaires UTT Arena 2018',
         req.user.firstname,
         req.user.lastname,
         req.user.email,
         'checkout',
         data
       )
-
-      if (req.body.plusone) {
-        basket.addItem(
-          'Place UTT Arena Visiteur/Accompagnateur',
-          euro * env.ARENA_PRICES_PLUSONE,
-          1
-        )
-      } else {
-        basket.addItem('Place UTT Arena', euro * price, 1)
-      }
       if (order.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
       if (order.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
       if (order.kaliento) basket.addItem('Location Kaliento', euro * env.ARENA_PRICES_KALIENTO, 1)

@@ -25,7 +25,7 @@ module.exports = app => {
     validateBody()
   ])
   app.post('/admin/chart', async (req, res) => {
-    const { User } = req.app.locals.models
+    const { User, Order } = req.app.locals.models
     const { start, end, step } = req.body
     try {
       let totalPaidPlayers = await User.findAll({
@@ -33,7 +33,11 @@ module.exports = app => {
             paid: 1,
             plusone: 0,
           },
-          order: [['paid_at']]
+          include: [Order]
+      })
+      totalPaidPlayers = totalPaidPlayers.map(user => {
+        const paid_at = user.orders.find(order => order.paid && order.place).paid_at //the case where the find is undefined should not happen, because we filtered only paid users
+        return { ...user, paid_at } // adding paid_at to user
       })
       totalPaidPlayers = totalPaidPlayers.filter(user => moment(user.paid_at).isAfter(start) && moment(user.paid_at).isBefore(end))
       let result = []
