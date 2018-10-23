@@ -18,7 +18,7 @@ module.exports = app => {
       let users = await User.findAll()
       let orders = []
       users = await Promise.all(users.map(async user => {
-        if(user.transactionState){
+        if(user.transactionState || user.paid){
           let order = await Order.create({
             place: true,
             paid_at: user.paid_at,
