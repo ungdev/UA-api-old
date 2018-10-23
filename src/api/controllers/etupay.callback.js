@@ -110,7 +110,7 @@ module.exports = app => {
       const { User, Team, Order } = req.app.locals.models
       user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
       await sendPdf(user)
-      log.info('MAIL SENT TO USER')
+      log.info(`Mail sent to ${user.name}`)
     }
 
     return res
@@ -136,14 +136,13 @@ module.exports = app => {
         const { User, Team, Order } = req.app.locals.models
         user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
         await sendPdf(user)
-        log.info('MAIL SENT TO USER') //todo
+        log.info(`Mail sent to ${user.name}`)
       }
-      log.info('transactionState :', transactionState)
       if(transactionState !== 'paid') {
-        log.info('REDIRECT TO ', env.ARENA_ETUPAY_ERRORURL)
+        log.info(`${user.name} was redirected to ${env.ARENA_ETUPAY_ERRORURL}`)
         return res.redirect(env.ARENA_ETUPAY_ERRORURL)
       }
-      log.info('REDIRECT TO ', env.ARENA_ETUPAY_SUCCESSURL)
+      log.info(`${user.name} was redirected to ${env.ARENA_ETUPAY_SUCCESSURL}`)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
     }
 
