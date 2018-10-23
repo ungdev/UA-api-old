@@ -60,7 +60,7 @@ async function handlePayload(models, payload) {
       await order.save()
   
       return {
-        shouldSendMail: true,
+        shouldSendMail: user.paid,
         user,
         error: null,
         transactionState: order.transactionState
