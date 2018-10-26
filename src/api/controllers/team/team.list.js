@@ -4,8 +4,7 @@ const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
 const log = require('../../utils/log')(module)
 const errorHandler = require('../../utils/errorHandler')
-const { outputFields } = require('../../utils/publicFields')
-const { isSpotlightFull } = require('../../utils/isFull')
+const isInSpotlight = require('../../utils/isInSpotlight')
 
 /**
  * GET /user
@@ -34,20 +33,22 @@ module.exports = app => {
           }
         ]
       })
-      teams = teams.map(team => {
+      teams = await Promise.all(teams.map(async team => {
+        const isIn = await isInSpotlight(team.id, req)
         return {
           id : team.id,
           name: team.name,
           captainId: team.captainId,
           soloTeam: team.soloTeam,
           spotlightId: team.spotlightId,
+          isInSpotlight: isIn,
           users: team.users.map(user => {
             return {
               id: user.id,
               name: user.name,
               role: user.role,
           }})
-      }})
+      }}))
       return res
         .status(200)
         .json(teams)
