@@ -40,7 +40,6 @@ module.exports = app => {
           team: user.team ? user.team.name : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
           material: {
-            //shirt: user.shirt,
             ethernet: user.ethernet,
             ethernet7: user.ethernet7,
             kaliento: user.kaliento,
@@ -53,7 +52,8 @@ module.exports = app => {
             gamingPC: user.gamingPC,
             streamingPC: user.streamingPC,
             laptop: user.laptop,
-            tombola: user.tombola
+            tombola: user.tombola,
+            shirt: user.shirt
           }
         }
       })
