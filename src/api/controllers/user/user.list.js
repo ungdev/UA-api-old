@@ -8,7 +8,7 @@ const isAuth = require('../../middlewares/isAuth')
  * Response:
  * [
  *    {
- *      id, name, isAdmin, firstname, lastname, mail, team, spotlightId
+ *      id, name, isAdmin, firstname, lastname, mail, team, spotlightId, material
  *    },
  *    ...
  * ]
@@ -38,7 +38,23 @@ module.exports = app => {
           isAdmin: user.isAdmin,
           paid: user.paid,
           team: user.team ? user.team.name : '/',
-          spotlightId: user.team ? user.team.spotlightId : '/'
+          spotlightId: user.team ? user.team.spotlightId : '/',
+          material: {
+            ethernet: user.ethernet,
+            ethernet7: user.ethernet7,
+            kaliento: user.kaliento,
+            mouse: user.mouse,
+            keyboard: user.keyboard,
+            headset: user.headset,
+            screen24: user.screen24,
+            screen27: user.screen27,
+            chair: user.chair,
+            gamingPC: user.gamingPC,
+            streamingPC: user.streamingPC,
+            laptop: user.laptop,
+            tombola: user.tombola,
+            shirt: user.shirt
+          }
         }
       })
       return res

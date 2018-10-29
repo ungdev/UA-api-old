@@ -53,7 +53,7 @@ module.exports = app => {
   ])
 
   app.post('/user', async (req, res) => {
-    const { User } = req.app.locals.models
+    const { User, Permission } = req.app.locals.models
 
     try {
       req.body.barcode = random(env.ARENA_API_BARCODE_LENGTH)
@@ -61,6 +61,9 @@ module.exports = app => {
 
       req.body.registerToken = uuid()
       const user = await User.create(req.body)
+      await Permission.create({
+        userId: user.id
+      })
 
       await mail('user.register', user.email, {
         mail: user.email,

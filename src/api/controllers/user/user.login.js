@@ -35,7 +35,7 @@ module.exports = app => {
   ])
 
   app.put('/user/login', async (req, res) => {
-    const { User } = req.app.locals.models
+    const { User, Permission } = req.app.locals.models
 
     try {
       const username = req.body.name
@@ -82,9 +82,15 @@ module.exports = app => {
 
       log.info(`user ${user.name} logged`)
 
+      const permissions = await Permission.findOne({
+        where: {
+          userId: user.id
+        }
+      })
+
       res
         .status(200)
-        .json({ user: outputFields(user), token })
+        .json({ user: outputFields(user), token, permissions })
         .end()
     } catch (err) {
       errorHandler(err, res)

@@ -1,7 +1,8 @@
 
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('permission', {
-    respo: { type: DataTypes.INTEGER, defaultValue: 0 },
-    sendMessage: { type: DataTypes.STRING, defaultValue: null },
+    userId : { type: DataTypes.UUID, allowNull: false, unique: true },
+    respo: { type: DataTypes.STRING, defaultValue: null },
+    admin: { type: DataTypes.BOOLEAN, defaultValue: false },
   })
 }

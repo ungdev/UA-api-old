@@ -2,10 +2,10 @@ module.exports = function(sequelize) {
   const User = sequelize.import(`${__dirname}/user`)
   const Info = sequelize.import(`${__dirname}/info`)
   const Team = sequelize.import(`${__dirname}/team`)
+  const Permission = sequelize.import(`${__dirname}/permission`)
   const Spotlight = sequelize.import(`${__dirname}/spotlight`)
   const AskingUser = sequelize.import(`${__dirname}/askingUser`)
   const Order = sequelize.import(`${__dirname}/order`)
-  const Permission = sequelize.import(`${__dirname}/permission`)
 
   User.belongsTo(Team)
   Team.hasMany(User)
@@ -16,10 +16,11 @@ module.exports = function(sequelize) {
   Team.belongsTo(Spotlight)
   Spotlight.hasMany(Team)
 
+  Permission.belongsTo(User)
+  User.hasOne(Permission)
+
   User.belongsToMany(Team, { through: AskingUser, as: 'RequestedTeam' })
   Team.belongsToMany(User, { through: AskingUser, as: 'AskingUser' })
-
-  Permission.belongsTo(User)
 
   return { User, Team, Spotlight, AskingUser, Info, Order, Permission }
 }
