@@ -20,6 +20,9 @@ module.exports = app => {
         include: [
           {
             model: User, as: 'From'
+          },
+          {
+            model: User, as: 'To'
           }
         ]
       })
