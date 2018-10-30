@@ -8,7 +8,7 @@ const isAuth = require('../../middlewares/isAuth')
  * Response:
  * [
  *    {
- *      id, name, isAdmin, firstname, lastname, mail, team, spotlightId, material
+ *      id, name, firstname, lastname, email, paid, teamId, material, permissions
  *    },
  *    ...
  * ]
@@ -17,7 +17,7 @@ module.exports = app => {
   app.get('/users', [isAuth(), isAdmin()])
 
   app.get('/users', async (req, res) => {
-    const { User, Team } = req.app.locals.models
+    const { User, Team, Permission } = req.app.locals.models
 
     try {
       let users = await User.findAll({
@@ -27,18 +27,21 @@ module.exports = app => {
           }
         ]
       })
-      users = users.map(user => {
+      users = users.map(async (user) => {
+        let permissions = await Permission.findOne({
+          where: {
+            userId: user.id
+          }
+        })
+
         return {
           id: user.id,
           name: user.name,
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          respo: user.respo,
-          isAdmin: user.isAdmin,
           paid: user.paid,
-          team: user.team ? user.team.name : '/',
-          spotlightId: user.team ? user.team.spotlightId : '/',
+          teamId: user.team ? user.team.id : '/',
           material: {
             ethernet: user.ethernet,
             ethernet7: user.ethernet7,
@@ -54,7 +57,8 @@ module.exports = app => {
             laptop: user.laptop,
             tombola: user.tombola,
             shirt: user.shirt
-          }
+          },
+          permissions: permissions
         }
       })
       return res
