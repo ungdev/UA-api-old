@@ -88,6 +88,10 @@ module.exports = app => {
         }
       })
 
+      if(!permissions) {
+        log.warn(`no permissions found for user ${user.name}`)
+      }
+
       res
         .status(200)
         .json({ user: outputFields(user), token, permissions })
