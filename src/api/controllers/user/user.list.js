@@ -17,17 +17,47 @@ module.exports = app => {
   app.get('/users', [isAuth(), isAdmin()])
 
   app.get('/users', async (req, res) => {
-    const { User, Team } = req.app.locals.models
+    const { User, Team, Order } = req.app.locals.models
 
     try {
       let users = await User.findAll({
         include: [
           {
             model: Team
+          },
+          {
+            model: Order
           }
         ]
       })
+
       users = users.map(user => {
+        let orders = user.orders.map(order => {
+          return {
+            paid: order.paid,
+            paid_at: order.paid_at,
+            transactionState: order.transactionState,
+            place: order.place,
+            plusone: order.plusone,
+            material: {
+              ethernet: order.ethernet,
+              ethernet7: order.ethernet7,
+              kaliento: order.kaliento,
+              mouse: order.mouse,
+              keyboard: order.keyboard,
+              headset: order.headset,
+              screen24: order.screen14,
+              screen27: order.screen27,
+              chair: order.chair,
+              gamingPC: order.gamingPC,
+              streamingPC: order.streamingPC,
+              laptop: order.laptop,
+              tombola: order.tombola,
+              shirt: order.shirt
+            }
+          }
+        })
+
         return {
           id: user.id,
           name: user.name,
@@ -39,24 +69,10 @@ module.exports = app => {
           paid: user.paid,
           team: user.team ? user.team.name : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
-          material: {
-            ethernet: user.ethernet,
-            ethernet7: user.ethernet7,
-            kaliento: user.kaliento,
-            mouse: user.mouse,
-            keyboard: user.keyboard,
-            headset: user.headset,
-            screen24: user.screen24,
-            screen27: user.screen27,
-            chair: user.chair,
-            gamingPC: user.gamingPC,
-            streamingPC: user.streamingPC,
-            laptop: user.laptop,
-            tombola: user.tombola,
-            shirt: user.shirt
-          }
+          orders: orders
         }
       })
+
       return res
         .status(200)
         .json(users)
