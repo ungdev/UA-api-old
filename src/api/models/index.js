@@ -19,5 +19,12 @@ module.exports = function(sequelize) {
   User.belongsToMany(Team, { through: AskingUser, as: 'RequestedTeam' })
   Team.belongsToMany(User, { through: AskingUser, as: 'AskingUser' })
 
+  Messages.belongsTo(User, {as: 'From', foreignKey: 'senderId'})
+  Messages.belongsTo(User, {as: 'To', foreignKey: 'receiverId'})
+
+  User.hasMany(Messages, {as: 'From', foreignKey: 'senderId'})
+  User.hasMany(Messages, {as: 'To', foreignKey: 'receiverId'})
+
+
   return { User, Team, Spotlight, AskingUser, Info, Order, Messages }
 }
