@@ -36,32 +36,6 @@ module.exports = app => {
         ]
       })
 
-      let teams = await Team.findAll({
-        include: [{ model: User, through: AskingUser, as: 'AskingUser' }]
-      })
-
-      // clean teams
-      teams = await Promise.all(teams.map(async team => {
-        team = team.toJSON()
-
-        // AskingUser = users on AskingUsers
-        if (team.AskingUser) {
-          team.askingUsers = team.AskingUser.map(teamUser => {
-            // clean the user
-            const cleanedUser = outputFields(teamUser)
-
-            // add data from join table
-            cleanedUser.askingMessage = teamUser.askingUser.message
-
-            return cleanedUser
-          })
-
-          delete team.AskingUser
-        }
-        team.isInSpotlight = await isInSpotlight(team.id, req)
-        return team
-      }))
-
       // Generate new token
       const token = jwt.sign({ id: req.user.id }, env.ARENA_API_SECRET, {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
@@ -90,7 +64,6 @@ module.exports = app => {
           user,
           token,
           spotlights: spotlights,
-          teams,
           prices: {
             partners: env.ARENA_PRICES_PARTNER_MAILS,
             plusone: env.ARENA_PRICES_PLUSONE,
