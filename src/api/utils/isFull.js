@@ -3,7 +3,7 @@ const log = require('./log')(module)
 const isTeamFull = (team, max, paid = false) => {
   let count
   if(!team.users){
-    log.info('NO USERS IN TEAM', team.is)
+    log.info('NO USERS IN TEAM')
     return false
   }
 
