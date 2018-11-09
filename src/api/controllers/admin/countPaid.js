@@ -20,13 +20,16 @@ module.exports = app => {
     try {
       let totalUsers = await User.count()
       let totalPaidVisitors = await Order.count({
-          where:{ paid: 1, place: 1, plusone: 1 }
+        where:{ paid: 1, place: 1, plusone: 1 }
       })
       let totalPaidPlayers = await Order.count({
-          where: { paid: 1, place: 1, plusone: 0 }
+        where: { paid: 1, place: 1, plusone: 0 }
       })
       let totalUnpaid = await User.count({
-          where: { paid: 0 }
+        where: { paid: 0 }
+      })
+      let totalFreePlayers = await User.count({
+        where: { paid: 1, plusone: 0, teamId: null }
       })
       let totalTeams = await Team.count()
       const teams = await Team.findAll({ include: [Spotlight, User] })
@@ -34,7 +37,7 @@ module.exports = app => {
       const totalFullTeams = teams.filter(team => isTeamFull(team, team.spotlight.perTeam, false)).length
       return res
         .status(200)
-        .json({ totalUsers, totalPaidPlayers, totalPaidVisitors, totalUnpaid, totalTeams, totalPaidTeams, totalFullTeams })
+        .json({ totalUsers, totalPaidPlayers, totalPaidVisitors, totalUnpaid, totalTeams, totalPaidTeams, totalFullTeams, totalFreePlayers })
         .end()
     } catch (err) {
       errorHandler(err, res)
