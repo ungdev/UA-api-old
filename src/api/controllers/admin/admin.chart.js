@@ -20,26 +20,24 @@ module.exports = app => {
       .exists(),
     check('end')
       .exists(),
+    check('mode')
+      .exists(),
     check('step')
       .exists(),
     validateBody()
   ])
   app.post('/admin/chart', async (req, res) => {
-    const { User, Order } = req.app.locals.models
-    const { start, end, step } = req.body
+    const { Order } = req.app.locals.models
+    const { start, end, step, mode } = req.body
     try {
-      let totalPaidPlayers = await User.findAll({
+      let totalPaidOrders = await Order.findAll({
           where: {
             paid: 1,
+            place: 1,
             plusone: 0,
           },
-          include: [Order]
       })
-      totalPaidPlayers = totalPaidPlayers.map(user => {
-        const paid_at = user.orders.find(order => order.paid && order.place).paid_at //the case where the find is undefined should not happen, because we filtered only paid users
-        return { ...user, paid_at } // adding paid_at to user
-      })
-      totalPaidPlayers = totalPaidPlayers.filter(user => moment(user.paid_at).isAfter(start) && moment(user.paid_at).isBefore(end))
+      totalPaidOrders = totalPaidOrders.filter(order => moment(order.paid_at).isAfter(start) && moment(order.paid_at).isBefore(end))
       let result = []
       let format = 'YYYY-MM-DD'
       let adding = 'days'
@@ -57,8 +55,8 @@ module.exports = app => {
         let count = 0
         do {
           i++
-          totalPaidPlayers.forEach(user => {
-            if(moment(user.paid_at).format(format) === current.format(format))
+          totalPaidOrders.forEach(order => {
+            if(moment(order.paid_at).format(format) === current.format(format))
               count++
           })
           result.push({
@@ -66,6 +64,7 @@ module.exports = app => {
             count
           })
           current = current.add(1, adding)
+          if(mode === 'dayly') count = 0
         } while (i < 100 && !current.isAfter(ending))
       return res
         .status(200)
