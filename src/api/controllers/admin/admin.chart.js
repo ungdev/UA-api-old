@@ -55,7 +55,7 @@ module.exports = app => {
         const ending = moment(end)
         let i = 0
         let count = 0
-        while (i < 100 && !current.isAfter(ending)) {
+        do {
           i++
           totalPaidPlayers.forEach(user => {
             if(moment(user.paid_at).format(format) === current.format(format))
@@ -66,7 +66,7 @@ module.exports = app => {
             count
           })
           current = current.add(1, adding)
-        }
+        } while (i < 100 && !current.isAfter(ending))
       return res
         .status(200)
         .json(result)
