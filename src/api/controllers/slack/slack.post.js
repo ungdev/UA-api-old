@@ -84,7 +84,7 @@ module.exports = app => {
           .end()
       let { user } = req.body
       user.topic = user.topic.label
-      let text = `Message depuis le formulaire de contacte du site :\n
+      let text = `Message depuis le formulaire de contact du site :\n
           De: ${user.firstname} ${user.lastname}\n
           Mail: ${user.email}\n
           Téléphone: ${user.phone}\n
@@ -108,7 +108,6 @@ module.exports = app => {
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))
   app.post("/slack/update", async (req, res) => {
-    log.info(req.body)
     return res.status(200).json({ challenge: req.body.challenge })
   })
 }

@@ -14,7 +14,7 @@ Vous trouverez la place en format numérique en pièce jointe. Veuillez conserve
 À bientôt pour l'UTT Arena !
 Toute l'équipe organisatrice`
 
-const htmlMessage = fs.readFileSync(path.join(__dirname, 'template.html'))
+const htmlMessage = fs.readFileSync(path.join(__dirname, 'place-template.html'))
 
 function generateBarcode(user) {
   return new Promise((resolve, reject) => {

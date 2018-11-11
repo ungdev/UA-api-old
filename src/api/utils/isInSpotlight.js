@@ -27,7 +27,7 @@ module.exports = async function isInSpotlight(teamId, req) {
 
 
   spotlight.teams = spotlight.teams.map(team => {
-    let teamCompletedAt = moment('2000') // initialize way in the past
+    let teamCompletedAt = moment('2000-01-01') // initialize way in the past
     team.users.forEach(user => {
       const payment = user.orders.find(order => order.place && order.paid)
       if(payment) {
