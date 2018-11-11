@@ -1,11 +1,6 @@
-const isAdmin = require('../../middlewares/isAdmin')
-const isAuth = require('../../middlewares/isAuth')
-const sendPdf = require('../../utils/sendPDF')
-const errorHandler = require('../../utils/errorHandler')
 const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
-const log = require('../../utils/log')(module)
-const moment = require('moment')
+const errorHandler = require('../../utils/errorHandler')
 
 /**
  * put /users/id
@@ -14,15 +9,25 @@ const moment = require('moment')
  * 
  */
 module.exports = app => {
-
-  app.post('/network', [isAuth()])
+  app.post('/network', [
+    check('mac')
+      .exists(),
+    check('ip')
+      .exists(),
+    check('switchId')
+      .exists(),
+    check('switchPort')
+      .exists(),
+    validateBody()
+  ])
   app.post('/network', async (req, res) => {
-    //const { User, Network } = req.app.locals.models
+    const { Network } = req.app.locals.models
+    const { mac, ip, switchId, switchPort } = req.body
     try {
-      
+      const nw = await Network.create({ mac, ip, switchId, switchPort })
       return res
         .status(200)
-        .json({ ip1: req.headers['x-forwarded-for'], ip2: req.connection.remoteAddress })
+        .json(nw)
         .end()
     } catch (err) {
       errorHandler(err, res)
