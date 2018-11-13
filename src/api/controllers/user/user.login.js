@@ -82,14 +82,19 @@ module.exports = app => {
 
       log.info(`user ${user.name} logged`)
 
-      const permissions = await Permission.findOne({
+      let permissions = await Permission.findOne({
         where: {
           userId: user.id
         }
       })
 
       if(!permissions) {
-        log.warn(`no permissions found for user ${user.name}`)
+        log.info(`no permissions found for user ${user.name}`)
+      }
+
+      permissions = {
+        admin: permissions.admin,
+        respo: permissions.respo
       }
 
       let ip = req.headers['x-forwarded-for']

@@ -1,6 +1,4 @@
 const jwt = require('jsonwebtoken')
-const pick = require('lodash.pick')
-const bcrypt = require('bcryptjs')
 const { promisify } = require('util')
 const env = require('../../env')
 const log = require('../utils/log')(module)
