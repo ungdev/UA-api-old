@@ -14,14 +14,14 @@ const moment = require('moment')
 module.exports = app => {
   app.get('/admin/spotlight/:id', [isAuth(), isAdmin()])
   app.get('/admin/spotlight/:id', async (req, res) => {
-    const { Spotlight, Team, User } = req.app.locals.models
+    const { Spotlight, Team, User, Order } = req.app.locals.models
 
     try {
       let spotlight = await Spotlight.findById(req.params.id, {
         include: [
           {
             model: Team,
-            include: [User]
+            include: [ { model: User, include: [Order] } ]
           }
         ]
       })
@@ -29,7 +29,9 @@ module.exports = app => {
       spotlight.teams = spotlight.teams.map(team => {
         let teamCompletedAt = moment('2000') // initialize way in the past
         team.users.forEach(user => {
-          if(moment(teamCompletedAt).isBefore(user.paid_at)) teamCompletedAt = user.paid_at
+          const place = user.orders.find(order => order.paid && order.place)
+          const paid_at = place ? place.paid_at : ''
+          if(moment(teamCompletedAt).isBefore(paid_at)) teamCompletedAt = paid_at
           if(moment(teamCompletedAt).isBefore(user.joined_at)) teamCompletedAt = user.joined_at
         })
         return {id: team.id, completed_at: teamCompletedAt, name: team.name, users: team.users}

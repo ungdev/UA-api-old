@@ -2,6 +2,7 @@ const env = require('../../env')
 const log = require('../utils/log')(module)
 const moment = require('moment')
 const sendPdf = require('../utils/sendPDF')
+const Base64 = require('js-base64').Base64
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -30,38 +31,63 @@ async function leaveTeam(user, Team, User) {
   }
 
 }
-async function handlePayload(User, Team, payload) {
+async function handlePayload(models, payload) {
+  let { User, Team, Order } = models
   try {
-    log.info('payload :', payload)
-    const data = JSON.parse(payload.serviceData)
-    log.info('data: ', data)
-    const user = await User.findById(data.id, { include: [Team] })
+    const data = JSON.parse(Base64.decode(payload.serviceData))
+    const { orderId, isInscription, userId } = data
+    const user = await User.findById(userId, { include: [Team] })
 
 
-    if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER' }
-    if(user.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
-    const userHadPay = user.paid
+    if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER', transactionState: 'error' }
+    if (isInscription) {
+      let order = await Order.findById(orderId)
+      if(user.paid || order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID', transactionState: 'error' }
+  
+      order.transactionId = payload.transactionId
+      order.transactionState = payload.step
+      order.paid = payload.paid
+      if(order.paid) {
+        user.paid = order.paid
+        order.paid_at = moment().format()
+      }
+      user.plusone = order.plusone
+      if(order.plusone) await leaveTeam(user, Team, User)
+  
+      log.info(`user ${user.name} is at state ${order.transactionState} for his order ${order.id}`)
+  
+      await user.save()
+      await order.save()
+  
+      return {
+        shouldSendMail: user.paid,
+        user,
+        error: null,
+        transactionState: order.transactionState
+      }
+    }
+    else {
+      let order = await Order.findById(orderId)
+      if(order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
 
-    user.transactionId = payload.transactionId
-    user.transactionState = payload.step
-    user.paid = payload.paid
-    if(user.paid) user.paid_at = moment().format()
-    if(user.plusone) await leaveTeam(user, Team, User)
-
-    log.info(`user ${user.name} is at state ${user.transactionState}`)
-
-    await user.save()
-
-    return {
-      shouldSendMail: user.paid && !userHadPay,
-      user,
-      error: null
+      order.transactionId = payload.transactionId
+      order.transactionState = payload.step
+      order.paid = payload.paid
+      if(order.paid) order.paid_at = moment().format()
+      log.info(`user ${user.name} is at state ${order.transactionState} for his order ${order.id}`)
+      await order.save()
+      return {
+        shouldSendMail: false,
+        user,
+        error: null,
+        transactionState: order.transactionState
+      }
     }
   } catch (err) {
     const body = JSON.stringify(payload, null, 2)
 
     log.info(`handle payload error: ${body}`)
-    return { user: null, shouldSendMail: false, error: body}
+    return { user: null, shouldSendMail: false, error: body, transactionState: 'error' }
   }
 }
 
@@ -78,11 +104,13 @@ async function handlePayload(User, Team, payload) {
  */
 module.exports = app => {
   app.post('/user/pay/callback', etupay.middleware, async (req, res) => {
-    const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+    let { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
     if (error) return res.status(200).end()
     if (shouldSendMail) {
+      const { User, Team, Order } = req.app.locals.models
+      user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
       await sendPdf(user)
-      log.info('MAIL SENT TO USER')
+      log.info(`Mail sent to ${user.name}`)
     }
 
     return res
@@ -93,7 +121,7 @@ module.exports = app => {
 
   app.get('/user/pay/return', etupay.middleware, async (req, res, next) => {
     if (req.query.payload) {
-      const { shouldSendMail, user, error } = await handlePayload(req.app.locals.models.User, req.app.locals.models.Team, req.etupay)
+      let { shouldSendMail, user, error, transactionState } = await handlePayload(req.app.locals.models, req.etupay)
       if (error) {
         if(error === 'ALREADY_PAID') return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
         else return res.redirect(env.ARENA_ETUPAY_ERRORURL)
@@ -105,10 +133,16 @@ module.exports = app => {
           .end()
       }
       if (shouldSendMail) {
+        const { User, Team, Order } = req.app.locals.models
+        user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
         await sendPdf(user)
-        log.info('MAIL SENT TO USER') //todo
+        log.info(`Mail sent to ${user.name}`)
       }
-      if(user.transactionState === 'refused') return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      if(transactionState !== 'paid') {
+        log.info(`${user.name} was redirected to ${env.ARENA_ETUPAY_ERRORURL}`)
+        return res.redirect(env.ARENA_ETUPAY_ERRORURL)
+      }
+      log.info(`${user.name} was redirected to ${env.ARENA_ETUPAY_SUCCESSURL}`)
       return res.redirect(env.ARENA_ETUPAY_SUCCESSURL)
     }
 

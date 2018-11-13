@@ -1,11 +1,7 @@
-const pick = require('lodash.pick')
-const jwt = require('jsonwebtoken')
 const isAuth = require('../../middlewares/isAuth')
-const env = require('../../../env')
-const log = require('../../utils/log')(module)
 const errorHandler = require('../../utils/errorHandler')
+const isInSpotlight = require('../../utils/isInSpotlight')
 const { outputFields } = require('../../utils/publicFields')
-const { isSpotlightFull } = require('../../utils/isFull')
 
 /**
  * GET /user
@@ -24,30 +20,47 @@ module.exports = app => {
   app.get('/teams', [isAuth()])
 
   app.get('/teams', async (req, res) => {
-    const { Team, User } = req.app.locals.models
+    const { Team, User, AskingUser } = req.app.locals.models
 
     try {
       let teams = await Team.findAll({
         include: [
           {
             model: User
+          },
+          {
+            model: User,
+            through: AskingUser,
+            as: 'AskingUser'
           }
         ]
       })
-      teams = teams.map(team => {
+      teams = await Promise.all(teams.map(async team => {
+        team = team.toJSON()
+        if (team.AskingUser) {
+          team.askingUsers = team.AskingUser.map(teamUser => {
+            // clean the user
+            const cleanedUser = outputFields(teamUser)
+
+            // add data from join table
+            cleanedUser.askingMessage = teamUser.askingUser.message
+
+            return cleanedUser
+          })
+
+          delete team.AskingUser
+        }
+        team.isInSpotlight = await isInSpotlight(team.id, req)
         return {
-          id : team.id,
-          name: team.name,
-          captainId: team.captainId,
-          soloTeam: team.soloTeam,
-          spotlightId: team.spotlightId,
+          ...team,
           users: team.users.map(user => {
-            return {
-              id: user.id,
-              name: user.name,
-              role: user.role,
+          return {
+            id: user.id,
+            name: user.name,
+            role: user.role,
           }})
-      }})
+        }
+      }))
       return res
         .status(200)
         .json(teams)

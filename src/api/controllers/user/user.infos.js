@@ -24,7 +24,7 @@ module.exports = app => {
   app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
-    const { User, Spotlight, Team, AskingUser } = req.app.locals.models
+    const { User, Spotlight, Team, AskingUser, Order } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
@@ -35,32 +35,6 @@ module.exports = app => {
           }
         ]
       })
-
-      let teams = await Team.findAll({
-        include: [{ model: User, through: AskingUser, as: 'AskingUser' }]
-      })
-
-      // clean teams
-      teams = await Promise.all(teams.map(async team => {
-        team = team.toJSON()
-
-        // AskingUser = users on AskingUsers
-        if (team.AskingUser) {
-          team.askingUsers = team.AskingUser.map(teamUser => {
-            // clean the user
-            const cleanedUser = outputFields(teamUser)
-
-            // add data from join table
-            cleanedUser.askingMessage = teamUser.askingUser.message
-
-            return cleanedUser
-          })
-
-          delete team.AskingUser
-        }
-        team.isInSpotlight = await isInSpotlight(team.id, req)
-        return team
-      }))
 
       // Generate new token
       const token = jwt.sign({ id: req.user.id }, env.ARENA_API_SECRET, {
@@ -83,13 +57,13 @@ module.exports = app => {
         return spotlight
       })
       user = outputFields(user)
+      user.orders = await Order.findAll({ where: { userId: user.id } })
       return res
         .status(200)
         .json({
           user,
           token,
           spotlights: spotlights,
-          teams,
           prices: {
             partners: env.ARENA_PRICES_PARTNER_MAILS,
             plusone: env.ARENA_PRICES_PLUSONE,

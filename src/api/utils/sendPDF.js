@@ -14,7 +14,7 @@ Vous trouverez la place en format numérique en pièce jointe. Veuillez conserve
 À bientôt pour l'UTT Arena !
 Toute l'équipe organisatrice`
 
-const htmlMessage = fs.readFileSync(path.join(__dirname, 'template.html'))
+const htmlMessage = fs.readFileSync(path.join(__dirname, 'place-template.html'))
 
 function generateBarcode(user) {
   return new Promise((resolve, reject) => {
@@ -41,32 +41,33 @@ function generatePdf(user, barcode) {
 
     doc.image(fond, 0, 0, { width: doc.page.width, height: doc.page.height })
     let scoup = ''
-    if(user.kaliento) scoup = `${scoup}, kaliento`
-    if(user.mouse) scoup = `${scoup}, souris`
-    if(user.keyboard) scoup = `${scoup}, clavier`
-    if(user.headset) scoup = `${scoup}, casque`
-    if(user.chair) scoup = `${scoup}, chaise gaming`
-    if(user.screen24) scoup = `${scoup}, écran 24"`
-    if(user.screen27) scoup = `${scoup}, écran 27"`
-    if(user.laptop) scoup = `${scoup}, PC portable`
-    if(user.gamingPC) scoup = `${scoup}, PC gaming`
-    if(user.streamingPC) scoup = `${scoup}, PC streaming`
+    let order = user.orders.find(order => order.place && order.paid)
+    if(order.kaliento) scoup = `${scoup}, kaliento`
+    if(order.mouse) scoup = `${scoup}, souris`
+    if(order.keyboard) scoup = `${scoup}, clavier`
+    if(order.headset) scoup = `${scoup}, casque`
+    if(order.chair) scoup = `${scoup}, chaise gaming`
+    if(order.screen24) scoup = `${scoup}, écran 24"`
+    if(order.screen27) scoup = `${scoup}, écran 27"`
+    if(order.laptop) scoup = `${scoup}, PC portable`
+    if(order.gamingPC) scoup = `${scoup}, PC gaming`
+    if(order.streamingPC) scoup = `${scoup}, PC streaming`
     if(scoup.length > 0) scoup = scoup.substr(2, scoup.length)
-    if(user.shirt === 'none') user.shirt = 'aucun'
+    if(order.shirt === 'none') order.shirt = 'aucun'
     else {
-      const gen = user.shirt.substr(0, 1) === 'h' ? 'Homme' : 'Femme'
-      const size = user.shirt.substr(1, user.shirt.length).toUpperCase()
-      user.shirt = `${gen} ${size}`
+      const gen = order.shirt.substr(0, 1) === 'h' ? 'Homme' : 'Femme'
+      const size = order.shirt.substr(1, order.shirt.length).toUpperCase()
+      order.shirt = `${gen} ${size}`
     }
     doc
         .font(__dirname + '/assets/ua-2018.ttf')
         .fontSize(30)
         .text(`${user.lastname} ${user.firstname}`, 204, 240)
         .text(`${user.plusone ? 'Accompagnateur' : 'Joueur'}`, 120, 276)
-        .text(`${user.shirt}`, 140, 312)
-        .text(`${user.ethernet ? 'oui': 'non'}`, 165, 349)
-        .text(`${user.ethernet7 ? 'oui': 'non'}`, 165, 386)
-        .text(`${user.tombola}`, 153, 421)
+        .text(`${order.shirt}`, 140, 312)
+        .text(`${order.ethernet ? 'oui': 'non'}`, 165, 349)
+        .text(`${order.ethernet7 ? 'oui': 'non'}`, 165, 386)
+        .text(`${order.tombola}`, 153, 421)
         .text(`${scoup}`, 158, 457)
 
     doc.image(barcode, 364, 152, { height: 49 } )

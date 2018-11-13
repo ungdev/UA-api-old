@@ -3,6 +3,7 @@ const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
 const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
+const Base64 = require('js-base64').Base64
 const errorHandler = require('../../utils/errorHandler')
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
@@ -72,7 +73,6 @@ module.exports = app => {
 
   app.post('/user/shop', async (req, res) => {
     try {
-      // step 1 : save user's payment profile (place type, shirt, ethernet cable)
       let order = {}
       order.ethernet = req.body.ethernet ? req.body.ethernet : false
       order.ethernet7 = req.body.ethernet7 ? req.body.ethernet7 : false
@@ -93,7 +93,9 @@ module.exports = app => {
         order.shirt = req.body.shirtGender.toLowerCase() + req.body.shirtSize.toLowerCase()
       }
       //save order
-
+      order = await req.app.locals.models.Order.create(order)
+      order.setUser(req.user)
+      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: false, orderId: order.id }))
 
       const basket = new Basket(
         'Achats supplémentaires UTT Arena 2018',
@@ -101,7 +103,7 @@ module.exports = app => {
         req.user.lastname,
         req.user.email,
         'checkout',
-        req.user.id
+        data
       )
       if (order.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
       if (order.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
@@ -115,8 +117,8 @@ module.exports = app => {
       if (order.gamingPC) basket.addItem('Location PC Gaming', euro * env.ARENA_PRICES_GAMING_PC, 1)
       if (order.streamingPC) basket.addItem('Location PC Streaming', euro * env.ARENA_PRICES_STREAMING_PC, 1)
       if (order.laptop) basket.addItem('Location PC Portable', euro * env.ARENA_PRICES_LAPTOP, 1)
-      if (order.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, req.user.tombola)
-      if (req.user.shirt !== 'none') {
+      if (order.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, order.tombola)
+      if (order.shirt !== 'none') {
         basket.addItem(
           `T-Shirt ${gender[req.body.shirtGender]} ${req.body.shirtSize}`,
           euro * env.ARENA_PRICES_SHIRT,

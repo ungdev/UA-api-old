@@ -2,13 +2,18 @@ const { isSpotlightFull, isTeamFull } = require('./isFull')
 const moment = require('moment')
 
 module.exports = async function isInSpotlight(teamId, req) {
-  const { User, Team, Spotlight } = req.app.locals.models
+  const { User, Team, Spotlight, Order } = req.app.locals.models
   let team = await Team.findById(teamId, { include:[User] })
   const spotlight = await Spotlight.findById(team.spotlightId, {
     include: [
       {
         model: Team,
-        include: [User]
+        include: [
+          {
+            model: User,
+            include: [Order]
+          }
+        ]
       }
     ]
   })
@@ -22,12 +27,16 @@ module.exports = async function isInSpotlight(teamId, req) {
 
 
   spotlight.teams = spotlight.teams.map(team => {
-    let teamCompletedAt = moment('2000') // initialize way in the past
+    let teamCompletedAt = moment('2000-01-01') // initialize way in the past
     team.users.forEach(user => {
-      if(moment(teamCompletedAt).isBefore(user.paid_at)) teamCompletedAt = user.paid_at
-      if(moment(teamCompletedAt).isBefore(user.joined_at)) teamCompletedAt = user.joined_at
+      const payment = user.orders.find(order => order.place && order.paid)
+      if(payment) {
+        const paid_at = payment.paid_at
+        if(moment(teamCompletedAt).isBefore(paid_at)) teamCompletedAt = paid_at
+        if(moment(teamCompletedAt).isBefore(user.joined_at)) teamCompletedAt = user.joined_at
+      }
     })
-    return {id: team.id, completed_at: teamCompletedAt, users: team.users}
+    return {id: team.id, completed_at: teamCompletedAt, users: team.users } //users is used in isTeamFull
   }).sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
 
   spotlight.teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true))

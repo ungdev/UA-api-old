@@ -5,6 +5,7 @@ const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
+const Base64 = require('js-base64').Base64
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
   url: env.ARENA_ETUPAY_URL,
@@ -76,41 +77,42 @@ module.exports = app => {
 
   app.post('/user/pay', async (req, res) => {
     try {
+      const { Order } = req.app.locals.models
       if (req.user.paid) return res.status(404).json('ALREADY_PAID').end()
       if (req.body.plusone) {
-        const count = await req.app.locals.models.User.count({ where: { plusone: true } })
+        const count = await Order.count({ where: { plusone: true, paid: true } })
         if (count >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
       }
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
-      req.user.plusone = req.body.plusone ? req.body.plusone : false
-      req.user.ethernet = req.body.ethernet ? req.body.ethernet : false
-      req.user.ethernet7 = req.body.ethernet7 ? req.body.ethernet7 : false
-      req.user.tombola = req.body.tombola ? req.body.tombola : 0
-      req.user.kaliento = req.body.kaliento ? req.body.kaliento : false
-      req.user.mouse = req.body.mouse ? req.body.mouse : false
-      req.user.keyboard = req.body.keyboard ? req.body.keyboard : false
-      req.user.headset = req.body.headset ? req.body.headset : false
-      req.user.screen24 = req.body.screen24 ? req.body.screen24 : false
-      req.user.screen27 = req.body.screen27 ? req.body.screen27 : false
-      req.user.chair = req.body.chair ? req.body.chair : false
-      req.user.gamingPC = req.body.gamingPC ? req.body.gamingPC : false
-      req.user.streamingPC = req.body.streamingPC ? req.body.streamingPC : false
-      req.user.laptop = req.body.laptop ? req.body.laptop : false
-      req.user.shirt = 'none'
+      let order = { place: true }
+      order.plusone = req.body.plusone ? req.body.plusone : false
+      order.ethernet = req.body.ethernet ? req.body.ethernet : false
+      order.ethernet7 = req.body.ethernet7 ? req.body.ethernet7 : false
+      order.tombola = req.body.tombola ? req.body.tombola : 0
+      order.kaliento = req.body.kaliento ? req.body.kaliento : false
+      order.mouse = req.body.mouse ? req.body.mouse : false
+      order.keyboard = req.body.keyboard ? req.body.keyboard : false
+      order.headset = req.body.headset ? req.body.headset : false
+      order.screen24 = req.body.screen24 ? req.body.screen24 : false
+      order.screen27 = req.body.screen27 ? req.body.screen27 : false
+      order.chair = req.body.chair ? req.body.chair : false
+      order.gamingPC = req.body.gamingPC ? req.body.gamingPC : false
+      order.streamingPC = req.body.streamingPC ? req.body.streamingPC : false
+      order.laptop = req.body.laptop ? req.body.laptop : false
+      order.shirt = 'none'
 
       if (req.body.shirtGender && req.body.shirtSize) {
-        req.user.shirt = req.body.shirtGender.toLowerCase() + req.body.shirtSize.toLowerCase()
+        order.shirt = req.body.shirtGender.toLowerCase() + req.body.shirtSize.toLowerCase()
       }
-      await req.user.save()
+      order = await Order.create(order)
+      order.setUser(req.user)
 
       // step 2 : determine price (based on profile + mail)
       const partnerPrice = env.ARENA_PRICES_PARTNER_MAILS.split(',').some(partner =>
         req.user.email.toLowerCase().endsWith(partner)
       )
-
+      const data = Base64.encode(JSON.stringify({ userId: req.user.id, isInscription: true, orderId: order.id }))
       let price = partnerPrice ? env.ARENA_PRICES_PARTNER : env.ARENA_PRICES_DEFAULT
-      const data = JSON.stringify({ id: req.user.id, isInscription: true })
-      log.info('HERE IS DATA :', data)
       const basket = new Basket(
         'Inscription UTT Arena 2018',
         req.user.firstname,
@@ -129,20 +131,20 @@ module.exports = app => {
       } else {
         basket.addItem('Place UTT Arena', euro * price, 1)
       }
-      if (req.user.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
-      if (req.user.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
-      if (req.user.kaliento) basket.addItem('Location Kaliento', euro * env.ARENA_PRICES_KALIENTO, 1)
-      if (req.user.mouse) basket.addItem('Location Souris', euro * env.ARENA_PRICES_MOUSE, 1)
-      if (req.user.keyboard) basket.addItem('Location Clavier', euro * env.ARENA_PRICES_KEYBOARD, 1)
-      if (req.user.headset) basket.addItem('Location Casque', euro * env.ARENA_PRICES_HEADSET, 1)
-      if (req.user.screen24) basket.addItem('Location Ecran 24"', euro * env.ARENA_PRICES_SCREEN24, 1)
-      if (req.user.screen27) basket.addItem('Location Ecran 27"', euro * env.ARENA_PRICES_SCREEN27, 1)
-      if (req.user.chair) basket.addItem('Location Chaise Gaming', euro * env.ARENA_PRICES_CHAIR, 1)
-      if (req.user.gamingPC) basket.addItem('Location PC Gaming', euro * env.ARENA_PRICES_GAMING_PC, 1)
-      if (req.user.streamingPC) basket.addItem('Location PC Streaming', euro * env.ARENA_PRICES_STREAMING_PC, 1)
-      if (req.user.laptop) basket.addItem('Location PC Portable', euro * env.ARENA_PRICES_LAPTOP, 1)
-      if (req.user.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, req.user.tombola)
-      if (req.user.shirt !== 'none') {
+      if (order.ethernet) basket.addItem('Cable Ethernet 5m', euro * env.ARENA_PRICES_ETHERNET, 1)
+      if (order.ethernet7) basket.addItem('Cable Ethernet 7m', euro * env.ARENA_PRICES_ETHERNET7, 1)
+      if (order.kaliento) basket.addItem('Location Kaliento', euro * env.ARENA_PRICES_KALIENTO, 1)
+      if (order.mouse) basket.addItem('Location Souris', euro * env.ARENA_PRICES_MOUSE, 1)
+      if (order.keyboard) basket.addItem('Location Clavier', euro * env.ARENA_PRICES_KEYBOARD, 1)
+      if (order.headset) basket.addItem('Location Casque', euro * env.ARENA_PRICES_HEADSET, 1)
+      if (order.screen24) basket.addItem('Location Ecran 24"', euro * env.ARENA_PRICES_SCREEN24, 1)
+      if (order.screen27) basket.addItem('Location Ecran 27"', euro * env.ARENA_PRICES_SCREEN27, 1)
+      if (order.chair) basket.addItem('Location Chaise Gaming', euro * env.ARENA_PRICES_CHAIR, 1)
+      if (order.gamingPC) basket.addItem('Location PC Gaming', euro * env.ARENA_PRICES_GAMING_PC, 1)
+      if (order.streamingPC) basket.addItem('Location PC Streaming', euro * env.ARENA_PRICES_STREAMING_PC, 1)
+      if (order.laptop) basket.addItem('Location PC Portable', euro * env.ARENA_PRICES_LAPTOP, 1)
+      if (order.tombola > 0) basket.addItem('Tombola', euro * env.ARENA_PRICES_TOMBOLA, order.tombola)
+      if (order.shirt !== 'none') {
         basket.addItem(
           `T-Shirt ${gender[req.body.shirtGender]} ${req.body.shirtSize}`,
           euro * env.ARENA_PRICES_SHIRT,
