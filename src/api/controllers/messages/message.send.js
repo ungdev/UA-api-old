@@ -9,13 +9,12 @@ module.exports = app => {
     const { Messages, User } = req.app.locals.models
 
     try {
+      const user = await User.findById(req.user.id)
       const message = await Messages.create({
-        message: 'message'
+        message: req.message
       })
       await message.setFrom(req.user)
       await message.setTo(req.user)
-      const prout = await User.findById(req.user.id)
-      log.info(prout.isAdmin)
       return res
         .status(200)
         .json(message)
