@@ -87,7 +87,6 @@ module.exports = async (user) => {
   const pdf = await generatePdf(user, barcode)
   
   log.info(`[generatePdf] sending mail to ${user.email}`)
-
   return transporter.sendMail({
       from: '"UTT Arena" <arena@utt.fr>',
       to: user.email,
