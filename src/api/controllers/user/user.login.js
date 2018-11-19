@@ -35,7 +35,7 @@ module.exports = app => {
   ])
 
   app.put('/user/login', async (req, res) => {
-    const { User } = req.app.locals.models
+    const { User, Network } = req.app.locals.models
 
     try {
       const username = req.body.name
@@ -81,7 +81,22 @@ module.exports = app => {
       })
 
       log.info(`user ${user.name} logged`)
-
+      let ip = req.headers['x-forwarded-for']
+      if(ip){
+        ip = ip.split(',')[0]
+        const ipTab = ip.split('.')
+        if(ipTab[0] === '10') {
+          let network = await Network.findOne({
+            where: { ip }
+          })
+          if(network){
+            await user.addNetwork(network)
+            log.info(`Added ip ${ip} to user ${user.name}.`)
+          } else {
+            log.info(`Could not add user ip, ${ip} does not exist.`)
+          }
+        }
+      }
       res
         .status(200)
         .json({ user: outputFields(user), token })
