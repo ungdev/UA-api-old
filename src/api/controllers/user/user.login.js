@@ -2,12 +2,13 @@ const { check } = require('express-validator/check')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const validateBody = require('../../middlewares/validateBody')
-const isLoginEnabled = require('../../middlewares/isLoginEnabled')
+
 const env = require('../../../env')
+const log = require('../../utils/log')(module)
 const errorHandler = require('../../utils/errorHandler')
 const { outputFields } = require('../../utils/publicFields')
-const log = require('../../utils/log')(module)
+const validateBody = require('../../middlewares/validateBody')
+const isLoginEnabled = require('../../middlewares/isLoginEnabled')
 
 /**
  * POST /user/login
@@ -35,12 +36,13 @@ module.exports = app => {
   ])
 
   app.put('/user/login', async (req, res) => {
-    const { User, Permission, Network } = req.app.locals.models
+    const { User, Network } = req.app.locals.models
 
     try {
       const username = req.body.name
       const password = req.body.password
 
+      // Get user
       const user = await User.findOne({
         where: {
           [Op.or]: [{ name: username }, { email: username }]
@@ -56,15 +58,7 @@ module.exports = app => {
           .end()
       }
 
-      if (user.registerToken) {
-        log.warn(`user ${username} tried to login before activating`)
-
-        return res
-          .status(400)
-          .json({ error: 'USER_NOT_ACTIVATED' })
-          .end()
-      }
-
+      // Check for password
       const passwordMatches = await bcrypt.compare(password, user.password)
 
       if (!passwordMatches) {
@@ -76,27 +70,22 @@ module.exports = app => {
           .end()
       }
 
+      // Check if account is activated
+      if (user.registerToken) {
+        log.warn(`user ${username} tried to login before activating`)
+
+        return res
+          .status(400)
+          .json({ error: 'USER_NOT_ACTIVATED' })
+          .end()
+      }
+
+      // Generate new token
       const token = jwt.sign({ id: user.id }, env.ARENA_API_SECRET, {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
 
-      log.info(`user ${user.name} logged`)
-
-      let permissions = await Permission.findOne({
-        where: {
-          userId: user.id
-        }
-      })
-
-      if(!permissions) {
-        log.info(`no permissions found for user ${user.name}`)
-      }
-
-      permissions = {
-        admin: permissions.admin,
-        respo: permissions.respo
-      }
-
+      // 
       let ip = req.headers['x-forwarded-for']
       if(ip) {
         ip = ip.split(',')[0]
@@ -117,9 +106,11 @@ module.exports = app => {
         }
       }
 
+      log.info(`user ${user.name} logged`)
+
       res
         .status(200)
-        .json({ user: outputFields(user), token, permissions })
+        .json({ user: outputFields(user), token })
         .end()
     } catch (err) {
       errorHandler(err, res)

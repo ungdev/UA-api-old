@@ -6,7 +6,7 @@ const log = require('../utils/log')(module)
 jwt.verify = promisify(jwt.verify)
 
 module.exports = route => async (req, res, next) => {
-  const { User, Team, Spotlight } = req.app.locals.models
+  const { User, Permission, Team, Spotlight } = req.app.locals.models
 
   const auth = req.get('X-Token')
 
@@ -31,7 +31,15 @@ module.exports = route => async (req, res, next) => {
       ]
     })
 
+    const permissions = await Permission.findOne({
+      where: { userId: user.id }
+    })
+
     req.user = user
+    req.permissions = {
+      admin: permissions.admin,
+      respo: permissions.respo
+    }
 
     next()
   } catch (err) {
