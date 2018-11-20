@@ -20,24 +20,12 @@ module.exports = app => {
     const { User, Team, Order, Permission } = req.app.locals.models
 
     try {
-      let users = await User.findAll({
-        include: [
-          {
-            model: Team
-          },
-          {
-            model: Order
-          }
-        ]
+      const users = await User.findAll({
+        include: [Team, Order, Permission]
       })
 
-      users = users.map(async (user) => {
-        let permissions = await Permission.findOne({
-          where: {
-            userId: user.id
-          }
-        })
-
+      let usersData = users.map(user => {
+        // Get orders
         let orders = user.orders.map(order => {
           return {
             paid: order.paid,
@@ -64,6 +52,15 @@ module.exports = app => {
           }
         })
 
+        // Get permissions
+        let permissions = null
+        if(user.permission) {
+          permissions = {
+            respo: user.permission.respo,
+            admin: user.permission.admin
+          }
+        }
+
         return {
           id: user.id,
           name: user.name,
@@ -72,15 +69,15 @@ module.exports = app => {
           email: user.email,
           paid: user.paid,
           teamId: user.team ? user.team.id : '/',
-          permissions: permissions,
+          permissions,
           spotlightId: user.team ? user.team.spotlightId : '/',
-          orders: orders
+          orders
         }
       })
 
       return res
         .status(200)
-        .json(users)
+        .json(usersData)
         .end()
     } catch (err) {
       errorHandler(err, res)

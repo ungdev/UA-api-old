@@ -23,26 +23,21 @@ module.exports = route => async (req, res, next) => {
     const decoded = await jwt.verify(auth, env.ARENA_API_SECRET)
 
     const user = await User.findById(decoded.id, {
-      include: [
+      include:
+      [
         {
           model: Team,
           include: [User, Spotlight]
-        }
+        },
+        Permission
       ]
     })
 
-    const permissions = await Permission.findOne({
-      where: { userId: user.id }
-    })
-
     req.user = user
-    req.permissions = {
-      admin: permissions.admin,
-      respo: permissions.respo
-    }
 
     next()
-  } catch (err) {
+  }
+  catch (err) {
     log.warn('invalid token', { route })
 
     return res
