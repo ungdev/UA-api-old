@@ -25,15 +25,21 @@ module.exports = app => {
     const { User, Team, Spotlight } = req.app.locals.models
 
     try {
-      let unpaidUsers = await User.findAll({ where: { paid: 0 } })
+      let unpaidUsers = await User.findAll({ where: { paid: 0, registerToken: null } })
       for(let user of unpaidUsers) {
         await sendReminderToUnpaidUsers(user)
       }
-      let notInTeamPaidUsers = await User.findAll({ where: { paid: 1, teamId: null } })
+      let notInTeamPaidUsers = await User.findAll({ where: { paid: 1, teamId: null, registerToken: null } })
       for(let user of notInTeamPaidUsers) {
         await sendReminderToNotInTeamUsers(user)
       }
-      let inNotFullTeamUsers = await User.findAll({ where: { paid: 1 }, include: [{ model: Team, include: [Spotlight, User] }] })
+      let inNotFullTeamUsers = await User.findAll({
+        where: {
+          paid: 1,
+          registerToken: null
+        },
+        include: [{ model: Team, include: [Spotlight, User] }]
+      })
       //return res.status(200).json(inNotFullTeamUsers).end()
       inNotFullTeamUsers = inNotFullTeamUsers.filter(user => {
         if (!user.team) return false
