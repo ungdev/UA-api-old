@@ -52,7 +52,6 @@ module.exports = app => {
       //     channel = env.SLACK_CHANNEL_UA_APP
       //     break
       // } 
-      log.info('LOG', req.body.toChannel)
       slack.post(
         channel,
         { text: req.body.message },

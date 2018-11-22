@@ -5,6 +5,8 @@ module.exports = function(sequelize) {
   const Spotlight = sequelize.import(`${__dirname}/spotlight`)
   const AskingUser = sequelize.import(`${__dirname}/askingUser`)
   const Order = sequelize.import(`${__dirname}/order`)
+  const Message = sequelize.import(`${__dirname}/message`)
+  const Conversation = sequelize.import(`${__dirname}/conversation`)
   const Network = sequelize.import(`${__dirname}/network`)
   const Deck = sequelize.import(`${__dirname}/deck`)
   const State = sequelize.import(`${__dirname}/state`)
@@ -30,5 +32,17 @@ module.exports = function(sequelize) {
   User.belongsToMany(Team, { through: AskingUser, as: 'RequestedTeam' })
   Team.belongsToMany(User, { through: AskingUser, as: 'AskingUser' })
 
-  return { User, Team, Spotlight, AskingUser, Info, Order, Network, Deck, State }
+  Message.belongsTo(User, {as: 'From', foreignKey: 'senderId'})
+  Message.belongsTo(User, {as: 'To', foreignKey: 'receiverId'})
+
+  User.hasMany(Message, {as: 'From', foreignKey: 'senderId'})
+  User.hasMany(Message, {as: 'To', foreignKey: 'receiverId'})
+
+  Message.belongsTo(Conversation)
+  Conversation.hasMany(Message)
+
+  Conversation.belongsTo(User, {as: 'User1', foreignKey: 'user1'})
+  Conversation.belongsTo(User, {as: 'User2', foreignKey: 'user2'})
+
+  return { User, Team, Spotlight, AskingUser, Info, Order, Message, Conversation, Network, Deck, State }
 }
