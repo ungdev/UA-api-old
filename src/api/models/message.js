@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('messages', {
+  return sequelize.define('message', {
     message: { type: DataTypes.STRING },
   })
 }

@@ -6,10 +6,10 @@ const log = require('../../utils/log')(module)
 module.exports = app => {
   app.get('/messages', [isAuth()])
   app.get('/messages', async (req, res) => {
-    const { Messages, User } = req.app.locals.models
+    const { Message, User, Team, Spotlight } = req.app.locals.models
 
     try {
-      let messages = await Messages.findAll({
+      let messages = await Message.findAll({
         order: [['createdAt', 'ASC']],
         where: {
           [Sequelize.Op.or]: [
@@ -20,7 +20,20 @@ module.exports = app => {
         include: [
           {
             model: User,
-            as: 'From'
+            as: 'From',
+            attributes: ['id', 'name'],
+            include: [
+              {
+                model: Team,
+                attributes: ['spotlightId'],
+                include: [
+                  {
+                    model: Spotlight,
+                    attributes: ['id', 'name']
+                  }
+                ]
+              }
+            ]
           },
           {
             model: User,
@@ -38,10 +51,10 @@ module.exports = app => {
   })
 
   app.get('/messages/:id', async (req, res) => {
-    const { Messages, User } = req.app.locals.models
+    const { Message, User, Team, Spotlight } = req.app.locals.models
 
     try {
-      let messages = await Messages.findAll({
+      let messages = await Message.findAll({
         order: [['createdAt', 'ASC']],
         where: {
           [Sequelize.Op.or]: [
@@ -49,7 +62,25 @@ module.exports = app => {
             { receiverId: req.params.id }
           ]
         },
-        include: [{ model: User, as: 'From' }, { model: User, as: 'To' }]
+        include: [
+          {
+            model: User,
+            as: 'From',
+            attributes: ['id', 'name'],
+            include: [
+              {
+                model: Team,
+                attributes: ['spotlightId'],
+                include: [
+                  {
+                    model: Spotlight,
+                    attributes: ['id', 'name']
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       })
       return res
         .status(200)
