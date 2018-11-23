@@ -11,7 +11,7 @@ const validateBody = require('../../middlewares/validateBody')
 const isLoginEnabled = require('../../middlewares/isLoginEnabled')
 
 /**
- * POST /user/login
+ * PUT /user/login
  * {
  *    name: String
  *    password: String
