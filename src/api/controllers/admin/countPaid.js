@@ -33,8 +33,8 @@ module.exports = app => {
       })
       let totalTeams = await Team.count()
       const teams = await Team.findAll({ include: [Spotlight, User] })
-      const totalPaidTeams = teams.filter(team => isTeamFull(team, team.spotlight.perTeam, true)).length
-      const totalFullTeams = teams.filter(team => isTeamFull(team, team.spotlight.perTeam, false)).length
+      const totalPaidTeams = teams.filter(team => isTeamFull(team, team.spotlight.perTeam, true) && team.spotlight.perTeam > 1).length
+      const totalFullTeams = teams.filter(team => isTeamFull(team, team.spotlight.perTeam, false) && team.spotlight.perTeam > 1).length
       return res
         .status(200)
         .json({ totalUsers, totalPaidPlayers, totalPaidVisitors, totalUnpaid, totalTeams, totalPaidTeams, totalFullTeams, totalFreePlayers })
