@@ -15,22 +15,33 @@ module.exports = app => {
     const { Permission } = req.app.locals.models
 
     try {
+      if(req.body.admin === null) {
+        return res
+        .status(400)  // Bad request
+        .json({ error: 'BAD_REQUEST' })
+        .end()
+      }
+      else if(req.params.id === req.user.id) {
+        return res
+        .status(403)  // Forbidden
+        .json({ error: 'NOT_ALLOWED' })
+        .end()
+      }
+
       let permission = await Permission.find({
         where: { userId: req.params.id }
       })
 
-      if(req.body.admin !== null && req.params.id !== req.user.id) {
-        if(permission) {
-          permission.admin = req.body.admin
-          await permission.save()
-        }
-        else {
-          await Permission.create({
-            userId: req.params.id,
-            admin: req.body.admin,
-            respo: null
-          })
-        }
+      if(permission) {
+        permission.admin = req.body.admin
+        await permission.save()
+      }
+      else {
+        await Permission.create({
+          userId: req.params.id,
+          admin: req.body.admin,
+          respo: null
+        })
       }
 
       return res
