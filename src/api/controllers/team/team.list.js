@@ -33,6 +33,9 @@ module.exports = app => {
             through: AskingUser,
             as: 'AskingUser'
           }
+        ],
+        order: [
+          ['name', 'ASC']
         ]
       })
       teams = await Promise.all(teams.map(async team => {

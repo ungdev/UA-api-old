@@ -18,7 +18,10 @@ module.exports = app => {
 
     try {
       const users = await User.findAll({
-        include: [Team, Order, Permission]
+        include: [Team, Order, Permission],
+        order: [
+          ['name', 'ASC']
+        ]
       })
 
       let usersData = users.map(user => {
