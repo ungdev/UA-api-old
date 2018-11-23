@@ -52,7 +52,6 @@ module.exports = app => {
       //     channel = env.SLACK_CHANNEL_UA_APP
       //     break
       // } 
-      log.info('LOG', req.body.toChannel)
       slack.post(
         channel,
         { text: req.body.message },
@@ -90,12 +89,11 @@ module.exports = app => {
           Téléphone: ${user.phone}\n
           Sujet: ${user.topic}\n
           Message: ${user.message}`
-      const result = await slack.post(
+      await slack.post(
         env.SLACK_CHANNEL_UA_APP,
         { text },
         { headers: { "Content-type": "application/json" } }
       )
-      log.info(result.status)
       return res
         .status(200)
         .json("OK")

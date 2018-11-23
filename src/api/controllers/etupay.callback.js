@@ -2,6 +2,7 @@ const env = require('../../env')
 const log = require('../utils/log')(module)
 const moment = require('moment')
 const sendPdf = require('../utils/sendPDF')
+const sendInfosMail = require('../utils/sendMailInfo')
 const Base64 = require('js-base64').Base64
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,
@@ -107,9 +108,10 @@ module.exports = app => {
     let { shouldSendMail, user, error } = await handlePayload(req.app.locals.models, req.etupay)
     if (error) return res.status(200).end()
     if (shouldSendMail) {
-      const { User, Team, Order } = req.app.locals.models
-      user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
+      const { User, Team, Order, Spotlight } = req.app.locals.models
+      user = await User.findById(user.id, { include: [{ model: Team, include: [Spotlight] }, Order] }) //add order to user
       await sendPdf(user)
+      await sendInfosMail(user)
       log.info(`Mail sent to ${user.name}`)
     }
 
@@ -133,9 +135,10 @@ module.exports = app => {
           .end()
       }
       if (shouldSendMail) {
-        const { User, Team, Order } = req.app.locals.models
-        user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
+        const { User, Team, Order, Spotlight } = req.app.locals.models
+        user = await User.findById(user.id, { include: [{model: Team, include: [Spotlight]}, Order] }) //add order to user
         await sendPdf(user)
+        await sendInfosMail(user)
         log.info(`Mail sent to ${user.name}`)
       }
       if(transactionState !== 'paid') {
