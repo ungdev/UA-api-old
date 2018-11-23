@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     registerToken: { type: DataTypes.STRING },
     resetToken: { type: DataTypes.STRING },
     role: { type: DataTypes.STRING },
-    respo: { type: DataTypes.INTEGER, defaultValue: 0 },
     tableLetter: { type: DataTypes.STRING, defaultValue: null },
     placeNumber: { type: DataTypes.INTEGER, defaultValue: null },
   })
