@@ -8,24 +8,28 @@ const log = require('../../utils/log')(module)
 const moment = require('moment')
 
 /**
- * put /users/id
+ * POST /admin/forcepay
  *
  * Response:
- * 
+ *  user
  */
 module.exports = app => {
-
-  app.post('/admin/pay', [isAuth(), isAdmin()])
-  app.post('/admin/pay', [
+  app.post('/admin/forcepay', [isAuth(), isAdmin()])
+  app.post('/admin/forcepay', [
     check('userId')
       .exists(),
     validateBody()
   ])
-  app.post('/admin/pay', async (req, res) => {
+
+  app.post('/admin/forcepay', async (req, res) => {
     const { User, Team, Order } = req.app.locals.models
 
     try {
-      let user = await User.findOne({ where: { id: req.body.userId }, include: [Order] })
+      let user = await User.findOne({
+        where: { id: req.body.userId },
+        include: [Order]
+      })
+
       let order = { place: true }
       order.plusone = false
       order.ethernet = false
@@ -56,9 +60,11 @@ module.exports = app => {
       await user.save()
       await order.save()
       log.info(`Forced ${user.name}'s payment`)
+
       user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
       await sendPdf(user)
       log.info(`Mail sent to ${user.name}`)
+
       return res
         .status(200)
         .json(user)

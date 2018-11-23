@@ -3,20 +3,17 @@ const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 
 /**
- * GET /users
+ * GET /admin/users
  *
  * Response:
  * [
- *    {
- *      id, name, firstname, lastname, email, paid, teamId, material, permissions
- *    },
- *    ...
+ *    { id, name, firstname, lastname, email, paid, teamId, spotlightId, permissions, orders }, ...
  * ]
  */
 module.exports = app => {
-  app.get('/users', [isAuth(), isAdmin()])
+  app.get('/admin/users', [isAuth(), isAdmin()])
 
-  app.get('/users', async (req, res) => {
+  app.get('/admin/users', async (req, res) => {
     const { User, Team, Order, Permission } = req.app.locals.models
 
     try {
@@ -25,7 +22,7 @@ module.exports = app => {
       })
 
       let usersData = users.map(user => {
-        // Get orders
+        // Get user orders
         let orders = user.orders.map(order => {
           return {
             paid: order.paid,
@@ -52,7 +49,7 @@ module.exports = app => {
           }
         })
 
-        // Get permissions
+        // Get user permissions
         let permissions = null
         if(user.permission) {
           permissions = {
@@ -69,8 +66,8 @@ module.exports = app => {
           email: user.email,
           paid: user.paid,
           teamId: user.team ? user.team.id : '/',
-          permissions,
           spotlightId: user.team ? user.team.spotlightId : '/',
+          permissions,
           orders
         }
       })

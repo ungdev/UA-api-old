@@ -3,22 +3,23 @@ const isAuth = require('../../middlewares/isAuth')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
- * put /users/id
+ * GET /admin/data
  *
  * Response:
- * 
+ *  {t, users, orders}
  */
 module.exports = app => {
-
   app.get('/admin/data', [isAuth(), isAdmin()])
+
   app.get('/admin/data', async (req, res) => {
     const { User, Order } = req.app.locals.models
+
     try {
-        
       let users = await User.findAll()
       let orders = []
+
       users = await Promise.all(users.map(async user => {
-        if(user.transactionState || user.paid){
+        if(user.transactionState || user.paid) {
           let order = await Order.create({
             place: true,
             paid_at: user.paid_at,
@@ -41,11 +42,12 @@ module.exports = app => {
             transactionState: user.transactionState,
             paid: user.paid,
           })
+
           await order.setUser(user)
           orders.push({ id: order.id})
         }
-        return { name: user.name }
 
+        return { name: user.name }
       }))
 
       let t = await User.findAll({ include: [Order] })

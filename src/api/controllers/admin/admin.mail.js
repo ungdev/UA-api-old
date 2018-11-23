@@ -4,15 +4,15 @@ const sendPDF = require('../../utils/sendPDF')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
- * put /users/id
+ * GET /admin/mail/:name
  *
- * Response:
+ * Response: none
  * 
  */
 module.exports = app => {
-
-  app.get('/mail/:name', [isAuth(), isAdmin()])
-  app.get('/mail/:name', async (req, res) => {
+  app.get('/admin/mail/:name', [isAuth(), isAdmin()])
+  
+  app.get('/admin/mail/:name', async (req, res) => {
     const { User, Order } = req.app.locals.models
 
     try {

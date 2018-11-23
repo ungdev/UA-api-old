@@ -3,7 +3,7 @@ const validateBody = require('../../middlewares/validateBody')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
- * put /users/id
+ * POST /network
  *
  * Response:
  * 
@@ -20,6 +20,7 @@ module.exports = app => {
       .exists(),
     validateBody()
   ])
+
   app.post('/network', async (req, res) => {
     const { Network } = req.app.locals.models
     const { mac, ip, switchId, switchPort } = req.body
