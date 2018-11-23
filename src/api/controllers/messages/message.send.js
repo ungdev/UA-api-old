@@ -11,15 +11,17 @@ const _ = require('lodash')
 module.exports = app => {
   app.post('/messages', [isAuth()])
   app.post('/messages', async (req, res) => {
-    const { Message, User, Conversation } = req.app.locals.models
+    const { Message, User, Conversation, Permission } = req.app.locals.models
     let conversation
     try {
-      const user = await User.findById(req.user.id)
+      const user = await User.findById(req.user.id, {
+        include: [Permission]
+      })
       const userTo = _.isUndefined(req.body.to)
         ? null
         : await User.findById(req.body.to)
 
-      if (user.isAdmin !== 100) {
+      if (user.permission.admin !== 100) {
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
@@ -30,7 +32,7 @@ module.exports = app => {
         if (!conversation)
           await Conversation.create({
             user1: null,
-            user2: user.isAdmin ? userTo.id : user.id
+            user2: user.permission.admin ? userTo.id : user.id
           })
         conversation = await Conversation.findOne({
           where: {
@@ -42,9 +44,9 @@ module.exports = app => {
       const message = await Message.create({
         message: req.body.message
       })
-      await message.setFrom(user.isAdmin === 100 ? null : user)
+      await message.setFrom(user.permission.admin === 100 ? null : user)
       userTo
-        ? await message.setTo(userTo.isAdmin === 100 ? null : userTo)
+        ? await message.setTo(userTo.permission.admin === 100 ? null : userTo)
         : await message.setTo(null)
 
       await message.setConversation(conversation)
