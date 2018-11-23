@@ -1,4 +1,4 @@
-const env = require("../../../env")
+const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const Sequelize = require('sequelize')
@@ -50,8 +50,8 @@ module.exports = app => {
       await message.setConversation(conversation)
 
       let slackNotif
-      let channel = ''
       if (!_.isUndefined(req.body.spotlight)) {
+        let channel = ''
         switch (req.body.spotlight) {
           case 1:
             channel = env.SLACK_CHANNEL_UA_TOURNOI_LOL
@@ -78,16 +78,16 @@ module.exports = app => {
             channel = env.SLACK_CHANNEL_UA_APP
             break
         }
-      }
-      if (userTo === null) {
-        slackNotif = `Nouveau message de ${
-          user.name
-        } -> https://uttarena.app/dashboard/admin/messages/${user.id}`
-        await slack.post(
-          channel,
-          { text: slackNotif },
-          { headers: { 'Content-Type': 'application/json' } }
-        )
+        if (userTo === null) {
+          slackNotif = `Nouveau message de ${
+            user.name
+          } -> https://uttarena.app/dashboard/admin/messages/${user.id}`
+          await slack.post(
+            channel,
+            { text: slackNotif },
+            { headers: { 'Content-Type': 'application/json' } }
+          )
+        }
       }
 
       return res
