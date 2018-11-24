@@ -3,39 +3,51 @@ const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const { isTeamFull } = require('../../utils/isFull')
 const moment = require('moment')
+
 /**
- * GET /users
+ * GET /admin/spotlight/:id
  *
  * Response:
  * [
- *    
+ *    { id, completed_at, name, users }, ...
  * ]
  */
 module.exports = app => {
   app.get('/admin/spotlight/:id', [isAuth(), isAdmin()])
+
   app.get('/admin/spotlight/:id', async (req, res) => {
     const { Spotlight, Team, User, Order } = req.app.locals.models
 
     try {
       let spotlight = await Spotlight.findById(req.params.id, {
-        include: [
-          {
-            model: Team,
-            include: [ { model: User, include: [Order] } ]
-          }
-        ]
+        include: [{
+          model: Team,
+          include: [{
+            model: User,
+            include: [Order]
+          }]
+        }]
       })
 
       spotlight.teams = spotlight.teams.map(team => {
         let teamCompletedAt = moment('2000') // initialize way in the past
+
         team.users.forEach(user => {
           const place = user.orders.find(order => order.paid && order.place)
           const paid_at = place ? place.paid_at : ''
-          if(moment(teamCompletedAt).isBefore(paid_at)) teamCompletedAt = paid_at
-          if(moment(teamCompletedAt).isBefore(user.joined_at)) teamCompletedAt = user.joined_at
+
+          if(moment(teamCompletedAt).isBefore(paid_at)) {
+            teamCompletedAt = paid_at
+          }
+
+          if(moment(teamCompletedAt).isBefore(user.joined_at)) {
+            teamCompletedAt = user.joined_at
+          }
         })
+
         return {id: team.id, completed_at: teamCompletedAt, name: team.name, users: team.users}
-      }).sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
+      })
+      .sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
       .filter(team => isTeamFull(team, spotlight.perTeam, true))
 
       return res

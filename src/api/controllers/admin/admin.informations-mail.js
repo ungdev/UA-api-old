@@ -5,16 +5,15 @@ const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
 
 /**
- * put /users/id
+ * GET /admin/informations-mail
  *
  * Response:
  * 
  */
 
 module.exports = app => {
-  
-
   app.get('/admin/informations-mail', [isAuth(), isAdmin()])
+
   app.get('/admin/informations-mail', async (req, res) => {
     const { User, Team, Spotlight } = req.app.locals.models
 

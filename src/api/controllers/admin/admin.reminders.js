@@ -5,22 +5,15 @@ const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
 
 /**
- * put /users/id
+ * GET /admin/reminders
  *
  * Response:
- * 
+ *  { unpaidUsers, notInTeamPaidUsers, inNotFullTeamUsers }
  */
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(() => {
-    log.info('resolved !')
-    resolve()
-  }, ms))
-}
 
 module.exports = app => {
-  
-
   app.get('/admin/reminders', [isAuth(), isAdmin()])
+
   app.get('/admin/reminders', async (req, res) => {
     const { User, Team, Spotlight } = req.app.locals.models
 

@@ -1,6 +1,4 @@
 const jwt = require('jsonwebtoken')
-const pick = require('lodash.pick')
-const bcrypt = require('bcryptjs')
 const { promisify } = require('util')
 const env = require('../../env')
 const log = require('../utils/log')(module)
@@ -8,7 +6,7 @@ const log = require('../utils/log')(module)
 jwt.verify = promisify(jwt.verify)
 
 module.exports = route => async (req, res, next) => {
-  const { User, Team, Spotlight } = req.app.locals.models
+  const { User, Permission, Team, Spotlight } = req.app.locals.models
 
   const auth = req.get('X-Token')
 
@@ -25,18 +23,21 @@ module.exports = route => async (req, res, next) => {
     const decoded = await jwt.verify(auth, env.ARENA_API_SECRET)
 
     const user = await User.findById(decoded.id, {
-      include: [
+      include:
+      [
         {
           model: Team,
           include: [User, Spotlight]
-        }
+        },
+        Permission
       ]
     })
 
     req.user = user
 
     next()
-  } catch (err) {
+  }
+  catch (err) {
     log.warn('invalid token', { route })
 
     return res

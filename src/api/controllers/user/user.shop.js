@@ -17,7 +17,7 @@ const euro = 100
 const gender = { H: 'Homme', F: 'Femme' }
 
 /**
- * GET /user/pay
+ * POST /user/shop
  * {
  *    plusone: Boolean,
  *    ethernet: Boolean,
@@ -33,7 +33,7 @@ const gender = { H: 'Homme', F: 'Femme' }
 module.exports = app => {
   app.post('/user/shop', [isAuth('user-pay')])
 
-  app.post('/user/pay', [
+  app.post('/user/shop', [
     check('ethernet')
       .exists()
       .isBoolean(),

@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     firstname: { type: DataTypes.STRING },
     gender: { type: DataTypes.STRING },
     email: { type: DataTypes.STRING, validate: { isEmail: true }, unique: true },
-    isAdmin: { type: DataTypes.BOOLEAN, defaultValue: false },
     password: { type: DataTypes.STRING },
     barcode: { type: DataTypes.STRING },
     paid: { type: DataTypes.BOOLEAN, defaultValue: false },
@@ -15,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     registerToken: { type: DataTypes.STRING },
     resetToken: { type: DataTypes.STRING },
     role: { type: DataTypes.STRING },
-    respo: { type: DataTypes.INTEGER, defaultValue: 0 },
     tableLetter: { type: DataTypes.STRING, defaultValue: null },
     placeNumber: { type: DataTypes.INTEGER, defaultValue: null },
   })
