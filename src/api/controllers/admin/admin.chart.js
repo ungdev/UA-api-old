@@ -75,7 +75,7 @@ module.exports = app => {
 
         current = current.add(1, adding)
 
-        if(mode === 'dayly') {
+        if(mode === 'daily') {
           count = 0
         }
       } while (i < 100 && !current.isAfter(ending))

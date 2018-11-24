@@ -4,7 +4,7 @@ const { promisify } = require('util')
 jwt.verify = promisify(jwt.verify)
 
 module.exports = route => async (req, res, next) => {
-  if(req.user.permission && req.user.permission.admin === 100) next()
+  if(req.user && req.user.permission && req.user.permission.admin === 100) next()
   else return res
     .status(401)
     .json({ error: 'NOT_ADMIN' })
