@@ -7,7 +7,7 @@ const isAuth = require('../../middlewares/isAuth')
  *
  * Response:
  * [
- *    { id, name, firstname, lastname, email, paid, teamId, spotlightId, permissions, orders }, ...
+ *    { id, name, firstname, lastname, email, paid, teamId, spotlightId, permission, orders }, ...
  * ]
  */
 module.exports = app => {
@@ -52,13 +52,10 @@ module.exports = app => {
           }
         })
 
-        // Get user permissions
-        let permissions = null
-        if(user.permission) {
-          permissions = {
-            respo: user.permission.respo,
-            admin: user.permission.admin
-          }
+        // Get user permission
+        let permission = {
+          respo: user.permission ? user.permission.respo : null,
+          admin: user.permission ? user.permission.admin : false,
         }
 
         return {
@@ -70,7 +67,7 @@ module.exports = app => {
           paid: user.paid,
           teamId: user.team ? user.team.id : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
-          permissions,
+          permission,
           orders
         }
       })

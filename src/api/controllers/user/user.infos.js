@@ -55,27 +55,27 @@ module.exports = app => {
         return spotlight
       })
 
-      // Get permissions
-      const permissions = await Permission.findOne({
+      // Get permission
+      const permission = await Permission.findOne({
         where: { userId: user.id }
       })
 
-      let permissionsData = null
+      let permissionData = null
 
-      if(permissions) {
-        permissionsData = {
-          admin: permissions.admin,
-          respo: permissions.respo
+      if(permission) {
+        permissionData = {
+          admin: permission.admin,
+          respo: permission.respo
         }
       }
       else {
-        log.info(`No permissions found for user ${user.name}`)
+        log.info(`No permission found for user ${user.name}`)
       }
 
       // Select returned information about user
       let userData = {
         ...outputFields(user),
-        permissions: permissionsData,
+        permission: permissionData,
         orders: await Order.findAll({
           where: { userId: user.id }
         })

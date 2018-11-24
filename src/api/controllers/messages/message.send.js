@@ -21,7 +21,7 @@ module.exports = app => {
         ? null
         : await User.findById(req.body.to)
 
-      if (user.permission.admin !== 100) {
+      if (!user.permission.admin) {
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
@@ -44,9 +44,9 @@ module.exports = app => {
       const message = await Message.create({
         message: req.body.message
       })
-      await message.setFrom(user.permission.admin === 100 ? null : user)
+      await message.setFrom(user.permission && user.permission.admin ? null : user)
       userTo
-        ? await message.setTo(userTo.permission.admin === 100 ? null : userTo)
+        ? await message.setTo(userTo.permission.admin === 1 ? null : userTo)
         : await message.setTo(null)
 
       await message.setConversation(conversation)

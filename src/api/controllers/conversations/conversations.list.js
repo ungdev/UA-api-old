@@ -1,7 +1,5 @@
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
-const Sequelize = require('sequelize')
-const log = require('../../utils/log')(module)
 
 module.exports = app => {
   app.get('/conversations', [isAuth()])
@@ -11,7 +9,10 @@ module.exports = app => {
       include: [Permission]
     })
 
-    if (user.permission.admin === 100) {
+    if(!user) return res.status(404).json('NOT_FOUND').end()
+    if(!user.permission.admin) return res.status(401).json('NOT_ALLOWED').end()
+
+    if (user && user.permission && user.permission.admin) {
       try {
         let conversations = await Conversation.findAll({
           order: [['createdAt', 'ASC']],
