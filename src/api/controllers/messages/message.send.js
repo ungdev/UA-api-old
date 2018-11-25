@@ -32,7 +32,7 @@ module.exports = app => {
         if (!conversation)
           await Conversation.create({
             user1: null,
-            user2: user.permission.admin ? userTo.id : user.id
+            user2: user.permission && user.permission.admin ? userTo.id : user.id
           })
         conversation = await Conversation.findOne({
           where: {
@@ -46,7 +46,7 @@ module.exports = app => {
       })
       await message.setFrom(user.permission && user.permission.admin ? null : user)
       userTo
-        ? await message.setTo(userTo.permission.admin === 1 ? null : userTo)
+        ? await message.setTo(userTo.permission && userTo.permission.admin === 1 ? null : userTo)
         : await message.setTo(null)
 
       await message.setConversation(conversation)
