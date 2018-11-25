@@ -21,7 +21,7 @@ module.exports = app => {
         ? null
         : await User.findById(req.body.to)
 
-      if (!user.permission.admin) {
+      if (!user.permission || !user.permission.admin) {
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
