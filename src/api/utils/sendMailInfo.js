@@ -19,7 +19,7 @@ module.exports = {
     return transporter.sendMail({
         from: '"UTT Arena" <arena@utt.fr>',
         to: user.email,
-        subject: `UTT Arena 2018 - Informations essentiels`,
+        subject: `UTT Arena 2018 - Informations essentielles`,
         html: mustache.render(infosHTML, {
           lol: user.team && user.team.spotlight && 
           (user.team.spotlight.shortName === 'LoL (pro)' || user.team.spotlight.shortName === 'LoL (amateur)'),
