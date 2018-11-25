@@ -78,7 +78,8 @@ module.exports = app => {
         permission: permissionData,
         orders: await Order.findAll({
           where: { userId: user.id }
-        })
+        }),
+        team: user.team
       }
 
       return res
