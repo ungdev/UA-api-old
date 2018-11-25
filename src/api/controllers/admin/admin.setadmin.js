@@ -3,15 +3,15 @@ const isAuth = require('../../middlewares/isAuth')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
- * PUT /admin/user/:id
+ * PUT /admin/setadmin/:id
  *
  * Response: none
  * 
  */
 module.exports = app => {
-  app.put('/admin/user/:id', [isAuth(), isAdmin()])
+  app.put('/admin/setadmin/:id', [isAuth(), isAdmin()])
 
-  app.put('/admin/user/:id', async (req, res) => {
+  app.put('/admin/setadmin/:id', async (req, res) => {
     const { Permission } = req.app.locals.models
 
     try {
