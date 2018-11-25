@@ -2,7 +2,7 @@ const env = require('../../env')
 const log = require('../utils/log')(module)
 const moment = require('moment')
 const sendPdf = require('../utils/sendPDF')
-const sendInfosMail = require('../utils/sendMailInfo')
+const { sendInfosMail } = require('../utils/sendMailInfo')
 const Base64 = require('js-base64').Base64
 const etupay = require('@ung/node-etupay')({
   id: env.ARENA_ETUPAY_ID,

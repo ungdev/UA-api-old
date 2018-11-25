@@ -31,7 +31,7 @@ module.exports = app => {
       })
 
       spotlight.teams = spotlight.teams.map(team => {
-        let teamCompletedAt = moment('2000') // initialize way in the past
+        let teamCompletedAt = moment('2000-01-01') // initialize way in the past
 
         team.users = team.users.map(user => {
           const place = user.orders.find(order => order.paid && order.place)
