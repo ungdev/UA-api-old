@@ -30,7 +30,7 @@ module.exports = app => {
 
         spotlight.isFull = isSpotlightFull(spotlight, true)
 
-        return pick(spotlight, ['id', 'name', 'shortName', 'perTeam', 'isFull', 'states', 'state'])
+        return pick(spotlight, ['id', 'name', 'shortName', 'perTeam', 'isFull', 'states', 'state', 'toornamentID'])
       })
 
       return res
