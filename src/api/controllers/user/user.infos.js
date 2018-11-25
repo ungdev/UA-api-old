@@ -1,4 +1,4 @@
-const pick = require('lodash.pick')
+const log = require('../../utils/log')(module)
 const jwt = require('jsonwebtoken')
 const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
@@ -24,16 +24,14 @@ module.exports = app => {
   app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
-    const { User, Spotlight, Team, AskingUser, Order } = req.app.locals.models
+    const { User, Permission, Spotlight, Team, Order } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
-        include: [
-          {
-            model: Team,
-            include: [User]
-          }
-        ]
+        include: [{
+          model: Team,
+          include: [User]
+        }]
       })
 
       // Generate new token
@@ -41,9 +39,9 @@ module.exports = app => {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
 
-      let user = req.user.toJSON()
+      const user = req.user.toJSON()
 
-      // clean user team
+      // Clean user team
       if (user.team && user.team.users.length > 0) {
         user.team.users = user.team.users.map(outputFields)
         user.team.isInSpotlight = await isInSpotlight(user.team.id, req)
@@ -56,14 +54,39 @@ module.exports = app => {
 
         return spotlight
       })
-      user = outputFields(user)
-      user.orders = await Order.findAll({ where: { userId: user.id } })
+
+      // Get permission
+      const permission = await Permission.findOne({
+        where: { userId: user.id }
+      })
+
+      let permissionData = null
+
+      if(permission) {
+        permissionData = {
+          admin: permission.admin,
+          respo: permission.respo
+        }
+      }
+      else {
+        log.info(`No permission found for user ${user.name}`)
+      }
+
+      // Select returned information about user
+      let userData = {
+        ...outputFields(user),
+        permission: permissionData,
+        orders: await Order.findAll({
+          where: { userId: user.id }
+        })
+      }
+
       return res
         .status(200)
         .json({
-          user,
+          user: userData,
           token,
-          spotlights: spotlights,
+          spotlights,
           prices: {
             partners: env.ARENA_PRICES_PARTNER_MAILS,
             plusone: env.ARENA_PRICES_PLUSONE,
@@ -86,7 +109,8 @@ module.exports = app => {
           }
         })
         .end()
-    } catch (err) {
+    }
+    catch (err) {
       errorHandler(err, res)
     }
   })

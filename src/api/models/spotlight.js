@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     shortName: { type: DataTypes.STRING },
     maxPlayers: { type: DataTypes.INTEGER },
     perTeam: { type: DataTypes.INTEGER, defaultValue: 5 },
-    state: { type: DataTypes.INTEGER, defaultValue: 0 }
+    state: { type: DataTypes.INTEGER, defaultValue: 0 },
+    toornamentID: { type: DataTypes.STRING }
   })
 }

@@ -18,7 +18,7 @@ const euro = 100
 const gender = { H: 'Homme', F: 'Femme' }
 
 /**
- * GET /user/pay
+ * POST /user/pay
  * {
  *    plusone: Boolean,
  *    ethernet: Boolean,

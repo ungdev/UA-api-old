@@ -17,13 +17,14 @@ const { outputFields } = require('../../utils/publicFields')
  * }
  */
 module.exports = app => {
-  app.get('/teams', [isAuth()])
+  app.get('/spotlights/:id/teams', [isAuth()])
 
-  app.get('/teams', async (req, res) => {
+  app.get('/spotlights/:id/teams', async (req, res) => {
     const { Team, User, AskingUser } = req.app.locals.models
 
     try {
       let teams = await Team.findAll({
+        where: { spotlightId: req.params.id },
         include: [
           {
             model: User
@@ -33,11 +34,9 @@ module.exports = app => {
             through: AskingUser,
             as: 'AskingUser'
           }
-        ],
-        order: [
-          ['name', 'ASC']
         ]
       })
+      if(!teams) return res.status(404).json('SPOTLIGHT_NOT_FOUND').end()
       teams = await Promise.all(teams.map(async team => {
         team = team.toJSON()
         if (team.AskingUser) {

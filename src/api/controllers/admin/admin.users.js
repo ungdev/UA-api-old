@@ -3,35 +3,29 @@ const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 
 /**
- * GET /users
+ * GET /admin/users
  *
  * Response:
  * [
- *    {
- *      id, name, isAdmin, firstname, lastname, mail, team, spotlightId, material
- *    },
- *    ...
+ *    { id, name, firstname, lastname, email, paid, teamId, spotlightId, permission, orders }, ...
  * ]
  */
 module.exports = app => {
-  app.get('/users', [isAuth(), isAdmin()])
+  app.get('/admin/users', [isAuth(), isAdmin()])
 
-  app.get('/users', async (req, res) => {
-    const { User, Team, Order } = req.app.locals.models
+  app.get('/admin/users', async (req, res) => {
+    const { User, Team, Order, Permission } = req.app.locals.models
 
     try {
-      let users = await User.findAll({
-        include: [
-          {
-            model: Team
-          },
-          {
-            model: Order
-          }
+      const users = await User.findAll({
+        include: [Team, Order, Permission],
+        order: [
+          ['name', 'ASC']
         ]
       })
 
-      users = users.map(user => {
+      let usersData = users.map(user => {
+        // Get user orders
         let orders = user.orders.map(order => {
           return {
             paid: order.paid,
@@ -58,24 +52,29 @@ module.exports = app => {
           }
         })
 
+        // Get user permission
+        let permission = {
+          respo: user.permission ? user.permission.respo : null,
+          admin: user.permission ? user.permission.admin : false,
+        }
+
         return {
           id: user.id,
           name: user.name,
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          respo: user.respo,
-          isAdmin: user.isAdmin,
           paid: user.paid,
-          team: user.team ? user.team.name : '/',
+          teamId: user.team ? user.team.id : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
-          orders: orders
+          permission,
+          orders
         }
       })
 
       return res
         .status(200)
-        .json(users)
+        .json(usersData)
         .end()
     } catch (err) {
       errorHandler(err, res)
