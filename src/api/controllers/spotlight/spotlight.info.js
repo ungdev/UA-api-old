@@ -2,7 +2,7 @@ const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 
 /**
- * GET /spotlights
+ * GET /spotlights/:id
  * {
  *
  * }

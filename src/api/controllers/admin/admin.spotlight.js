@@ -1,8 +1,9 @@
+const moment = require('moment')
 const isAdmin = require('../../middlewares/isAdmin')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const { isTeamFull } = require('../../utils/isFull')
-const moment = require('moment')
+const { outputFields } = require('../../utils/publicFields')
 
 /**
  * GET /admin/spotlight/:id
@@ -32,7 +33,7 @@ module.exports = app => {
       spotlight.teams = spotlight.teams.map(team => {
         let teamCompletedAt = moment('2000') // initialize way in the past
 
-        team.users.forEach(user => {
+        team.users = team.users.map(user => {
           const place = user.orders.find(order => order.paid && order.place)
           const paid_at = place ? place.paid_at : ''
 
@@ -43,6 +44,8 @@ module.exports = app => {
           if(moment(teamCompletedAt).isBefore(user.joined_at)) {
             teamCompletedAt = user.joined_at
           }
+
+          return outputFields(user)
         })
 
         return {id: team.id, completed_at: teamCompletedAt, name: team.name, users: team.users}
