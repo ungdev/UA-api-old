@@ -29,16 +29,21 @@ module.exports = app => {
 
   app.post('/admin/chart', async (req, res) => {
     const { Order } = req.app.locals.models
-    const { start, end, step, mode } = req.body
+    const { step, mode } = req.body
+    const startBody = req.body.start
+    const endBody = req.body.end
 
     try {
       let totalPaidOrders = await Order.findAll({
-          where: {
-            paid: 1,
-            place: 1,
-            plusone: 0,
-          },
+        where: {
+          paid: 1,
+          place: 1,
+          plusone: 0
+        }
       })
+
+      const start = moment(startBody)
+      const end = moment(endBody).add(1, 'day') // include end date
 
       totalPaidOrders = totalPaidOrders.filter(order => moment(order.paid_at).isAfter(start) && moment(order.paid_at).isBefore(end))
       
@@ -78,7 +83,7 @@ module.exports = app => {
         if(mode === 'daily') {
           count = 0
         }
-      } while (i < 100 && !current.isAfter(ending))
+      } while (i < 100 && !current.isSameOrAfter(ending))
 
       return res
         .status(200)
