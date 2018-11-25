@@ -18,7 +18,7 @@ module.exports = app => {
     const { User, Team, Spotlight } = req.app.locals.models
 
     try {
-      let allPaidUsers = await User.findAll({ attributes: ['email', 'name', 'id'], where: { paid: 1 }, include: [{ model: Team, include: [Spotlight] }] })
+      let allPaidUsers = await User.findAll({ attributes: ['email', 'name', 'id'], where: { paid: 1, registerToken: null }, include: [{ model: Team, include: [Spotlight] }] })
       
       for(let user of allPaidUsers) {
         await sendInfosMail(user)
