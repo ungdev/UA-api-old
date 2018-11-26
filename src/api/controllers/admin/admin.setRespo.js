@@ -1,6 +1,9 @@
 const isAdmin = require('../../middlewares/isAdmin')
 const isAuth = require('../../middlewares/isAuth')
 const errorHandler = require('../../utils/errorHandler')
+const _ = require ('lodash')
+const log = require('../../utils/log')(module)
+
 
 /**
  * PUT /admin/setrespo/:id
@@ -33,14 +36,14 @@ module.exports = app => {
       })
 
       if(permission) {
-        permission.respo = req.body.respo
+        permission.respo = req.body.respo.toString()
         await permission.save()
       }
       else {
         await Permission.create({
           userId: req.params.id,
           admin: null,
-          respo: req.body.admin
+          respo: req.body.respo.toString()
         })
       }
 
