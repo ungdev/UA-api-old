@@ -7,7 +7,8 @@ module.exports = app => {
   app.get('/messages', [isAuth()])
   app.get('/messages', async (req, res) => {
     const { Message, User, Team, Spotlight } = req.app.locals.models
-
+    const socket = req.app.models.io
+    log.info('SOCKET : ', socket)
     try {
       let messages = await Message.findAll({
         order: [['createdAt', 'ASC']],
