@@ -66,6 +66,7 @@ module.exports = app => {
           email: user.email,
           paid: user.paid,
           teamId: user.team ? user.team.id : '/',
+          team: user.team ? user.team.name : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
           permission,
           orders
