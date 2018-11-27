@@ -40,7 +40,7 @@ module.exports = app => {
               mouse: order.mouse,
               keyboard: order.keyboard,
               headset: order.headset,
-              screen24: order.screen14,
+              screen24: order.screen24,
               screen27: order.screen27,
               chair: order.chair,
               gamingPC: order.gamingPC,
