@@ -13,7 +13,7 @@ const validateBody = require('../../middlewares/validateBody')
  * ]
  */
 module.exports = app => {
-  app.put('/spotlights/:id/state', [isAuth(), isAdmin()])
+  app.put('/spotlights/:id/state', [isAuth(), isRespo()])
   app.put('/spotlights/:id/state', [
     check('value')
       .exists()
