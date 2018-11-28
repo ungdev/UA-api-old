@@ -35,7 +35,7 @@ module.exports = async function isInSpotlight(teamId, req) {
         if(moment(teamCompletedAt).isBefore(user.joined_at)) teamCompletedAt = user.joined_at
       }
     })
-    return {id: team.id, completed_at: teamCompletedAt, users: team.users } //users is used in isTeamFull
+    return {id: team.id, name: team.name, completed_at: teamCompletedAt, users: team.users } //users is used in isTeamFull // remove name
   }).sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
   spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true)).forEach(team => console.log(team.name))
   spotlight.teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true))
