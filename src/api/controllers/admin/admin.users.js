@@ -69,7 +69,8 @@ module.exports = app => {
           team: user.team ? user.team.name : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
           permission,
-          orders
+          orders,
+          place: user.tableLetter + user.placeNumber
         }
       })
 

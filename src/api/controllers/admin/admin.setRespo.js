@@ -30,11 +30,15 @@ module.exports = app => {
         permission.respo = req.body.respo.toString()
         await permission.save()
       } else {
-        await Permission.create({
+        permission = await Permission.create({
           userId: req.params.id,
           admin: null,
           respo: req.body.respo.toString()
         })
+      }
+
+      if((!permission.admin || permission.admin === 0) && !permission.respo) {
+        permission.destroy()
       }
 
       return res.status(200).end()

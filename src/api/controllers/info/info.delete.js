@@ -11,10 +11,10 @@ module.exports = app => {
     try {
       const info = await Info.findById(req.params.infoId)
 
-      if(info.spotlightId !== req.params.id) {
+      if(info.spotlightId !== parseInt(req.params.id)) {
         return res
-          .status(401)
-          .json({error: "UNAUTHORIZED"})
+          .status(400)
+          .json({error: 'BAD_REQUEST'})
           .end()
       }
       
