@@ -36,11 +36,17 @@ module.exports = async function isInSpotlight(teamId, req) {
       }
     })
     return {id: team.id, name: team.name, completed_at: teamCompletedAt, users: team.users } //users is used in isTeamFull // remove name
-  }).sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
-  spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true)).forEach(team => console.log(team.name))
-  spotlight.teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true))
-                                   .slice(0, (spotlight.maxPlayers / spotlight.perTeam))
+  }).filter(team => isTeamFull(team, spotlight.perTeam, true)).sort((team1, team2) => {
+    if(moment(team1.completed_at).isAfter(team2.completed_at)) return 1
+    if(moment(team1.completed_at).isBefore(team2.completed_at)) return -1
+    return 0
+  })
+  spotlight.teams.forEach(team => console.log(team.name))
+  console.log('_______1')
+  spotlight.teams = spotlight.teams.slice(0, (spotlight.maxPlayers / spotlight.perTeam))
 
+  spotlight.teams.forEach(team => console.log(team.name))
+  console.log('_______2')
   let found = spotlight.teams.find(t => t.id === team.id)
   return found ? true : false
 }
