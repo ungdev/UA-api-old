@@ -1,5 +1,5 @@
 const errorHandler = require('../../utils/errorHandler')
-const isAdmin = require('../../middlewares/isAdmin')
+const isRespo = require('../../middlewares/isRespo')
 const isAuth = require('../../middlewares/isAuth')
 const log = require ('../../utils/log')(module)
 
@@ -9,7 +9,7 @@ module.exports = app => {
     const { Info } = req.app.locals.models
 
     try {
-
+      log.info(JSON.stringify(req))
       const info = await Info.findById(req.params.id)
       info.deleted = true
       await info.save()

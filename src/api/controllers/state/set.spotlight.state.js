@@ -1,4 +1,4 @@
-const isAdmin = require('../../middlewares/isAdmin')
+const isRespo = require('../../middlewares/isRespo')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const { check } = require('express-validator/check')
