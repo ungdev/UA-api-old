@@ -12,7 +12,7 @@ module.exports = async function isInSpotlight(teamId, req) {
         include: [
           {
             model: User,
-            attributes: ['joined_at'],
+            attributes: ['joined_at', 'paid'],
             include: [{
               model: Order,
               attributes: ['paid', 'place']
