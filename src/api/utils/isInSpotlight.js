@@ -41,12 +41,7 @@ module.exports = async function isInSpotlight(teamId, req) {
     if(moment(team1.completed_at).isBefore(team2.completed_at)) return -1
     return 0
   })
-  spotlight.teams.forEach(team => console.log(team.name))
-  console.log('_______1')
   spotlight.teams = spotlight.teams.slice(0, (spotlight.maxPlayers / spotlight.perTeam))
-
-  spotlight.teams.forEach(team => console.log(team.name))
-  console.log('_______2')
   let found = spotlight.teams.find(t => t.id === team.id)
   return found ? true : false
 }
