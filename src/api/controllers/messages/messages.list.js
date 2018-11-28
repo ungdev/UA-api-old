@@ -6,16 +6,17 @@ const log = require('../../utils/log')(module)
 module.exports = app => {
   app.get('/messages', [isAuth()])
   app.get('/messages', async (req, res) => {
-    const { Message, User, Team, Spotlight } = req.app.locals.models
+    const { Message, User, Team, Spotlight, Permission } = req.app.locals.models
 
     try {
       let messages = await Message.findAll({
         order: [['createdAt', 'ASC']],
+        attributes: ['message'],
         where: {
           [Sequelize.Op.or]: [
             { senderId: req.user.id },
             { receiverId: req.user.id }
-          ]
+          ],
         },
         include: [
           {
@@ -32,6 +33,10 @@ module.exports = app => {
                     attributes: ['id', 'name']
                   }
                 ]
+              },
+              {
+                model: Permission,
+                attributes:['admin', 'respo']
               }
             ]
           },
