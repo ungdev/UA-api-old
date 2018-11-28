@@ -17,7 +17,7 @@ module.exports = async function isInSpotlight(teamId, req) {
       }
     ]
   })
-  team.users = team.users.filter(user => user.plusone === 0 && user.paid === 1) // check for dumbass visitors that enters a team...
+  team.users = team.users.filter(user => !user.plusone && user.paid) // check for dumbass visitors that enters a team...
   if(team.soloTeam) return true // cant join without having paid in solo tournament
   if(!team.users) return false // no paid players in team
   if(team.users.length < spotlight.perTeam) return false //not enough paid players in team
