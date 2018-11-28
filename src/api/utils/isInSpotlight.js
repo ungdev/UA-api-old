@@ -8,7 +8,7 @@ module.exports = async function isInSpotlight(teamId, req) {
     include: [
       {
         model: Team,
-        attributes: ['id'],
+        attributes: ['id', 'name'],
         include: [
           {
             model: User,
@@ -46,9 +46,15 @@ module.exports = async function isInSpotlight(teamId, req) {
     if(moment(team1.completed_at).isBefore(team2.completed_at)) return -1
     return 0
   })
-  console.log('HERE', spotlight.name, spotlight.teams.length)
+  if(spotlight.id === 1){
+    console.log('HERE', spotlight.name, spotlight.teams.length)
+    spotlight.teams.forEach(team => console.log(team.name))
+  }
   spotlight.teams = spotlight.teams.slice(0, (spotlight.maxPlayers / spotlight.perTeam))
-  console.log(spotlight.teams.length)
+  if(spotlight.id === 1){
+    console.log('HERE2', spotlight.name, spotlight.teams.length)
+    spotlight.teams.forEach(team => console.log(team.name))
+  }
   let found = spotlight.teams.find(t => t.id === team.id)
   return found ? true : false
 }
