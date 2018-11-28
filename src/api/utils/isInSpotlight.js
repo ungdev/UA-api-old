@@ -1,6 +1,5 @@
 const { isSpotlightFull, isTeamFull } = require('./isFull')
 const moment = require('moment')
-const log = require('../utils/log')(module)
 
 module.exports = async function isInSpotlight(teamId, req) {
   const { User, Team, Spotlight, Order } = req.app.locals.models
@@ -47,15 +46,7 @@ module.exports = async function isInSpotlight(teamId, req) {
     if(moment(team1.completed_at).isBefore(team2.completed_at)) return -1
     return 0
   })
-  if(spotlight.id === 1){
-    log.info('HERE', spotlight.name, spotlight.teams.length)
-    spotlight.teams.forEach(team => console.log(team.name, team.completed_at))
-  }
   spotlight.teams = spotlight.teams.slice(0, (spotlight.maxPlayers / spotlight.perTeam))
-  if(spotlight.id === 1){
-    log.info('HERE2', spotlight.name, spotlight.teams.length)
-    spotlight.teams.forEach(team => console.log(team.name))
-  }
   let found = spotlight.teams.find(t => t.id === team.id)
   return found ? true : false
 }
