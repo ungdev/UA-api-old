@@ -1,5 +1,6 @@
 const { isSpotlightFull, isTeamFull } = require('./isFull')
 const moment = require('moment')
+const log = require('../utils/log')(module)
 
 module.exports = async function isInSpotlight(teamId, req) {
   const { User, Team, Spotlight, Order } = req.app.locals.models
@@ -15,7 +16,7 @@ module.exports = async function isInSpotlight(teamId, req) {
             attributes: ['joined_at', 'paid'],
             include: [{
               model: Order,
-              attributes: ['paid', 'place']
+              attributes: ['paid', 'place', 'paid_at']
             }]
           }
         ]
@@ -31,7 +32,7 @@ module.exports = async function isInSpotlight(teamId, req) {
 
 
   spotlight.teams = spotlight.teams.map(team => {
-    let teamCompletedAt = moment('2000-01-01') // initialize way in the past
+    let teamCompletedAt = '2000-01-01' // initialize way in the past
     team.users.forEach(user => {
       const payment = user.orders.find(order => order.place && order.paid)
       if(payment) {
@@ -47,12 +48,12 @@ module.exports = async function isInSpotlight(teamId, req) {
     return 0
   })
   if(spotlight.id === 1){
-    console.log('HERE', spotlight.name, spotlight.teams.length)
+    log.info('HERE', spotlight.name, spotlight.teams.length)
     spotlight.teams.forEach(team => console.log(team.name, team.completed_at))
   }
   spotlight.teams = spotlight.teams.slice(0, (spotlight.maxPlayers / spotlight.perTeam))
   if(spotlight.id === 1){
-    console.log('HERE2', spotlight.name, spotlight.teams.length)
+    log.info('HERE2', spotlight.name, spotlight.teams.length)
     spotlight.teams.forEach(team => console.log(team.name))
   }
   let found = spotlight.teams.find(t => t.id === team.id)
