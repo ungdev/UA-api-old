@@ -5,14 +5,14 @@ const log = require('../../utils/log')(module)
 const { cards } = require('./cardsV27641')
 
 /**
- * put /hearthstone/deck
+ * GET /hearthstone/cards
  *
  * Response:
  * 
  */
 module.exports = app => {
-
   app.get('/hearthstone/cards', [isAuth(), isAdmin()])
+  
   app.get('/hearthstone/cards', async (req, res) => {
     let formatedCards = []
     for(let i = 0; i < cards.length; i++){

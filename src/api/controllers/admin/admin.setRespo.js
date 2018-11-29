@@ -3,19 +3,19 @@ const isAuth = require('../../middlewares/isAuth')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
- * PUT /admin/setRespoPermission/:id
+ * PUT /admin/setRespo/:id
  *
  * Response: none
  *
  */
 module.exports = app => {
-  app.put('/admin/setRespoPermission/:id', [isAuth(), isAdmin()])
+  app.put('/admin/setRespo/:id', [isAuth(), isAdmin()])
 
-  app.put('/admin/setRespoPermission/:id', async (req, res) => {
+  app.put('/admin/setRespo/:id', async (req, res) => {
     const { Permission } = req.app.locals.models
 
     try {
-      if (req.body.respoPermission === null) {
+      if (req.body.respo === null) {
         return res
           .status(400) // Bad request
           .json({ error: 'BAD_REQUEST' })
@@ -27,14 +27,18 @@ module.exports = app => {
       })
 
       if (permission) {
-        permission.respo = req.body.respoPermission.toString()
+        permission.respo = req.body.respo.toString()
         await permission.save()
       } else {
-        await Permission.create({
+        permission = await Permission.create({
           userId: req.params.id,
           admin: null,
-          respo: req.body.respoPermission.toString()
+          respo: req.body.respo.toString()
         })
+      }
+
+      if((!permission.admin || permission.admin === 0) && !permission.respo) {
+        permission.destroy()
       }
 
       return res.status(200).end()

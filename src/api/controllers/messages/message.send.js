@@ -21,22 +21,44 @@ module.exports = app => {
         ? null
         : await User.findById(req.body.to)
 
+      // Find if conversation exists
       if (!user.permission || !user.permission.admin) {
+        log.info('PAS ADMIN')
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
           }
         })
+      } else {
+        log.info('ADMIN - FIND CONVERS WITH user2 = ', userTo.id)
+        conversation = await Conversation.findOne({
+          where: {
+            user2: userTo.id
+          }
+        })
+      }
+      log.info('CONVERS FOUND : ', conversation.id)
 
-        //If no conv opened yet, create one.
-        if (!conversation)
-          await Conversation.create({
-            user1: null,
-            user2: user.permission && user.permission.admin ? userTo.id : user.id
-          })
+      // If not, create one
+      if (!conversation)
+        await Conversation.create({
+          user1: null,
+          user2: user.permission && user.permission.admin ? userTo.id : user.id
+        })
+
+      // Then get conversation id to set the conversationId attributes of the message
+      if (!user.permission || !user.permission.admin) {
+        log.info('PAS ADMIN')
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
+          }
+        })
+      } else {
+        log.info('ADMIN - FIND CONVERS WITH user2 = ', userTo.id)
+        conversation = await Conversation.findOne({
+          where: {
+            user2: userTo.id
           }
         })
       }
@@ -44,12 +66,18 @@ module.exports = app => {
       const message = await Message.create({
         message: req.body.message
       })
-      await message.setFrom(user.permission && user.permission.admin ? null : user)
+      await message.setFrom(
+        user.permission && user.permission.admin ? null : user
+      )
       userTo
-        ? await message.setTo(userTo.permission && userTo.permission.admin === 1 ? null : userTo)
+        ? await message.setTo(
+            userTo.permission && userTo.permission.admin === 1 ? null : userTo
+          )
         : await message.setTo(null)
 
-      await message.setConversation(conversation)
+      log.info('FIND CONVERS ', conversation.id)
+
+      await message.setConversation(conversation.id)
 
       let slackNotif
       if (!_.isUndefined(req.body.spotlight)) {
