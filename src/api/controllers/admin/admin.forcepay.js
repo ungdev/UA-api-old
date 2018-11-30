@@ -29,6 +29,7 @@ module.exports = app => {
         where: { id: req.body.userId },
         include: [Order]
       })
+      if(!user) return res.status(404).json({ error: 'NOT_FOUND' }).end()
 
       let order = { place: true }
       order.plusone = false
@@ -54,6 +55,7 @@ module.exports = app => {
       user.paid = true
       user.paid_at = moment().format()
       user.plusone = false
+      user.registerToken = null
 
       order = await Order.create(order)
       order.setUser(user)
