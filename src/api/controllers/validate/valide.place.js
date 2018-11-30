@@ -23,6 +23,7 @@ module.exports = app => {
         const barcode = req.body.barcode.substr(0, req.body.barcode.length - 1)
         user = await User.findOne({
           where: { barcode },
+          attributes: ['id', 'barcode', 'firstname', 'lastname', 'name', 'paid', 'placeNumber', 'tableLetter', 'plusone', 'scanned'],
           include: [{
             model: Order,
           }]
@@ -31,6 +32,7 @@ module.exports = app => {
       if (!user && req.body.name) {
         user = await User.findOne({
           where: { name: req.body.name },
+          attributes: ['id', 'barcode', 'firstname', 'lastname', 'name', 'paid', 'placeNumber', 'tableLetter', 'plusone', 'scanned'],
           include: [{
             model: Order,
           }]
@@ -38,9 +40,14 @@ module.exports = app => {
       }
       if (!user) return res.status(404).json({ error: 'NOT_FOUND' })
 
+      const { scanned } = user
+
+      user.scanned = true
+      await user.save()
+      user.scanned = scanned
       return res
         .status(200)
-        .json(user)
+        .json({ user })
         .end()
     } catch (err) {
       errorHandler(err, res)
