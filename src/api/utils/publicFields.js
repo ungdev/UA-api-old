@@ -10,7 +10,9 @@ module.exports.outputFields = user =>
     'email',
     'paid',
     'plusone',
-    'teamId'
+    'teamId',
+    'tableLetter',
+    'placeNumber'
   ])
 
 module.exports.inputFields = user => pick(user, ['name', 'lastname', 'firstname', 'gender', 'email', 'password'])

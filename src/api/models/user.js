@@ -16,5 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     role: { type: DataTypes.STRING },
     tableLetter: { type: DataTypes.STRING, defaultValue: null },
     placeNumber: { type: DataTypes.INTEGER, defaultValue: null },
+    scanned: { type: DataTypes.BOOLEAN, defaultValue: false },
   })
 }

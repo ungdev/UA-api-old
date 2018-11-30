@@ -72,6 +72,7 @@ module.exports = app => {
   ])
 
   app.post('/user/shop', async (req, res) => {
+    if(env.ARENA_PAYMENT_DISABLED === '1') return res.status(404).json({ error: 'PAYMENT_DISABLED' }).end()
     try {
       let order = {}
       order.ethernet = req.body.ethernet ? req.body.ethernet : false
