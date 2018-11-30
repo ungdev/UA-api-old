@@ -20,8 +20,9 @@ module.exports = app => {
       if(!req.body.barcode && !req.body.name ) return res.status(400).json({ error: 'MISSING_PARAMS' })
       let user = null
       if (req.body.barcode) {
+        const barcode = req.body.barcode.substr(0, req.body.barcode.length - 1)
         user = await User.findOne({
-          where: { barcode: req.body.barcode },
+          where: { barcode },
           include: [{
             model: Order,
           }]
