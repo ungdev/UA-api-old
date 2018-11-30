@@ -79,7 +79,8 @@ module.exports = app => {
         orders: await Order.findAll({
           where: { userId: user.id }
         }),
-        team: user.team
+        team: user.team,
+        place: (user.tableLetter + user.placeNumber) || ''
       }
 
       return res
