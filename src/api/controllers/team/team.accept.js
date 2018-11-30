@@ -34,7 +34,26 @@ module.exports = app => {
 
   app.post('/team/:id/accept', async (req, res) => {
     try {
-      const user = await req.app.locals.models.User.findById(req.body.user)
+      const { User, Team, Spotlight } = req.app.locals.models
+      const user = await User.findById(req.body.user)
+      const captain = await User.findById(req.user.id, {
+        include: [
+          {
+            model: Team,
+            attributes: ['id'],
+            include: [
+              {
+                model: User,
+                attributes: ['id']
+              },
+              {
+                model: Spotlight,
+                attributes: ['perTeam']
+              }
+            ]
+          }
+        ]
+      })
 
       if (user.teamid) {
         log.warn(
@@ -47,6 +66,10 @@ module.exports = app => {
           .status(401)
           .json({ error: 'ALREADY_IN_TEAM' })
           .end()
+      }
+
+      if(captain.team && captain.team.spotlight && captain.team.users && captain.team.spotlight.perTeam <= captain.team.users.length) {
+        return res.status(400).json({ error: 'TEAM_FULL' })
       }
 
       await req.app.locals.models.AskingUser.destroy({
