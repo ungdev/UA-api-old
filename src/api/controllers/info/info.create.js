@@ -1,14 +1,19 @@
 const errorHandler = require('../../utils/errorHandler')
-const isAdmin = require('../../middlewares/isAdmin')
+const isRespo = require('../../middlewares/isRespo')
 const isAuth = require('../../middlewares/isAuth')
 const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
 
-
+/**
+ * POST /infos/:id
+ *
+ * Response:
+ * 
+ */
 module.exports = app => {
   app.post('/infos/:id', [
     isAuth(),
-    isAdmin(),
+    isRespo(),
     check('title')
       .exists(),
     check('content')

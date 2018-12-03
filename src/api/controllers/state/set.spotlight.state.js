@@ -1,4 +1,4 @@
-const isAdmin = require('../../middlewares/isAdmin')
+const isRespo = require('../../middlewares/isRespo')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const { check } = require('express-validator/check')
@@ -13,7 +13,7 @@ const validateBody = require('../../middlewares/validateBody')
  * ]
  */
 module.exports = app => {
-  app.put('/spotlights/:id/state', [isAuth(), isAdmin()])
+  app.put('/spotlights/:id/state', [isAuth(), isRespo()])
   app.put('/spotlights/:id/state', [
     check('value')
       .exists()

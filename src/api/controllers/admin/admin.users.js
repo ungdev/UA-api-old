@@ -1,5 +1,5 @@
-const isAdmin = require('../../middlewares/isAdmin')
 const errorHandler = require('../../utils/errorHandler')
+const isAdmin = require('../../middlewares/isAdmin')
 const isAuth = require('../../middlewares/isAuth')
 
 /**
@@ -40,7 +40,7 @@ module.exports = app => {
               mouse: order.mouse,
               keyboard: order.keyboard,
               headset: order.headset,
-              screen24: order.screen14,
+              screen24: order.screen24,
               screen27: order.screen27,
               chair: order.chair,
               gamingPC: order.gamingPC,
@@ -66,9 +66,11 @@ module.exports = app => {
           email: user.email,
           paid: user.paid,
           teamId: user.team ? user.team.id : '/',
+          team: user.team ? user.team.name : '/',
           spotlightId: user.team ? user.team.spotlightId : '/',
           permission,
-          orders
+          orders,
+          place: (user.tableLetter + user.placeNumber) || ''
         }
       })
 

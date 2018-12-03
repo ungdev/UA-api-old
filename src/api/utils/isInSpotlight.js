@@ -8,26 +8,30 @@ module.exports = async function isInSpotlight(teamId, req) {
     include: [
       {
         model: Team,
+        attributes: ['id', 'name'],
         include: [
           {
             model: User,
-            include: [Order]
+            attributes: ['joined_at', 'paid'],
+            include: [{
+              model: Order,
+              attributes: ['paid', 'place', 'paid_at']
+            }]
           }
         ]
       }
     ]
   })
+  team.users = team.users.filter(user => !user.plusone && user.paid) // check for dumbass visitors that enters a team...
   if(team.soloTeam) return true // cant join without having paid in solo tournament
-  if(!team.users) return false // no players in team (should not happened)
-  if(team.users.length < spotlight.perTeam) return false //not enough players in team
+  if(!team.users) return false // no paid players in team
+  if(team.users.length < spotlight.perTeam) return false //not enough paid players in team
   
-  const unpaidUser = team.users.find(user => !user.paid)
-  if(unpaidUser) return false
   if(!isSpotlightFull(spotlight)) return true //if spotlight isn't full, the team must be in the spotlight
 
 
   spotlight.teams = spotlight.teams.map(team => {
-    let teamCompletedAt = moment('2000-01-01') // initialize way in the past
+    let teamCompletedAt = '2000-01-01' // initialize way in the past
     team.users.forEach(user => {
       const payment = user.orders.find(order => order.place && order.paid)
       if(payment) {
@@ -36,12 +40,13 @@ module.exports = async function isInSpotlight(teamId, req) {
         if(moment(teamCompletedAt).isBefore(user.joined_at)) teamCompletedAt = user.joined_at
       }
     })
-    return {id: team.id, completed_at: teamCompletedAt, users: team.users } //users is used in isTeamFull
-  }).sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
-
-  spotlight.teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true))
-                                   .slice(0, (spotlight.maxPlayers / spotlight.perTeam))
-
+    return {id: team.id, name: team.name, completed_at: teamCompletedAt, users: team.users } //users is used in isTeamFull
+  }).filter(team => isTeamFull(team, spotlight.perTeam, true)).sort((team1, team2) => {
+    if(moment(team1.completed_at).isAfter(team2.completed_at)) return 1
+    if(moment(team1.completed_at).isBefore(team2.completed_at)) return -1
+    return 0
+  })
+  spotlight.teams = spotlight.teams.slice(0, (spotlight.maxPlayers / spotlight.perTeam))
   let found = spotlight.teams.find(t => t.id === team.id)
   return found ? true : false
 }

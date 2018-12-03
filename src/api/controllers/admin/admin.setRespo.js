@@ -3,44 +3,37 @@ const isAuth = require('../../middlewares/isAuth')
 const errorHandler = require('../../utils/errorHandler')
 
 /**
- * PUT /admin/setAdmin/:id
+ * PUT /admin/setRespo/:id
  *
  * Response: none
- * 
+ *
  */
 module.exports = app => {
-  app.put('/admin/setAdmin/:id', [isAuth(), isAdmin()])
+  app.put('/admin/setRespo/:id', [isAuth(), isAdmin()])
 
-  app.put('/admin/setAdmin/:id', async (req, res) => {
+  app.put('/admin/setRespo/:id', async (req, res) => {
     const { Permission } = req.app.locals.models
 
     try {
-      if(req.body.admin === null) {
+      if (req.body.respo === null) {
         return res
-        .status(400)  // Bad request
-        .json({ error: 'BAD_REQUEST' })
-        .end()
-      }
-      else if(req.params.id === req.user.id) {
-        return res
-        .status(403)  // Forbidden
-        .json({ error: 'NOT_ALLOWED' })
-        .end()
+          .status(400) // Bad request
+          .json({ error: 'BAD_REQUEST' })
+          .end()
       }
 
       let permission = await Permission.find({
         where: { userId: req.params.id }
       })
 
-      if(permission) {
-        permission.admin = req.body.admin
+      if (permission) {
+        permission.respo = req.body.respo.toString()
         await permission.save()
-      }
-      else {
+      } else {
         permission = await Permission.create({
           userId: req.params.id,
-          admin: req.body.admin,
-          respo: null
+          admin: null,
+          respo: req.body.respo.toString()
         })
       }
 
@@ -48,11 +41,8 @@ module.exports = app => {
         permission.destroy()
       }
 
-      return res
-        .status(200)
-        .end()
-    }
-    catch (err) {
+      return res.status(200).end()
+    } catch (err) {
       errorHandler(err, res)
     }
   })
