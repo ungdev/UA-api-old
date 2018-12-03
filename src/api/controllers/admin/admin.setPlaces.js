@@ -21,8 +21,8 @@ module.exports = app => {
       places.forEach(async (place) => {
         let user = await User.findById(place.id)
         if(user) {
-          user.tableLetter = place.tableLetter
-          user.placeNumber = place.placeNumber
+          user.tableLetter = (place.tableLetter && place.tableLetter !== '') ? place.tableLetter : null
+          user.placeNumber = (place.placeNumber && place.placeNumber !== '') ? place.placeNumber : null
           await user.save()
         }
       })
