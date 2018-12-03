@@ -11,7 +11,13 @@ const _ = require('lodash')
 module.exports = app => {
   app.post('/messages', [isAuth()])
   app.post('/messages', async (req, res) => {
-    const { Message, User, Conversation, Permission } = req.app.locals.models
+    const {
+      Message,
+      User,
+      Conversation,
+      Permission,
+      Team
+    } = req.app.locals.models
     let conversation
     try {
       const user = await User.findById(req.user.id, {
@@ -23,39 +29,44 @@ module.exports = app => {
 
       // Find if conversation exists
       if (!user.permission || !user.permission.admin) {
-        log.info('PAS ADMIN')
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
           }
         })
       } else {
-        log.info('ADMIN - FIND CONVERS WITH user2 = ', userTo.id)
         conversation = await Conversation.findOne({
           where: {
             user2: userTo.id
           }
         })
       }
-      log.info('CONVERS FOUND : ', conversation.id)
 
       // If not, create one
-      if (!conversation)
+      if (!conversation){
+        let team = ''
+        if(user.permission && (user.permission.admin || (user.permission.respo !== null) )){
+          team = await Team.findById(userTo.teamId)
+        }
+        else{
+          team = await Team.findById(user.teamId)
+        }
+        log.info(team.spotlightId)
         await Conversation.create({
           user1: null,
-          user2: user.permission && user.permission.admin ? userTo.id : user.id
+          user2: user.permission && (user.permission.admin || (user.permission.respo !== null) ) ? userTo.id : user.id,
+          spotlightId: team.spotlightId
         })
+      }
 
       // Then get conversation id to set the conversationId attributes of the message
       if (!user.permission || !user.permission.admin) {
-        log.info('PAS ADMIN')
         conversation = await Conversation.findOne({
           where: {
             user2: user.id
           }
         })
       } else {
-        log.info('ADMIN - FIND CONVERS WITH user2 = ', userTo.id)
         conversation = await Conversation.findOne({
           where: {
             user2: userTo.id
@@ -74,8 +85,6 @@ module.exports = app => {
             userTo.permission && userTo.permission.admin === 1 ? null : userTo
           )
         : await message.setTo(null)
-
-      log.info('FIND CONVERS ', conversation.id)
 
       await message.setConversation(conversation.id)
 

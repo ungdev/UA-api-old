@@ -7,7 +7,6 @@ module.exports = app => {
   app.get('/messages', [isAuth()])
   app.get('/messages', async (req, res) => {
     const { Message, User, Team, Spotlight, Permission } = req.app.locals.models
-
     try {
       let messages = await Message.findAll({
         order: [['createdAt', 'ASC']],
@@ -33,16 +32,13 @@ module.exports = app => {
                     attributes: ['id', 'name']
                   }
                 ]
-              },
-              {
-                model: Permission,
-                attributes:['admin', 'respo']
               }
             ]
           },
           {
             model: User,
-            as: 'To'
+            as: 'To',
+            attributes: ['id', 'name'],
           }
         ]
       })
