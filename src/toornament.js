@@ -20,7 +20,7 @@ class Toornament {
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
         });
         const expiresIn = new Date()
-        expiresIn.setSeconds(expiresIn.getSeconds() + resp.data.expires_in)
+        expiresIn.setSeconds(expiresIn.getSeconds() + resp.data.expires_in - 100)
         this.accessToken = resp.data.access_token
         this.expiresIn = expiresIn
     }

@@ -21,7 +21,7 @@ module.exports = app => {
     try {
       const { expiresIn, resetAccessToken, accessToken } = req.app.locals.toornament
       if (expiresIn < Date.now()) {
-        await resetAccessToken();
+        resetAccessToken();
       }
       const resp = await axios.get(`${req.query.spotlightID}/matches`, {  
         baseURL: "https://api.toornament.com/organizer/v2/tournaments",
