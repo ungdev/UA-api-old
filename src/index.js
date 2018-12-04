@@ -3,6 +3,7 @@ const database = require('./database')
 const socket = require('./socket')
 const arena = require('./arena')
 const env = require('./env')
+const toornament = require('./toornament')
 
 module.exports = async function(app, express) {
   const { sequelize, models } = await database()
@@ -17,6 +18,7 @@ module.exports = async function(app, express) {
   app.locals.db = sequelize
   app.locals.models = models
   app.locals.io = io
+  app.locals.toornament = toornament
 
   if (process.send) {
     process.send('ready')

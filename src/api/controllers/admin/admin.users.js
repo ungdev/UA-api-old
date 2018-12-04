@@ -56,6 +56,7 @@ module.exports = app => {
         let permission = {
           respo: user.permission ? user.permission.respo : null,
           admin: user.permission ? user.permission.admin : false,
+          permission: user.permission ? user.permission.permission : null
         }
 
         return {
