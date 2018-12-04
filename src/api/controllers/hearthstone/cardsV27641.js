@@ -1,4 +1,5 @@
-// update at https://api.hearthstonejson.com/v1/latest/frFR/cards.json, and use cards.parse to parse it
+// update at https://api.hearthstonejson.com/v1/latest/frFR/cards.json, and use cards.parse to parse it (past result here to be exported, and then run the func. paste the result here to)
+// version : 27845 // v27641 was inital version
 exports.cards = [
   {
       "id": "ART_BOT_Bundle_001",
@@ -491,20 +492,22 @@ exports.cards = [
   {
       "id": "AT_042a",
       "name": "Forme de lion",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 2,
       "dbfId": 2861,
       "cardClass": "DRUID"
   },
   {
       "id": "AT_042b",
       "name": "Forme de panthère",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 2,
       "dbfId": 2862,
       "cardClass": "DRUID"
   },
   {
       "id": "AT_042t",
-      "name": "Lion dent-de-sabre",
+      "name": "Druidesse du Sabre",
       "rarity": "COMMON",
       "cost": 2,
       "dbfId": 2784,
@@ -512,7 +515,7 @@ exports.cards = [
   },
   {
       "id": "AT_042t2",
-      "name": "Panthère dent-de-sabre",
+      "name": "Druidesse du Sabre",
       "rarity": "COMMON",
       "cost": 2,
       "dbfId": 2860,
@@ -1666,6 +1669,14 @@ exports.cards = [
       "cardClass": "WARLOCK"
   },
   {
+      "id": "BCON_026",
+      "name": "Épée longue flamboyante",
+      "rarity": "FREE",
+      "cost": 3,
+      "dbfId": 49251,
+      "cardClass": "WARRIOR"
+  },
+  {
       "id": "BOT_020",
       "name": "Robot-skater",
       "rarity": "COMMON",
@@ -1922,6 +1933,12 @@ exports.cards = [
       "cost": 2,
       "dbfId": 47978,
       "cardClass": "MAGE"
+  },
+  {
+      "id": "BOT_101e2",
+      "name": "Cris de guerre",
+      "dbfId": 49481,
+      "cardClass": "NEUTRAL"
   },
   {
       "id": "BOT_102",
@@ -4641,14 +4658,16 @@ exports.cards = [
   {
       "id": "BRM_010a",
       "name": "Forme de félin-de-feu",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 3,
       "dbfId": 2293,
       "cardClass": "DRUID"
   },
   {
       "id": "BRM_010b",
       "name": "Forme de faucon-de-feu",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 3,
       "dbfId": 2294,
       "cardClass": "DRUID"
   },
@@ -8265,11 +8284,155 @@ exports.cards = [
       "cardClass": "NEUTRAL"
   },
   {
+      "id": "CRED_100",
+      "name": "Isaac James",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 54513,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_101",
+      "name": "Melissa Corning",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 54514,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_102",
+      "name": "Alec Dawson",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 54515,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_103",
+      "name": "Brett Dixon",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 54516,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_105",
+      "name": "Cat Morgan",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 54518,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_106",
+      "name": "Paul Nguyen",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54519,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_107",
+      "name": "Chadd Nervig",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 54501,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_108",
+      "name": "Mark Agustin",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 54521,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_109",
+      "name": "Chris Allsopp",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54522,
+      "cardClass": "NEUTRAL"
+  },
+  {
       "id": "CRED_11",
       "name": "Jay Baxter",
       "rarity": "LEGENDARY",
       "cost": 4,
       "dbfId": 1771,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_110",
+      "name": "Davide Spicuglia",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54523,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_111",
+      "name": "Brian Doyle",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54524,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_112",
+      "name": "Haneul Lee",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 54525,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_113",
+      "name": "YoungWook Yang",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 54556,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_114",
+      "name": "Walter Ferrell",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54630,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_115",
+      "name": "Dan Priestly",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 54631,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_116",
+      "name": "Josh Harris",
+      "rarity": "LEGENDARY",
+      "cost": 0,
+      "dbfId": 54632,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_117",
+      "name": "Mason Phillips",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 54633,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_118",
+      "name": "Keaton Gill",
+      "rarity": "LEGENDARY",
+      "cost": 1,
+      "dbfId": 54634,
       "cardClass": "NEUTRAL"
   },
   {
@@ -8878,6 +9041,102 @@ exports.cards = [
       "rarity": "LEGENDARY",
       "cost": 5,
       "dbfId": 45441,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_88",
+      "name": "Xifang Zhang",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 54520,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "CRED_89",
+      "name": "Bree Lawlor",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 54502,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_90",
+      "name": "Laurent Bourcier",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54503,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_91",
+      "name": "Minshik Kim",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 54504,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_92",
+      "name": "Jeffrey Shyy",
+      "rarity": "LEGENDARY",
+      "cost": 9,
+      "dbfId": 54505,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_93",
+      "name": "Joe « Joemag » Magdalena",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 54506,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_94",
+      "name": "Kevin Matthews",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 54507,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_95",
+      "name": "Chris Abramian",
+      "rarity": "LEGENDARY",
+      "cost": 10,
+      "dbfId": 54508,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_96",
+      "name": "Stephen Chang",
+      "rarity": "LEGENDARY",
+      "cost": 9,
+      "dbfId": 54509,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_97",
+      "name": "Jordan Albert",
+      "rarity": "LEGENDARY",
+      "cost": 6,
+      "dbfId": 54510,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "CRED_98",
+      "name": "Giovanni Scarpati",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 54511,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "CRED_99",
+      "name": "James Yen",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54512,
       "cardClass": "NEUTRAL"
   },
   {
@@ -11326,14 +11585,16 @@ exports.cards = [
   {
       "id": "EX1_165a",
       "name": "Forme de félin",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 5,
       "dbfId": 63,
       "cardClass": "DRUID"
   },
   {
       "id": "EX1_165b",
       "name": "Forme d’ours",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 5,
       "dbfId": 99,
       "cardClass": "DRUID"
   },
@@ -13764,6 +14025,147 @@ exports.cards = [
       "cardClass": "NEUTRAL"
   },
   {
+      "id": "FB_Juggernaut_Bomb_Effect",
+      "name": "Largage des bombes_!",
+      "cost": 0,
+      "dbfId": 41652,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "FB_Juggernaut_Druid",
+      "name": "Druide",
+      "cost": 0,
+      "dbfId": 41450,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "FB_Juggernaut_Druid_Ench",
+      "name": "Classe de l’adversaire : ench. de druide",
+      "dbfId": 41439,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "FB_Juggernaut_Hunter",
+      "name": "Chasseur",
+      "cost": 0,
+      "dbfId": 41451,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "FB_Juggernaut_Hunter_Ench",
+      "name": "Classe de l’adversaire : ench. de chasseur",
+      "dbfId": 41440,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "FB_Juggernaut_Mage",
+      "name": "Mage",
+      "cost": 0,
+      "dbfId": 41452,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "FB_Juggernaut_Mage_Ench",
+      "name": "Classe de l’adversaire : ench. de mage",
+      "dbfId": 41441,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "FB_Juggernaut_MinionEnchant",
+      "name": "Largage des bombes_!",
+      "dbfId": 41630
+  },
+  {
+      "id": "FB_Juggernaut_Paladin",
+      "name": "Paladin",
+      "cost": 0,
+      "dbfId": 41453,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "FB_Juggernaut_Paladin_Ench",
+      "name": "Classe de l’adversaire : ench. de paladin",
+      "dbfId": 41442,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "FB_Juggernaut_PickClass_Column",
+      "name": "Choix de la classe adverse : colonne",
+      "dbfId": 41459,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "FB_Juggernaut_PickClass_Row",
+      "name": "Choix de la classe adverse : rang",
+      "dbfId": 41460,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "FB_Juggernaut_Priest",
+      "name": "Prêtre",
+      "cost": 0,
+      "dbfId": 41454,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "FB_Juggernaut_Priest_Ench",
+      "name": "Classe de l’adversaire : ench. de prêtre",
+      "dbfId": 41443,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "FB_Juggernaut_Rogue",
+      "name": "Voleur",
+      "cost": 0,
+      "dbfId": 41455,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "FB_Juggernaut_Rogue_Ench",
+      "name": "Classe de l’adversaire : ench. de voleur",
+      "dbfId": 41444,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "FB_Juggernaut_Shaman",
+      "name": "Chaman",
+      "cost": 0,
+      "dbfId": 41456,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "FB_Juggernaut_Shaman_Ench",
+      "name": "Classe de l’adversaire : ench. de chaman",
+      "dbfId": 41445,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "FB_Juggernaut_Warlock",
+      "name": "Démoniste",
+      "cost": 0,
+      "dbfId": 41457,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "FB_Juggernaut_Warlock_Ench",
+      "name": "Classe de l’adversaire : ench. de démoniste",
+      "dbfId": 41448,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "FB_Juggernaut_Warrior",
+      "name": "Guerrier",
+      "cost": 0,
+      "dbfId": 41458,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "FB_Juggernaut_Warrior_Ench",
+      "name": "Classe de l’adversaire : ench. de guerrier",
+      "dbfId": 41449,
+      "cardClass": "WARLOCK"
+  },
+  {
       "id": "FB_LK001",
       "name": "Soldats des froides ténèbres",
       "rarity": "FREE",
@@ -15021,14 +15423,16 @@ exports.cards = [
   {
       "id": "GIL_188a",
       "name": "Forme de panthère redoutable",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 3,
       "dbfId": 47048,
       "cardClass": "DRUID"
   },
   {
       "id": "GIL_188b",
       "name": "Forme de loup redoutable",
-      "cost": 0,
+      "rarity": "COMMON",
+      "cost": 3,
       "dbfId": 47049,
       "cardClass": "DRUID"
   },
@@ -19795,6 +20199,13 @@ exports.cards = [
       "cardClass": "PRIEST"
   },
   {
+      "id": "HERO_FB_Juggernaut",
+      "name": "Capitaine adverse",
+      "rarity": "FREE",
+      "dbfId": 41513,
+      "cardClass": "NEUTRAL"
+  },
+  {
       "id": "hexfrog",
       "name": "Grenouille",
       "rarity": "COMMON",
@@ -20078,14 +20489,16 @@ exports.cards = [
   {
       "id": "ICC_051a",
       "name": "Forme d’araignée",
-      "cost": 0,
+      "rarity": "RARE",
+      "cost": 2,
       "dbfId": 46048,
       "cardClass": "DRUID"
   },
   {
       "id": "ICC_051b",
       "name": "Forme de scarabée",
-      "cost": 0,
+      "rarity": "RARE",
+      "cost": 2,
       "dbfId": 46049,
       "cardClass": "DRUID"
   },
@@ -26561,6 +26974,12 @@ exports.cards = [
       "cardClass": "PALADIN"
   },
   {
+      "id": "LOOT_286t2e",
+      "name": "Bénédiction sacrée",
+      "dbfId": 54953,
+      "cardClass": "NEUTRAL"
+  },
+  {
       "id": "LOOT_286t3",
       "name": "Maillet béni",
       "rarity": "RARE",
@@ -30747,7 +31166,7 @@ exports.cards = [
   },
   {
       "id": "OG_044c",
-      "name": "Tigre dent-de-sabre",
+      "name": "Druidesse du Sabre",
       "rarity": "COMMON",
       "cost": 2,
       "dbfId": 38321,
@@ -33534,6 +33953,20 @@ exports.cards = [
       "cardClass": "NEUTRAL"
   },
   {
+      "id": "TB_GiftReceiptSpell",
+      "name": "Bon cadeau",
+      "cost": 5,
+      "dbfId": 54561,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TB_GiftReceiptSpell_Start",
+      "name": "Joyeux Voile d’hiver",
+      "cost": 5,
+      "dbfId": 54562,
+      "cardClass": "NEUTRAL"
+  },
+  {
       "id": "TB_GP_01e",
       "name": "Puissance de la tour des Ombres",
       "dbfId": 39870,
@@ -34837,6 +35270,24 @@ exports.cards = [
       "cardClass": "ROGUE"
   },
   {
+      "id": "TB_ShrinesPaladin",
+      "name": "Sanctuaires de paladin",
+      "dbfId": 53527,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TB_ShrinesWarlock",
+      "name": "Sanctuaires de démoniste",
+      "dbfId": 53526,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TB_ShrinesWarrior",
+      "name": "Sanctuaires de guerrier",
+      "dbfId": 53524,
+      "cardClass": "NEUTRAL"
+  },
+  {
       "id": "TB_Spellwrite_001",
       "name": "Lanceur de sorts",
       "dbfId": 42731,
@@ -35517,6 +35968,12 @@ exports.cards = [
       "cardClass": "NEUTRAL"
   },
   {
+      "id": "TOT_100e",
+      "name": "Écho des Auberges",
+      "dbfId": 51037,
+      "cardClass": "NEUTRAL"
+  },
+  {
       "id": "TOT_102",
       "name": "Gardien de la faille",
       "cost": 7,
@@ -35764,6 +36221,3396 @@ exports.cards = [
       "cost": 2,
       "dbfId": 38991,
       "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_010",
+      "name": "Pillarde à mi-temps",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 49049,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_012",
+      "name": "Totem fracassant",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 49051,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_015",
+      "name": "Fourgue-billets",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 49066,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_020",
+      "name": "Rôdeuse aveugle",
+      "rarity": "COMMON",
+      "cost": 5,
+      "dbfId": 49088,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_020t",
+      "name": "Chauve-souris",
+      "cost": 1,
+      "dbfId": 49087,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_057",
+      "name": "Gardien serpent",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 49800,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_058",
+      "name": "Visions envoûtantes",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 49802,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_058e",
+      "name": "Visions",
+      "dbfId": 50907,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_059",
+      "name": "Charrieur de bourbe",
+      "rarity": "RARE",
+      "cost": 3,
+      "dbfId": 49803,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_059e",
+      "name": "Embourbé",
+      "dbfId": 50277,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_060",
+      "name": "Esprit de la grenouille",
+      "rarity": "RARE",
+      "cost": 3,
+      "dbfId": 49804,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_065",
+      "name": "Zul’jin",
+      "rarity": "LEGENDARY",
+      "cost": 10,
+      "dbfId": 49819,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_065h",
+      "name": "Lancer du berserker",
+      "cost": 2,
+      "dbfId": 50579,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_071",
+      "name": "Crieur de la Voile sanglante",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 49838,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_071e",
+      "name": "Bon sang !",
+      "dbfId": 49839,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_074",
+      "name": "Dent crantée",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 49843,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_074e",
+      "name": "Carnassière",
+      "dbfId": 49844,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_077",
+      "name": "Brailleur gurubashi",
+      "rarity": "EPIC",
+      "cost": 7,
+      "dbfId": 49847,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_077e",
+      "name": "Surexcitation",
+      "dbfId": 49976,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_082",
+      "name": "Grand méchant vaudou",
+      "rarity": "EPIC",
+      "cost": 2,
+      "dbfId": 49853,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_082e",
+      "name": "Vaudou",
+      "dbfId": 49854,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_085",
+      "name": "Zentimo",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 49867,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_085e",
+      "name": "Éruption de sort",
+      "dbfId": 54770
+  },
+  {
+      "id": "TRL_092",
+      "name": "Esprit du requin",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 49972,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_092e",
+      "name": "Puissance du requin",
+      "dbfId": 52788,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_096",
+      "name": "Eskrokar",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 50009,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_096e",
+      "name": "Quelle carte ?",
+      "cost": 4,
+      "dbfId": 53254,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_097",
+      "name": "Spiritisme",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50278,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_111",
+      "name": "Hache du chasseur de têtes",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50608,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_111e1",
+      "name": "Hache du chasseur de têtes",
+      "dbfId": 50643,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_119",
+      "name": "Bête intérieure",
+      "rarity": "EPIC",
+      "cost": 1,
+      "dbfId": 50644,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_119e",
+      "name": "Bête intérieure",
+      "dbfId": 50673,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_124",
+      "name": "Pillage",
+      "rarity": "RARE",
+      "cost": 3,
+      "dbfId": 50773,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_126",
+      "name": "Capitaine Double-Crochet",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 50774,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_127",
+      "name": "Barrage au canon",
+      "rarity": "EPIC",
+      "cost": 6,
+      "dbfId": 50779,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_128",
+      "name": "Régénération",
+      "rarity": "COMMON",
+      "cost": 0,
+      "dbfId": 50794,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_131",
+      "name": "Manœuvre des sables",
+      "rarity": "COMMON",
+      "cost": 3,
+      "dbfId": 50315,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_131t",
+      "name": "Zombie",
+      "cost": 1,
+      "dbfId": 50845,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_151",
+      "name": "Gloire passée",
+      "rarity": "COMMON",
+      "cost": 5,
+      "dbfId": 50731,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_151t",
+      "name": "Étoile montante",
+      "cost": 5,
+      "dbfId": 50738,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_156",
+      "name": "Barbotage",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50749,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_157",
+      "name": "Sur la planche",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 50766,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_223",
+      "name": "Esprit du raptor",
+      "rarity": "RARE",
+      "cost": 1,
+      "dbfId": 49944,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_232",
+      "name": "Navrecorne cuiracier",
+      "rarity": "COMMON",
+      "cost": 7,
+      "dbfId": 49973,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_232t",
+      "name": "Rejeton cuiracier",
+      "cost": 5,
+      "dbfId": 50359,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_240",
+      "name": "Assaillante impitoyable",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 49984,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_241",
+      "name": "Gonk, le raptor",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 49985,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_243",
+      "name": "Traquenard",
+      "rarity": "COMMON",
+      "cost": 0,
+      "dbfId": 49990,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_243e",
+      "name": "Traquenard",
+      "dbfId": 50048,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_244",
+      "name": "Prédation",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 49994,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_244e",
+      "name": "Prédation",
+      "dbfId": 50060,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_245",
+      "name": "Cri perçant",
+      "rarity": "RARE",
+      "cost": 1,
+      "dbfId": 50002,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_246",
+      "name": "Contrat du Vide",
+      "rarity": "EPIC",
+      "cost": 8,
+      "dbfId": 50004,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_247",
+      "name": "Protectrice des âmes",
+      "rarity": "EPIC",
+      "cost": 6,
+      "dbfId": 50006,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_249",
+      "name": "Ralliement sinistre",
+      "rarity": "RARE",
+      "cost": 1,
+      "dbfId": 50012,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_249e",
+      "name": "Ralliement sinistre",
+      "dbfId": 50015,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_251",
+      "name": "Esprit de la chauve-souris",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50025,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_251e",
+      "name": "Offrande d’Hir’eek",
+      "dbfId": 50027,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_252",
+      "name": "Grande prêtresse Jeklik",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 50032,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_253",
+      "name": "Hir’eek, la chauve-souris",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 50034,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_254",
+      "name": "Marque du Loa",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 50042,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_254a",
+      "name": "Ténacité de Gonk",
+      "cost": 0,
+      "dbfId": 49995,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_254ae",
+      "name": "Marque du Loa",
+      "dbfId": 49996,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_254b",
+      "name": "Meute de raptors",
+      "cost": 0,
+      "dbfId": 49997,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_254t",
+      "name": "Raptor",
+      "cost": 2,
+      "dbfId": 51109,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_255",
+      "name": "Ruée rugissante",
+      "rarity": "EPIC",
+      "cost": 6,
+      "dbfId": 50044,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_255e",
+      "name": "Ruez !",
+      "dbfId": 54782,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_257",
+      "name": "Sapeuse trolle de sang",
+      "rarity": "COMMON",
+      "cost": 7,
+      "dbfId": 50070,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_258",
+      "name": "Hystérie collective",
+      "rarity": "RARE",
+      "cost": 5,
+      "dbfId": 50071,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_259",
+      "name": "Princesse Talanji",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 50082,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_260",
+      "name": "Bwonsamdi, la mort",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 50087,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_300",
+      "name": "Shirvallah, la tigresse",
+      "rarity": "LEGENDARY",
+      "cost": 25,
+      "dbfId": 49981,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_302",
+      "name": "Temps mort !",
+      "rarity": "COMMON",
+      "cost": 3,
+      "dbfId": 49999,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_302e",
+      "name": "Temps mort !",
+      "dbfId": 50458,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_304",
+      "name": "Hache de bataille farraki",
+      "rarity": "RARE",
+      "cost": 5,
+      "dbfId": 50014,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_304e",
+      "name": "Paré au combat",
+      "dbfId": 52743,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_305",
+      "name": "Un combattant sauvage…",
+      "rarity": "EPIC",
+      "cost": 7,
+      "dbfId": 50019,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_306",
+      "name": "Prélat immortel",
+      "rarity": "EPIC",
+      "cost": 2,
+      "dbfId": 50022,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_307",
+      "name": "Éclair lumineux",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50028,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_308",
+      "name": "Grand prêtre Thekal",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 50126,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_309",
+      "name": "Esprit du tigre",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 50031,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_309t",
+      "name": "Tigre",
+      "cost": 1,
+      "dbfId": 50033,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_310",
+      "name": "Évocation élémentaire",
+      "rarity": "COMMON",
+      "cost": 0,
+      "dbfId": 50120,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_310e",
+      "name": "Évocation élémentaire",
+      "rarity": "COMMON",
+      "dbfId": 50837,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_311",
+      "name": "Arcanosaure",
+      "rarity": "COMMON",
+      "cost": 6,
+      "dbfId": 50121,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_312",
+      "name": "Sorcière berserker",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50083,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_312e",
+      "name": "Puissance des Gurubashi",
+      "dbfId": 50228,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_313",
+      "name": "Brûlure",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 50122,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_315",
+      "name": "Pyromane",
+      "rarity": "RARE",
+      "cost": 3,
+      "dbfId": 50084,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_316",
+      "name": "Jan’alai, le faucon-dragon",
+      "rarity": "LEGENDARY",
+      "cost": 7,
+      "dbfId": 50088,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_316t",
+      "name": "Ragnaros, seigneur du feu",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 53181,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_317",
+      "name": "Vague explosive",
+      "rarity": "EPIC",
+      "cost": 5,
+      "dbfId": 50086,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_318",
+      "name": "Malacrass",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 50095,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_319",
+      "name": "Esprit du faucon-dragon",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50093,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_319e",
+      "name": "Puissance du faucon-dragon",
+      "dbfId": 52787,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_321",
+      "name": "Dévastation",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50040,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_323",
+      "name": "Drake écailles-de-braise",
+      "rarity": "RARE",
+      "cost": 5,
+      "dbfId": 50049,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_324",
+      "name": "C’est du lourd !",
+      "rarity": "RARE",
+      "cost": 6,
+      "dbfId": 50054,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_325",
+      "name": "Sul’thraze",
+      "rarity": "EPIC",
+      "cost": 6,
+      "dbfId": 50056,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_326",
+      "name": "Lancier brûleronce",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50059,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_327",
+      "name": "Esprit du rhinocéros",
+      "rarity": "RARE",
+      "cost": 1,
+      "dbfId": 52242,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_327e",
+      "name": "Protégé par le rhinocéros",
+      "dbfId": 52240,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_328",
+      "name": "Maître de guerre Voone",
+      "rarity": "LEGENDARY",
+      "cost": 4,
+      "dbfId": 50066,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_329",
+      "name": "Akali, le rhinocéros",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 50074,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_329e",
+      "name": "Peau de rhinocéros",
+      "dbfId": 50603,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_339",
+      "name": "Appel du maître",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50212,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_341",
+      "name": "Prédicateur sylvestre",
+      "rarity": "EPIC",
+      "cost": 5,
+      "dbfId": 50356,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_341t",
+      "name": "Ancien",
+      "cost": 5,
+      "dbfId": 51868,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343",
+      "name": "Druidesse de guerre Loti",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 43310,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343at1",
+      "name": "Ankylodon",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 43306,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343at2",
+      "name": "Druidesse de guerre Loti",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54599,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343bt1",
+      "name": "Sabre-d’ivoire",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 43307,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343bt2",
+      "name": "Druidesse de guerre Loti",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54600,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343ct1",
+      "name": "Pterreurdactyle",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 43311,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343ct2",
+      "name": "Druidesse de guerre Loti",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54601,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343dt1",
+      "name": "Ravasaure",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 43314,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343dt2",
+      "name": "Druidesse de guerre Loti",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 54602,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_343et1",
+      "name": "Druidesse de guerre Loti",
+      "rarity": "LEGENDARY",
+      "cost": 3,
+      "dbfId": 43315,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRL_345",
+      "name": "Krag’wa, la grenouille",
+      "rarity": "LEGENDARY",
+      "cost": 6,
+      "dbfId": 50369,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_347",
+      "name": "Flèche alléchante",
+      "rarity": "COMMON",
+      "cost": 5,
+      "dbfId": 50466,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_347t",
+      "name": "Diablosaure",
+      "cost": 5,
+      "dbfId": 50467,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_348",
+      "name": "Preste-patte",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 49824,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_348t",
+      "name": "Lynx",
+      "cost": 1,
+      "dbfId": 50213,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_349",
+      "name": "Stratège scalp-rouge",
+      "rarity": "RARE",
+      "cost": 3,
+      "dbfId": 50471,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_351",
+      "name": "Pluie de crapauds",
+      "rarity": "COMMON",
+      "cost": 6,
+      "dbfId": 50547,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_351t",
+      "name": "Crapaud",
+      "cost": 3,
+      "dbfId": 50906,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_352",
+      "name": "Roi-lèche",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50550,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_360",
+      "name": "Fouet du tyran",
+      "rarity": "COMMON",
+      "cost": 3,
+      "dbfId": 50595,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_362",
+      "name": "Rugissement de dragon",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50602,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRL_363",
+      "name": "Sous-chef de saronite",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50796,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_363t",
+      "name": "Combattant affranchi",
+      "cost": 1,
+      "dbfId": 50797,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_390",
+      "name": "Cracheur de feu audacieux",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50381,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_390e",
+      "name": "Tissage de flammes",
+      "dbfId": 54807
+  },
+  {
+      "id": "TRL_390e2",
+      "name": "Tissage de flammes",
+      "dbfId": 53219,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_400",
+      "name": "Portrait caché",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50230,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRL_405",
+      "name": "Belluaire indomptable",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50491,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_405e",
+      "name": "Peintures de guerre",
+      "dbfId": 50492,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_406",
+      "name": "Tireur d’élite assoupi",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50493,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_406e",
+      "name": "De mauvaise humeur",
+      "dbfId": 54771,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_407",
+      "name": "Vendeur d’eau",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50497,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_407e",
+      "name": "Eau de qualité supérieure",
+      "dbfId": 50498,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_408",
+      "name": "Horreur des tombes",
+      "rarity": "RARE",
+      "cost": 12,
+      "dbfId": 50539,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_409",
+      "name": "Gral, le requin",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 50775,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_409e",
+      "name": "Du sang dans l’eau",
+      "dbfId": 50788,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRL_500",
+      "name": "Sombre dans la folie",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50282,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_500e",
+      "name": "Complètement fou !",
+      "dbfId": 50371,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_501",
+      "name": "Illusion auchenaï",
+      "rarity": "EPIC",
+      "cost": 2,
+      "dbfId": 50283,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_501e",
+      "name": "Âme sombre",
+      "dbfId": 50905,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_502",
+      "name": "Esprit de la mort",
+      "rarity": "RARE",
+      "cost": 1,
+      "dbfId": 50352,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_502e",
+      "name": "Prière à Bwonsamdi",
+      "dbfId": 50518,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRL_503",
+      "name": "Œufs de scarabée",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50372,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_503t",
+      "name": "Scarabée",
+      "cost": 1,
+      "dbfId": 50373,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_504",
+      "name": "Preneuse de paris",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50374,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_505",
+      "name": "Jeune dragon sans défense",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50377,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_505e",
+      "name": "Vengeur",
+      "dbfId": 50378,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_506",
+      "name": "Poulet gurubashi",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50380,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_506e",
+      "name": "Prêt à frapper",
+      "dbfId": 50382,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_507",
+      "name": "Fan des Requins",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50383,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_507t",
+      "name": "Mousse",
+      "cost": 1,
+      "dbfId": 50833,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_508",
+      "name": "Guérisseuse brutale",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 50385,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_509",
+      "name": "Lanceur de bananes",
+      "rarity": "COMMON",
+      "cost": 3,
+      "dbfId": 50386,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_509t",
+      "name": "Banane",
+      "cost": 1,
+      "dbfId": 53215,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_509te",
+      "name": "Banane",
+      "dbfId": 53217,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_512",
+      "name": "Demi-portion sournoise",
+      "rarity": "COMMON",
+      "cost": 2,
+      "dbfId": 50391,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_513",
+      "name": "Massacreur mosh’Ogg",
+      "rarity": "COMMON",
+      "cost": 8,
+      "dbfId": 50392,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_514",
+      "name": "Gnome belliqueux",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50393,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_514e",
+      "name": "Belliqueux",
+      "dbfId": 50394,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_515",
+      "name": "Vide-grognons",
+      "rarity": "COMMON",
+      "cost": 7,
+      "dbfId": 50395,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_516",
+      "name": "Offrande gurubashi",
+      "rarity": "EPIC",
+      "cost": 1,
+      "dbfId": 50396,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_517",
+      "name": "Fan de l’arène",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 50397,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_517e2",
+      "name": "WOUHOU !",
+      "dbfId": 50399,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_520",
+      "name": "Murloc aileron-gourmet",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 50402,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_521",
+      "name": "Habitué de l’arène",
+      "rarity": "RARE",
+      "cost": 5,
+      "dbfId": 50403,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_522",
+      "name": "Malacné",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50405,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRL_523",
+      "name": "Féticheuse arbrefeu",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50408,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_524",
+      "name": "Brise-bouclier",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 50410,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_525",
+      "name": "Coffre de l’arène",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 50411,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_526",
+      "name": "Brûleur gueule-de-dragon",
+      "rarity": "COMMON",
+      "cost": 5,
+      "dbfId": 50412,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_527",
+      "name": "Entourloupeur drakkari",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50414,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_528",
+      "name": "Brute forcenée",
+      "rarity": "EPIC",
+      "cost": 7,
+      "dbfId": 50416,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_528e",
+      "name": "Dément",
+      "dbfId": 50417,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_530",
+      "name": "Compétiteur masqué",
+      "rarity": "EPIC",
+      "cost": 3,
+      "dbfId": 50421,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_531",
+      "name": "Rudoyeur gronde-ivoire",
+      "rarity": "COMMON",
+      "cost": 4,
+      "dbfId": 50427,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_531t",
+      "name": "Fracasseur gronde-ivoire",
+      "cost": 2,
+      "dbfId": 50428,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_532",
+      "name": "Présentateur mosh’Ogg",
+      "rarity": "EPIC",
+      "cost": 5,
+      "dbfId": 50430,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_533",
+      "name": "Marchande de glaces",
+      "rarity": "EPIC",
+      "cost": 4,
+      "dbfId": 50434,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_535",
+      "name": "Combattante tortueuse",
+      "rarity": "EPIC",
+      "cost": 5,
+      "dbfId": 50437,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_537",
+      "name": "Le Fossoyeur",
+      "rarity": "LEGENDARY",
+      "cost": 8,
+      "dbfId": 50443,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_537e",
+      "name": "Râles d’agonie du Fossoyeur",
+      "dbfId": 51181,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_541",
+      "name": "Hakkar, l’écorcheur d’âmes",
+      "rarity": "LEGENDARY",
+      "cost": 10,
+      "dbfId": 50454,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_541t",
+      "name": "Sang vicié",
+      "cost": 1,
+      "dbfId": 50455,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_542",
+      "name": "Oondasta",
+      "rarity": "LEGENDARY",
+      "cost": 9,
+      "dbfId": 50459,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_543",
+      "name": "Griffe-Sang",
+      "rarity": "COMMON",
+      "cost": 1,
+      "dbfId": 50512,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_545",
+      "name": "Templier zandalari",
+      "rarity": "RARE",
+      "cost": 4,
+      "dbfId": 50514,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRL_545e",
+      "name": "Régénéré",
+      "dbfId": 50515,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_546",
+      "name": "Tortue hargneuse",
+      "rarity": "COMMON",
+      "cost": 3,
+      "dbfId": 50532,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_550",
+      "name": "Ours de guerre amani",
+      "rarity": "COMMON",
+      "cost": 7,
+      "dbfId": 50776,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_551",
+      "name": "Troll redoutable audacieux",
+      "rarity": "COMMON",
+      "cost": 3,
+      "dbfId": 50863,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_555",
+      "name": "Trait démoniaque",
+      "rarity": "COMMON",
+      "cost": 8,
+      "dbfId": 50991,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRL_564",
+      "name": "Maître du mojo Zihi",
+      "rarity": "LEGENDARY",
+      "cost": 6,
+      "dbfId": 51136,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_566",
+      "name": "Vengeance sauvage",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 51159,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_569",
+      "name": "Rôtisseur de foule",
+      "rarity": "EPIC",
+      "cost": 7,
+      "dbfId": 51816,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_570",
+      "name": "Vendeur de soupe",
+      "rarity": "RARE",
+      "cost": 2,
+      "dbfId": 52931,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRL_900",
+      "name": "Halazzi, le lynx",
+      "rarity": "LEGENDARY",
+      "cost": 5,
+      "dbfId": 50659,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_901",
+      "name": "Esprit du lynx",
+      "rarity": "RARE",
+      "cost": 3,
+      "dbfId": 50660,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRL_901e",
+      "name": "Bénédiction de Halazzi",
+      "dbfId": 50786,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_065p",
+      "name": "Lancer assuré",
+      "cost": 2,
+      "dbfId": 53943,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_104",
+      "name": "Champion d’Akali",
+      "cost": 0,
+      "dbfId": 50772,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_104t",
+      "name": "Champion d’Akali",
+      "cost": 0,
+      "dbfId": 52724,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_105",
+      "name": "Protection de Shirvallah",
+      "cost": 0,
+      "dbfId": 50840,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_105t",
+      "name": "Protection de Shirvallah",
+      "cost": 0,
+      "dbfId": 52725,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_106",
+      "name": "Terreur en bouteille",
+      "cost": 0,
+      "dbfId": 50841,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_106e",
+      "name": "Terreur en bouteille",
+      "dbfId": 52842,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_106t",
+      "name": "Terreur en bouteille",
+      "cost": 0,
+      "dbfId": 52726,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_107",
+      "name": "Sanctuaire tribal",
+      "cost": 0,
+      "dbfId": 50842,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_107t",
+      "name": "Sanctuaire tribal",
+      "cost": 0,
+      "dbfId": 52727,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_108",
+      "name": "Mantelet de Jan’alai",
+      "cost": 0,
+      "dbfId": 50844,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_108t",
+      "name": "Mantelet de Jan’alai",
+      "cost": 0,
+      "dbfId": 52728,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_109",
+      "name": "Appât de Krag’wa",
+      "cost": 0,
+      "dbfId": 50900,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_109e",
+      "name": "Surchargé",
+      "dbfId": 53199,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_109t",
+      "name": "Appât de Krag’wa",
+      "cost": 0,
+      "dbfId": 52729,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_110",
+      "name": "Piège de Halazzi",
+      "cost": 0,
+      "dbfId": 50901,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_110t",
+      "name": "Piège de Halazzi",
+      "cost": 0,
+      "dbfId": 52730,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_112",
+      "name": "Armement de Gonk",
+      "cost": 0,
+      "dbfId": 50902,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_112t",
+      "name": "Armement de Gonk",
+      "cost": 0,
+      "dbfId": 52731,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_113",
+      "name": "Pacte de sang",
+      "cost": 0,
+      "dbfId": 50903,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_113e",
+      "name": "Ench. de joueur Pacte de sang",
+      "dbfId": 52785,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_113t",
+      "name": "Pacte de sang",
+      "cost": 0,
+      "dbfId": 52732,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_114",
+      "name": "Sanctum de Bwonsamdi",
+      "cost": 0,
+      "dbfId": 50904,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_114e",
+      "name": "Ench. de joueur Sanctum de vie",
+      "dbfId": 53956,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_114t",
+      "name": "Sanctum de Bwonsamdi",
+      "cost": 0,
+      "dbfId": 52733,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_115",
+      "name": "Marque de Gonk",
+      "cost": 0,
+      "dbfId": 50952,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_115e",
+      "name": "Marque de Gonk",
+      "dbfId": 53965,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_115t",
+      "name": "Marque de Gonk",
+      "cost": 0,
+      "dbfId": 52734,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_116",
+      "name": "Liens d’équilibre",
+      "cost": 0,
+      "dbfId": 50953,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_116e",
+      "name": "Lien de Gonk",
+      "dbfId": 54788,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_116t",
+      "name": "Liens d’équilibre",
+      "cost": 0,
+      "dbfId": 52735,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_121",
+      "name": "Esprit de l’eau",
+      "cost": 0,
+      "dbfId": 51223,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_122",
+      "name": "Marteleur navrecorne",
+      "cost": 5,
+      "dbfId": 51225,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_123",
+      "name": "Hurleciel de secours",
+      "cost": 3,
+      "dbfId": 51226,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_124",
+      "name": "Frappeur zandalari",
+      "cost": 5,
+      "dbfId": 51227,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_124e",
+      "name": "Surpuissant",
+      "dbfId": 51410,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_125",
+      "name": "Le favori des fans",
+      "cost": 6,
+      "dbfId": 51228,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_125e",
+      "name": "Le favori des fans",
+      "dbfId": 51776,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_127",
+      "name": "Raptor astral",
+      "cost": 3,
+      "dbfId": 51230,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_128",
+      "name": "Flamme de Jan’alai",
+      "cost": 0,
+      "dbfId": 51804,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_128e",
+      "name": "Ench. de joueur Flamme de Jan’alai",
+      "dbfId": 54112,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_128t",
+      "name": "Flamme de Jan’alai",
+      "cost": 0,
+      "dbfId": 52736,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_129",
+      "name": "Progéniture de Jan’alai",
+      "cost": 0,
+      "dbfId": 51808,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_129s",
+      "name": "Givrefeu",
+      "cost": 0,
+      "dbfId": 53174,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_129t",
+      "name": "Progéniture de Jan’alai",
+      "cost": 0,
+      "dbfId": 52737,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_130",
+      "name": "Idole enflammée",
+      "cost": 4,
+      "dbfId": 51812,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_131",
+      "name": "Gardien des glyphes",
+      "cost": 4,
+      "dbfId": 51819,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_131e",
+      "name": "Glyphe surpuissant",
+      "dbfId": 54117,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_132",
+      "name": "Tisseur de givre",
+      "cost": 2,
+      "dbfId": 51821,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_133",
+      "name": "Jette-feu",
+      "cost": 5,
+      "dbfId": 51822,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_134",
+      "name": "Adjurateur spectaculaire",
+      "cost": 3,
+      "dbfId": 51823,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_135",
+      "name": "Fan de flammes",
+      "cost": 1,
+      "dbfId": 51824,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_137",
+      "name": "Vengeance de Shirvallah",
+      "cost": 0,
+      "dbfId": 51920,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_137t",
+      "name": "Vengeance de Shirvallah",
+      "cost": 0,
+      "dbfId": 52738,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_138",
+      "name": "Grâce de Shirvallah",
+      "cost": 0,
+      "dbfId": 51921,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_138t",
+      "name": "Grâce de Shirvallah",
+      "cost": 0,
+      "dbfId": 52739,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_139",
+      "name": "Maréchal triomphant",
+      "cost": 3,
+      "dbfId": 51922,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_140",
+      "name": "Le Béni",
+      "cost": 4,
+      "dbfId": 51923,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_141",
+      "name": "Lance-lumière",
+      "cost": 3,
+      "dbfId": 51924,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_142",
+      "name": "Le fort mobile",
+      "cost": 6,
+      "dbfId": 51925,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_143",
+      "name": "Cherche-gloire",
+      "cost": 4,
+      "dbfId": 51926,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_144",
+      "name": "Exacteur de justice",
+      "cost": 5,
+      "dbfId": 51927,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_146",
+      "name": "Tome de Bwonsamdi",
+      "cost": 0,
+      "dbfId": 52037,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_146t",
+      "name": "Tome de Bwonsamdi",
+      "cost": 0,
+      "dbfId": 52740,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_147",
+      "name": "Covenant de Bwonsamdi",
+      "cost": 0,
+      "dbfId": 52038,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_147t",
+      "name": "Covenant de Bwonsamdi",
+      "cost": 0,
+      "dbfId": 52741,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_148",
+      "name": "Zombie armé",
+      "cost": 1,
+      "dbfId": 52040,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_148e",
+      "name": "Acier reconverti",
+      "dbfId": 52046,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_149",
+      "name": "Boagnarok",
+      "cost": 6,
+      "dbfId": 52041,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_150",
+      "name": "Médic lave-sang",
+      "cost": 3,
+      "dbfId": 52042,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_151",
+      "name": "Gardienne de Bwonsamdi",
+      "cost": 4,
+      "dbfId": 52043,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_152",
+      "name": "Sapeur d’âmes",
+      "cost": 5,
+      "dbfId": 52044,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_153",
+      "name": "Assistant adjurateur",
+      "cost": 3,
+      "dbfId": 52045,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_153e",
+      "name": "Adjuration attentive",
+      "dbfId": 53960,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_154",
+      "name": "Tribut des marées",
+      "cost": 0,
+      "dbfId": 52855,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_154t",
+      "name": "Tribut des marées",
+      "cost": 0,
+      "dbfId": 52857,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_155",
+      "name": "Grâce de Krag’wa",
+      "cost": 0,
+      "dbfId": 52891,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_155t",
+      "name": "Grâce de Krag’wa",
+      "cost": 0,
+      "dbfId": 52892,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_156",
+      "name": "Plongeur abyssal",
+      "cost": 1,
+      "dbfId": 52843,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_157",
+      "name": "Grenouille bondissante",
+      "cost": 4,
+      "dbfId": 52861,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_158",
+      "name": "Totem surchargé",
+      "cost": 0,
+      "dbfId": 52884,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_159",
+      "name": "Jouteuse de Krag’wa",
+      "cost": 3,
+      "dbfId": 52885,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_160",
+      "name": "Naga flagellangue",
+      "cost": 1,
+      "dbfId": 52886,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_161",
+      "name": "Ombre de la guerre",
+      "cost": 3,
+      "dbfId": 52890,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_162",
+      "name": "Traque de Halazzi",
+      "cost": 0,
+      "dbfId": 52993,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_162e",
+      "name": "Traque de Halazzi",
+      "dbfId": 53256,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_162e2",
+      "name": "Ench. Traque de Halazzi",
+      "dbfId": 54573,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_162t",
+      "name": "Traque de Halazzi",
+      "cost": 0,
+      "dbfId": 52994,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_163",
+      "name": "Semblance de Halazzi",
+      "cost": 0,
+      "dbfId": 52995,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_163e",
+      "name": "Hâte de Halazzi",
+      "dbfId": 53259,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_163e3",
+      "name": "Protecteur de Halazzi",
+      "dbfId": 53976,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_163e4",
+      "name": "Colère de Halazzi",
+      "dbfId": 53977,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_163t",
+      "name": "Semblance de Halazzi",
+      "cost": 0,
+      "dbfId": 52996,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_164",
+      "name": "Panthère ombregueule",
+      "cost": 3,
+      "dbfId": 52844,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_164e",
+      "name": "Piste de la panthère",
+      "dbfId": 54029,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_165",
+      "name": "Lynx avide de combat",
+      "cost": 4,
+      "dbfId": 52904,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_166",
+      "name": "Messager troll",
+      "cost": 5,
+      "dbfId": 52905,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_167",
+      "name": "Saurolisque enragé",
+      "cost": 3,
+      "dbfId": 52906,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_168",
+      "name": "Contrebandier des villes",
+      "cost": 4,
+      "dbfId": 52907,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_169",
+      "name": "Félina la Furie",
+      "cost": 5,
+      "dbfId": 52908,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_169e",
+      "name": "Furie de Félina",
+      "dbfId": 52909,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_170",
+      "name": "Tambour de guerre d’Akali",
+      "cost": 0,
+      "dbfId": 52997,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_170t",
+      "name": "Tambour de guerre d’Akali",
+      "cost": 0,
+      "dbfId": 52998,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_171",
+      "name": "Corne d’Akali",
+      "cost": 0,
+      "dbfId": 52999,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_171e",
+      "name": "Fureur du rhinocéros",
+      "dbfId": 53000,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_171t",
+      "name": "Corne d’Akali",
+      "cost": 0,
+      "dbfId": 53001,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_172",
+      "name": "Huran de ralliement",
+      "cost": 1,
+      "dbfId": 52924,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_172e",
+      "name": "Ralliement huran",
+      "dbfId": 52925,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_173",
+      "name": "Rockeur à crête rouge",
+      "cost": 1,
+      "dbfId": 52910,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_174",
+      "name": "Batteuse à dos de corne-de-fer",
+      "cost": 5,
+      "dbfId": 52927,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_174e",
+      "name": "Survolté",
+      "dbfId": 52928,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_175",
+      "name": "Baroudeur de la fosse",
+      "cost": 4,
+      "dbfId": 52930,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_176",
+      "name": "Héraut de la flamme",
+      "cost": 4,
+      "dbfId": 52932,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_176e",
+      "name": "En flammes",
+      "dbfId": 52933,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_177",
+      "name": "Punisseur déchaîné",
+      "cost": 8,
+      "dbfId": 52934,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_178",
+      "name": "Sombre reliquaire",
+      "cost": 0,
+      "dbfId": 53008,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_178t",
+      "name": "Sombre reliquaire",
+      "cost": 0,
+      "dbfId": 53009,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_179",
+      "name": "Faim d’Hir’eek",
+      "cost": 0,
+      "dbfId": 53011,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_179t",
+      "name": "Faim d’Hir’eek",
+      "cost": 0,
+      "dbfId": 53012,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_180",
+      "name": "Chauve-souris grimaçante",
+      "cost": 2,
+      "dbfId": 52971,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_180e",
+      "name": "Grimaçant",
+      "dbfId": 54285,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_181",
+      "name": "Familier vorace",
+      "cost": 2,
+      "dbfId": 52972,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_182",
+      "name": "Nécrodocteur vil",
+      "cost": 5,
+      "dbfId": 52973,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_183",
+      "name": "Traqueur dimensionnel",
+      "cost": 3,
+      "dbfId": 52975,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_184",
+      "name": "Sombre devineresse",
+      "cost": 4,
+      "dbfId": 52976,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_185",
+      "name": "Portail de sang",
+      "cost": 2,
+      "dbfId": 52714,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_186",
+      "name": "Trésor des profondeurs",
+      "cost": 0,
+      "dbfId": 53034,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_186t",
+      "name": "Trésor des profondeurs",
+      "cost": 0,
+      "dbfId": 53035,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_187",
+      "name": "Marque de pirate",
+      "cost": 0,
+      "dbfId": 53036,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_187t",
+      "name": "Marque de pirate",
+      "cost": 0,
+      "dbfId": 53037,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_188",
+      "name": "Vaurien agaçant",
+      "cost": 3,
+      "dbfId": 53025,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_189",
+      "name": "Mascotte perroquet",
+      "cost": 3,
+      "dbfId": 53027,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_190",
+      "name": "Pillard pirate",
+      "cost": 6,
+      "dbfId": 53028,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_191",
+      "name": "Harponneuse dents-de-requin",
+      "cost": 2,
+      "dbfId": 53030,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_192",
+      "name": "Goûteur homstrok",
+      "cost": 4,
+      "dbfId": 53031,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_193",
+      "name": "Belligérant déchaîné",
+      "cost": 6,
+      "dbfId": 53032,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_200h",
+      "name": "Maître de guerre Voone",
+      "dbfId": 53222,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_201h",
+      "name": "Zentimo",
+      "dbfId": 53223,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_202h",
+      "name": "Capitaine Double-Crochet",
+      "dbfId": 53224,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_203h",
+      "name": "Grand prêtre Thekal",
+      "dbfId": 53225,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_204h",
+      "name": "Zul’jin",
+      "dbfId": 53226,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_205h",
+      "name": "Druidesse de guerre Loti",
+      "dbfId": 53227,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_206h",
+      "name": "Grande prêtresse Jeklik",
+      "dbfId": 53228,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_207h",
+      "name": "Malacrass",
+      "dbfId": 53229,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_208h",
+      "name": "Princesse Talanji",
+      "dbfId": 53230,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_209h",
+      "name": "Rekkar",
+      "dbfId": 53959,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_209h_Druid",
+      "name": "Rekkar",
+      "dbfId": 54057,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_209h_Hunter",
+      "name": "Rekkar",
+      "dbfId": 54058,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_209h_Mage",
+      "name": "Rekkar",
+      "dbfId": 54056,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_209h_Paladin",
+      "name": "Rekkar",
+      "dbfId": 54059,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_209h_Priest",
+      "name": "Rekkar",
+      "dbfId": 54060,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_209h_Rogue",
+      "name": "Rekkar",
+      "dbfId": 54061,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_209h_Shaman",
+      "name": "Rekkar",
+      "dbfId": 54065,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_209h_Warlock",
+      "name": "Rekkar",
+      "dbfId": 54067,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_209h_Warrior",
+      "name": "Rekkar",
+      "dbfId": 54064,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_801",
+      "name": "Rituel sacré",
+      "cost": 0,
+      "dbfId": 50957,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_801e",
+      "name": "Sacré",
+      "dbfId": 50959,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_801e2",
+      "name": "Sacred Ritual Player Enchant",
+      "dbfId": 50958,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_802",
+      "name": "Faveur des dieux",
+      "cost": 0,
+      "dbfId": 50961,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_802e",
+      "name": "Favori",
+      "dbfId": 50960,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_802e2",
+      "name": "Favor of the Gods Player Enchant",
+      "dbfId": 50962,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_803",
+      "name": "Esprit fortifié",
+      "cost": 0,
+      "dbfId": 50963,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_803e",
+      "name": "Fortifié",
+      "dbfId": 50964,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_803e2",
+      "name": "Fortified Spirit Player Enchant",
+      "dbfId": 50965,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_804",
+      "name": "Dévotion éternelle",
+      "cost": 0,
+      "dbfId": 53038,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_805",
+      "name": "Pacte avec les Loas",
+      "cost": 0,
+      "dbfId": 53041,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_805e",
+      "name": "Pact with the Loa Player Enchant",
+      "dbfId": 53042,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_806",
+      "name": "Courroux des Loas",
+      "cost": 0,
+      "dbfId": 53045,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_806e",
+      "name": "Wrath of the Loa Player Enchant",
+      "dbfId": 53046,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_806e2",
+      "name": "Courroux des Loas",
+      "dbfId": 53049,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_807",
+      "name": "La faucheuse verte",
+      "cost": 0,
+      "dbfId": 53050,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_807e",
+      "name": "Boon Reaper Player Enchant",
+      "dbfId": 53051,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_807e2",
+      "name": "La faucheuse verte",
+      "dbfId": 53052,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_808",
+      "name": "Édifice rugissant",
+      "cost": 0,
+      "dbfId": 53053,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_808e",
+      "name": "Roaring Edifice Player Enchant",
+      "dbfId": 53054,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_808e2",
+      "name": "Édifice rugissant",
+      "dbfId": 53055,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_809",
+      "name": "Bénédiction inattendue",
+      "cost": 0,
+      "dbfId": 53056,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_809e",
+      "name": "Windfall Blessing Player Enchant",
+      "dbfId": 53057,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_809e2",
+      "name": "Glyphe de bénédiction inattendue",
+      "dbfId": 53058,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_809e3",
+      "name": "Bénédiction inattendue",
+      "dbfId": 54201,
+      "cardClass": "NEUTRAL"
+  },
+  {
+      "id": "TRLA_Druid_01",
+      "name": "Défense naturelle",
+      "cost": 0,
+      "dbfId": 50988,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_02",
+      "name": "Farouche",
+      "cost": 0,
+      "dbfId": 50989,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_03",
+      "name": "Bénédiction de la nature",
+      "cost": 0,
+      "dbfId": 50990,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_04",
+      "name": "Arbrisseaux",
+      "cost": 0,
+      "dbfId": 52917,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_05",
+      "name": "Grosse pioche",
+      "cost": 0,
+      "dbfId": 52918,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_06",
+      "name": "Sages décisions",
+      "cost": 0,
+      "dbfId": 52919,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_07",
+      "name": "Bêtes",
+      "cost": 0,
+      "dbfId": 52920,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_10",
+      "name": "Courroux de la nature",
+      "cost": 0,
+      "dbfId": 52961,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_13",
+      "name": "Rois des jeux",
+      "cost": 0,
+      "dbfId": 52964,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Druid_14",
+      "name": "Déchaînement",
+      "cost": 0,
+      "dbfId": 52965,
+      "cardClass": "DRUID"
+  },
+  {
+      "id": "TRLA_Hunter_01",
+      "name": "Viande fraîche",
+      "cost": 0,
+      "dbfId": 53261,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_02",
+      "name": "Grosses bêtes",
+      "cost": 0,
+      "dbfId": 53262,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_03",
+      "name": "Tirs piégés",
+      "cost": 0,
+      "dbfId": 53263,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_04",
+      "name": "Mande-bête",
+      "cost": 0,
+      "dbfId": 53264,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_05",
+      "name": "Secrets",
+      "cost": 0,
+      "dbfId": 53265,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_06",
+      "name": "Dressage de bêtes",
+      "cost": 0,
+      "dbfId": 53266,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_09",
+      "name": "Râle d’agonie",
+      "cost": 0,
+      "dbfId": 53267,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_10",
+      "name": "Légendaire",
+      "cost": 0,
+      "dbfId": 53268,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_11",
+      "name": "Tactiques de survie",
+      "cost": 0,
+      "dbfId": 53269,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Hunter_12",
+      "name": "Tas de ferraille",
+      "cost": 0,
+      "dbfId": 54102,
+      "cardClass": "HUNTER"
+  },
+  {
+      "id": "TRLA_Mage_01",
+      "name": "Puissance héroïque",
+      "cost": 0,
+      "dbfId": 52155,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_02",
+      "name": "Élémentaires",
+      "cost": 0,
+      "dbfId": 52157,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_03",
+      "name": "Gros sorts",
+      "cost": 0,
+      "dbfId": 53204,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_04",
+      "name": "Feu",
+      "cost": 0,
+      "dbfId": 53205,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_05",
+      "name": "Givre",
+      "cost": 0,
+      "dbfId": 53206,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_06",
+      "name": "Amis magiques",
+      "cost": 0,
+      "dbfId": 53207,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_07",
+      "name": "Puissance des sorts",
+      "cost": 0,
+      "dbfId": 53208,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_08",
+      "name": "Main puissante",
+      "cost": 0,
+      "dbfId": 53209,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_09",
+      "name": "Légendes gurubashi",
+      "cost": 0,
+      "dbfId": 53210,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Mage_10",
+      "name": "Chaos",
+      "cost": 0,
+      "dbfId": 53211,
+      "cardClass": "MAGE"
+  },
+  {
+      "id": "TRLA_Paladin_01",
+      "name": "Magnétisme",
+      "cost": 0,
+      "dbfId": 53110,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_02",
+      "name": "Soigneur",
+      "cost": 0,
+      "dbfId": 53112,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_03",
+      "name": "Recrues",
+      "cost": 0,
+      "dbfId": 53113,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_04",
+      "name": "Abnégation",
+      "cost": 0,
+      "dbfId": 53114,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_05",
+      "name": "Travail d’équipe",
+      "cost": 0,
+      "dbfId": 53115,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_06",
+      "name": "Renfort",
+      "cost": 0,
+      "dbfId": 53116,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_07",
+      "name": "Arsenal sacré",
+      "cost": 0,
+      "dbfId": 53117,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_08",
+      "name": "Secrets",
+      "cost": 0,
+      "dbfId": 53118,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_09",
+      "name": "Dragons",
+      "cost": 0,
+      "dbfId": 53119,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Paladin_10",
+      "name": "Légendes divines",
+      "cost": 0,
+      "dbfId": 53120,
+      "cardClass": "PALADIN"
+  },
+  {
+      "id": "TRLA_Priest_01",
+      "name": "Mots de la fin",
+      "cost": 0,
+      "dbfId": 52220,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_02",
+      "name": "Soigneur",
+      "cost": 0,
+      "dbfId": 52221,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_03",
+      "name": "Inspiré par la Lumière",
+      "cost": 0,
+      "dbfId": 54181,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_04",
+      "name": "Coup double",
+      "cost": 0,
+      "dbfId": 54182,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_05",
+      "name": "Élémentaires",
+      "cost": 0,
+      "dbfId": 54183,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_06",
+      "name": "Force intérieure",
+      "cost": 0,
+      "dbfId": 54184,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_07",
+      "name": "Résilience",
+      "cost": 0,
+      "dbfId": 54185,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_08",
+      "name": "Armée des morts",
+      "cost": 0,
+      "dbfId": 54186,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_09",
+      "name": "Colère",
+      "cost": 0,
+      "dbfId": 54187,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Priest_10",
+      "name": "Légendes de la Lumière",
+      "cost": 0,
+      "dbfId": 54188,
+      "cardClass": "PRIEST"
+  },
+  {
+      "id": "TRLA_Rogue_01",
+      "name": "Larcin",
+      "cost": 0,
+      "dbfId": 53126,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_02",
+      "name": "Pirates",
+      "cost": 0,
+      "dbfId": 53127,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_03",
+      "name": "Cri de guerre",
+      "cost": 0,
+      "dbfId": 53128,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_04",
+      "name": "Tactiques agressives",
+      "cost": 0,
+      "dbfId": 53129,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_05",
+      "name": "Ficelles du métier",
+      "cost": 0,
+      "dbfId": 53130,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_06",
+      "name": "Armes",
+      "cost": 0,
+      "dbfId": 53131,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_07",
+      "name": "Râle d’agonie",
+      "cost": 0,
+      "dbfId": 53132,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_08",
+      "name": "Pour l’argent",
+      "cost": 0,
+      "dbfId": 53133,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_09",
+      "name": "Rebond",
+      "cost": 0,
+      "dbfId": 53134,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Rogue_10",
+      "name": "Marginaux",
+      "cost": 0,
+      "dbfId": 53135,
+      "cardClass": "ROGUE"
+  },
+  {
+      "id": "TRLA_Shaman_01",
+      "name": "Fureur élémentaire",
+      "cost": 0,
+      "dbfId": 52977,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_02",
+      "name": "Chasseurs de sorts",
+      "cost": 0,
+      "dbfId": 52978,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_03",
+      "name": "Bénédictions",
+      "cost": 0,
+      "dbfId": 52979,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_04",
+      "name": "Mutations",
+      "cost": 0,
+      "dbfId": 52980,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_05",
+      "name": "Crieur de guerre",
+      "cost": 0,
+      "dbfId": 52981,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_06",
+      "name": "Élémentaires",
+      "cost": 0,
+      "dbfId": 52982,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_07",
+      "name": "Murlocs",
+      "cost": 0,
+      "dbfId": 52983,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_08",
+      "name": "Surcharge",
+      "cost": 0,
+      "dbfId": 52984,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_09",
+      "name": "Totems",
+      "cost": 0,
+      "dbfId": 52985,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_11",
+      "name": "Lotus de jade",
+      "cost": 0,
+      "dbfId": 52986,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_12",
+      "name": "Long-voyant",
+      "cost": 0,
+      "dbfId": 52987,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Shaman_13",
+      "name": "Mécanique",
+      "cost": 0,
+      "dbfId": 52988,
+      "cardClass": "SHAMAN"
+  },
+  {
+      "id": "TRLA_Warlock_01",
+      "name": "Légion d’Hir’eek",
+      "cost": 0,
+      "dbfId": 53083,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_02",
+      "name": "Défausse",
+      "cost": 0,
+      "dbfId": 53084,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_03",
+      "name": "Voleurs de vie",
+      "cost": 0,
+      "dbfId": 53085,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_04",
+      "name": "Provocation",
+      "cost": 0,
+      "dbfId": 53086,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_06",
+      "name": "Colère",
+      "cost": 0,
+      "dbfId": 53088,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_07",
+      "name": "Sacrifice",
+      "cost": 0,
+      "dbfId": 53089,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_08",
+      "name": "Sang",
+      "cost": 0,
+      "dbfId": 53090,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_09",
+      "name": "Démons sinistres",
+      "cost": 0,
+      "dbfId": 53091,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_10",
+      "name": "Sombre main",
+      "cost": 0,
+      "dbfId": 53092,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warlock_11",
+      "name": "Porte-malheur",
+      "cost": 0,
+      "dbfId": 53093,
+      "cardClass": "WARLOCK"
+  },
+  {
+      "id": "TRLA_Warrior_01",
+      "name": "Défense stoïque",
+      "cost": 0,
+      "dbfId": 54171,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_02",
+      "name": "Berserker",
+      "cost": 0,
+      "dbfId": 54172,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_03",
+      "name": "Légendaire",
+      "cost": 0,
+      "dbfId": 54173,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_04",
+      "name": "Choc",
+      "cost": 0,
+      "dbfId": 54174,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_05",
+      "name": "Têtes de fer",
+      "cost": 0,
+      "dbfId": 54175,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_06",
+      "name": "Ruée",
+      "cost": 0,
+      "dbfId": 54176,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_07",
+      "name": "Fans fervents",
+      "cost": 0,
+      "dbfId": 54177,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_08",
+      "name": "Protection",
+      "cost": 0,
+      "dbfId": 54178,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_09",
+      "name": "Cœur de dragon",
+      "cost": 0,
+      "dbfId": 54179,
+      "cardClass": "WARRIOR"
+  },
+  {
+      "id": "TRLA_Warrior_10",
+      "name": "Brutalité",
+      "cost": 0,
+      "dbfId": 54180,
+      "cardClass": "WARRIOR"
   },
   {
       "id": "tt_004",
@@ -36600,14 +40447,16 @@ exports.cards = [
   {
       "id": "UNG_101a",
       "name": "Forme de raptor",
-      "cost": 0,
+      "rarity": "RARE",
+      "cost": 4,
       "dbfId": 40977,
       "cardClass": "DRUID"
   },
   {
       "id": "UNG_101b",
       "name": "Forme de navrecorne",
-      "cost": 0,
+      "rarity": "RARE",
+      "cost": 4,
       "dbfId": 40978,
       "cardClass": "DRUID"
   },
