@@ -1,4 +1,4 @@
-// update at https://api.hearthstonejson.com/v1/latest/frFR/cards.json, and use cards.parse to parse it
+// update at https://api.hearthstonejson.com/v1/latest/frFR/cards.json, and use cards.parse to parse it (past result here to be exported, and then run the func. paste the result here to)
 // version : 27845 // v27641 was inital version
 exports.cards = [
   {
