@@ -1,8 +1,9 @@
-const isAdmin = require('../../middlewares/isAdmin')
+const isRespo = require('../../middlewares/isRespo')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
+const log = require('../../utils/log')(module)
 
 /**
  * GET /users
@@ -13,8 +14,9 @@ const validateBody = require('../../middlewares/validateBody')
  * ]
  */
 module.exports = app => {
-  app.post('/states', [isAuth(), isAdmin()])
-  app.post('/states', [
+  app.post('/states/:id', [isAuth(), isRespo()])
+
+  app.post('/states/:id', [
     check('title')
       .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
@@ -24,25 +26,31 @@ module.exports = app => {
     check('popover')
       .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
-    check('spotlightId')
-      .exists()
-      .matches(/\d/),
     validateBody()
   ])
-  app.post('/states', async (req, res) => {
+
+  app.post('/states/:id', async (req, res) => {
     const { State, Spotlight } = req.app.locals.models
 
     try {
-      const { title, desc, popover, spotlightId } = req.body
+      const spotlightId = req.params.id
+      const { title, desc, popover } = req.body
+
       let spotlight = await Spotlight.findById(spotlightId)
-      if(!spotlight) return res.status(404).json({ error: 'NOT_FOUND' }).end()
+      if(!spotlight) {
+        return res
+          .status(404)
+          .json({ error: 'NOT_FOUND' })
+          .end()
+      }
+
       let state = await State.create({
         title,
         desc,
         popover
       })
+
       await spotlight.addState(state)
-      await state.save()
       await spotlight.save()
       
       return res
