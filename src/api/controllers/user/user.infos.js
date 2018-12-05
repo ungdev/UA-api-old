@@ -65,7 +65,8 @@ module.exports = app => {
       if(permission) {
         permissionData = {
           admin: permission.admin,
-          respo: permission.respo
+          respo: permission.respo,
+          permission: permission.permission
         }
       }
       else {
