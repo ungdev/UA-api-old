@@ -24,7 +24,6 @@ module.exports = app => {
       .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
     check('popover')
-      .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
     validateBody()
   ])
@@ -47,7 +46,7 @@ module.exports = app => {
       let state = await State.create({
         title,
         desc,
-        popover
+        popover: popover || ''
       })
 
       await spotlight.addState(state)
