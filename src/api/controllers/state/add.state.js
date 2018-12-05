@@ -23,8 +23,7 @@ module.exports = app => {
     check('desc')
       .exists()
       .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
-    check('popover')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
+    check('popover'),
     validateBody()
   ])
 
