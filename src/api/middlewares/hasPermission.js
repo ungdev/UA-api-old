@@ -11,7 +11,7 @@ module.exports = route => async (req, res, next) => {
     if(req.user.permission.admin) {
       authorized = true
     }
-    else if(req.user.permission.respo && req.user.permission.respo.includes(req.params.id)) {
+    else if(req.user.permission.permission && req.user.permission.permission.includes(route)) {
       authorized = true
     }
   }
