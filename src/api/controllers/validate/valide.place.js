@@ -1,9 +1,10 @@
+const { outputFields } = require( '../../utils/publicFields')
 const errorHandler = require('../../utils/errorHandler')
-const isAdmin = require('../../middlewares/isAdmin')
+const hasPermission = require('../../middlewares/hasPermission')
 const isAuth = require('../../middlewares/isAuth')
 
 /**
- * GET /admin/users
+ * PUT /admin/validate
  *
  * Response:
  * [
@@ -11,9 +12,9 @@ const isAuth = require('../../middlewares/isAuth')
  * ]
  */
 module.exports = app => {
-  app.put('/validate', [isAuth(), isAdmin()]) // change isAdmin with permission
+  app.put('/admin/validate', [isAuth(), hasPermission('validate')])
 
-  app.put('/validate', async (req, res) => {
+  app.put('/admin/validate', async (req, res) => {
     const { User, Order } = req.app.locals.models
 
     try {
@@ -47,7 +48,7 @@ module.exports = app => {
       user.scanned = scanned
       return res
         .status(200)
-        .json({ user })
+        .json({ user: outputFields(user) })
         .end()
     } catch (err) {
       errorHandler(err, res)

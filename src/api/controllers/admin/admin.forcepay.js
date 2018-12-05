@@ -1,4 +1,4 @@
-const isAdmin = require('../../middlewares/isAdmin')
+const hasPermission = require('../../middlewares/hasPermission')
 const isAuth = require('../../middlewares/isAuth')
 const sendPdf = require('../../utils/sendPDF')
 const errorHandler = require('../../utils/errorHandler')
@@ -14,7 +14,7 @@ const moment = require('moment')
  *  user
  */
 module.exports = app => {
-  app.post('/admin/forcepay', [isAuth(), isAdmin()])
+  app.post('/admin/forcepay', [isAuth(), hasPermission('payment')])
   app.post('/admin/forcepay', [
     check('userId')
       .exists(),
