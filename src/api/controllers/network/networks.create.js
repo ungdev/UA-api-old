@@ -9,26 +9,29 @@ const errorHandler = require('../../utils/errorHandler')
  * 
  */
 module.exports = app => {
-  app.post('/network', [
+  app.post('/networks', [
     check('mac')
       .exists(),
     check('ip')
       .exists(),
-    check('switchId')
-      .exists(),
-    check('switchPort')
-      .exists(),
     validateBody()
   ])
 
-  app.post('/network', async (req, res) => {
+  app.post('/networks', async (req, res) => {
     const { Network } = req.app.locals.models
-    const { mac, ip, switchId, switchPort } = req.body
+    const { mac, ip } = req.body
     try {
-      const nw = await Network.create({ mac, ip, switchId, switchPort })
+      let nw = await Network.findOne({ where: {
+        mac
+      } })
+      if(!nw) nw = await Network.create({ mac, ip })
+      else {
+        nw.ip = ip
+        await nw.save()
+      }
       return res
         .status(200)
-        .json(nw)
+        .json(nw) // to remove
         .end()
     } catch (err) {
       errorHandler(err, res)

@@ -6,5 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     switchId: { type: DataTypes.INTEGER, defaultValue: null },
     switchPort: { type: DataTypes.INTEGER, defaultValue: null },
     isBanned: { type: DataTypes.BOOLEAN, defaultValue: false },
+    isCaster: { type: DataTypes.BOOLEAN, defaultValue: false },
   })
 }
