@@ -8,10 +8,7 @@ module.exports = route => async (req, res, next) => {
   let authorized = false
 
   if(req.user && req.user.permission) {
-    if(req.user.permission.admin) {
-      authorized = true
-    }
-    else if(req.user.permission.permission && req.user.permission.permission.includes(route)) {
+    if(req.user.permission.admin || req.user.permission.respo || req.user.permission.permission) {
       authorized = true
     }
   }

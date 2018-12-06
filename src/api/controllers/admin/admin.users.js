@@ -1,5 +1,5 @@
 const errorHandler = require('../../utils/errorHandler')
-const isAdmin = require('../../middlewares/isAdmin')
+const isOrga = require('../../middlewares/isOrga')
 const isAuth = require('../../middlewares/isAuth')
 
 /**
@@ -11,7 +11,7 @@ const isAuth = require('../../middlewares/isAuth')
  * ]
  */
 module.exports = app => {
-  app.get('/admin/users', [isAuth(), isAdmin()])
+  app.get('/admin/users', [isAuth(), isOrga()])
 
   app.get('/admin/users', async (req, res) => {
     const { User, Team, Order, Permission } = req.app.locals.models
