@@ -91,17 +91,64 @@ module.exports = app => {
         ip = ip.split(',')[0]
         const ipTab = ip.split('.')
         
-        if(ipTab[0] === '10') {
+        if(ipTab[0] === '172' && ipTab[1] === '16' && (ipTab[2] === '98' || ipTab[2] === '99')) {
           let network = await Network.findOne({
             where: { ip }
           })
 
-          if(network) {
+          if(network && network.ip.startsWith('172.16.98.')) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
             await user.addNetwork(network)
-            log.info(`Added ip ${ip} to user ${user.name}.`)
+            log.info(`Added user ${user.name} to ip ${ip}.`)
+            let allnetworks = await Network.findAll({ attributes: ['ip'] })
+            console.log('ALLIP')
+            console.log(allip)
+            let spotlight = 'libre'
+            let subnet = ''
+            if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
+            switch (spotlight){
+              case 'LoL (pro)':
+                subnet = '172.16.51.'
+                break
+              case 'LoL (amateur)':
+                subnet = '172.16.51.'
+                break
+              case 'Fortnite':
+                subnet = '172.16.54.'
+                break
+              case 'CS:GO':
+                subnet = '172.16.50.'
+                break
+              case 'HS':
+                subnet = '172.16.53.'
+                break
+              case 'osu!':
+                subnet = '172.16.52.'
+                break
+              case 'libre':
+                subnet = '172.16.55.'
+                break
+              default:
+                subnet = '172.16.98.' //poubelle
+                break
+            }
+            allnetworks = allnetworks.filter(nw => nw.ip.startsWith(subnet)).sort((a, b) => {
+              const ip1 = a.ip.split('.')[3]
+              const ip2 = b.ip.split('.')[3]
+              if(ip1 > ip2) return 1
+              if(ip1 < ip2) return -1
+              return 0
+            })
+            let allIp = allnetworks.map(nw => nw.ip.split('.')[3])
+            let newIp = 1
+            while(newIp === parseInt(allIp[newIp - 1], 10)) {
+              newIp++
+            }
+            network.ip = `${subnet}${newIp}`
+            await network.save()
+            log.info(`changed user ${user.name}'s ip to ${newIp}.`)
           }
           else {
-            log.info(`Could not add user ip, ${ip} does not exist.`)
+            log.info(`Could not add user ip, ${ip} does not exist or ip has not updated yet`)
           }
         }
       }
