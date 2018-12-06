@@ -31,7 +31,6 @@ module.exports = app => {
       }
       return res
         .status(200)
-        .json(nw) // to remove
         .end()
     } catch (err) {
       errorHandler(err, res)
