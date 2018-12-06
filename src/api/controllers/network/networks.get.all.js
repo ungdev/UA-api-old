@@ -14,7 +14,7 @@ module.exports = app => {
         include: [
           {
             model: User,
-            attributes: ['id', 'name', 'firstname', 'lastname'],
+            attributes: ['id', 'name', 'firstname', 'lastname', 'placeNumber', 'tableLetter'],
             include: [
               {
                 model: Team,
@@ -33,15 +33,17 @@ module.exports = app => {
       nws = nws.map(nw => {
         const { user } = nw
         let spotlight = null
+        let place = null
         if (user) {
           spotlight = 'libre'
           if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
+          place = user.tableLetter && user.placeNumber ? `${user.tableLetter}${user.placeNumber}` : null
         }
         return {
           name: user ? user.name : null,
           firstname: user ? user.firstname : null,
           lastname: user ? user.lastname : null,
-          place: user ? user.tableLetter && user.placeNumber ? `${user.tableLetter}${user.placeNumber}` : null : null,
+          place,
           spotlight,
           ip: nw.ip,
           mac: nw.mac,
