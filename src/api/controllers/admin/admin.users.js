@@ -59,6 +59,12 @@ module.exports = app => {
           permission: user.permission ? user.permission.permission : null
         }
 
+        // Get place
+        let place = ''
+        if(user.tableLetter && user.placeNumber) {
+          place = `${user.tableLetter}${user.placeNumber}`
+        }
+
         return {
           id: user.id,
           name: user.name,
@@ -71,7 +77,7 @@ module.exports = app => {
           spotlightId: user.team ? user.team.spotlightId : '/',
           permission,
           orders,
-          place: (user.tableLetter + user.placeNumber) || ''
+          place
         }
       })
 
