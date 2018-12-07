@@ -83,9 +83,20 @@ module.exports = app => {
       user.scanned = true
       await user.save()
       user.scanned = scanned
+
+      // Get place
+      let place = ''
+              
+      if(user.tableLetter && user.placeNumber) {
+        place = `${user.tableLetter}${user.placeNumber}`
+      }
+
       return res
         .status(200)
-        .json({ user: outputFields(user) })
+        .json({ user: {
+          ...outputFields(user),
+          place
+        }})
         .end()
     } catch (err) {
       errorHandler(err, res)
