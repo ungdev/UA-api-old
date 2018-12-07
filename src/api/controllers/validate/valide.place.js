@@ -40,6 +40,11 @@ module.exports = app => {
           include: [
             {
               model: Order
+            },
+            {
+              model: Team,
+              attributes: ['name'],
+              include: [{ model: Spotlight, attributes: ['name'] }]
             }
           ]
         })
