@@ -135,14 +135,12 @@ module.exports = app => {
                 subnet = '172.16.98.' //poubelle
                 break
             }
-            allnetworks = allnetworks.filter(nw => nw.ip.startsWith(subnet)).sort((a, b) => {
-              const ip1 = a.ip.split('.')[3]
-              const ip2 = b.ip.split('.')[3]
-              if(ip1 > ip2) return 1
-              if(ip1 < ip2) return -1
+            allnetworks = allnetworks.filter(nw => nw.ip.startsWith(subnet))
+            let allIp = allnetworks.map(nw => nw.ip.split('.')[3]).sort((a, b) => {
+              if(parseInt(a, 10) > parseInt(b, 10)) return 1
+              if(parseInt(a, 10) < parseInt(b, 10)) return -1
               return 0
             })
-            let allIp = allnetworks.map(nw => nw.ip.split('.')[3])
             console.log(allIp)
             let newIp = 1
             while(newIp === parseInt(allIp[newIp - 1], 10)) {
