@@ -24,7 +24,7 @@ module.exports = app => {
   app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
-    const { User, Permission, Spotlight, Team, Order } = req.app.locals.models
+    const { User, Permission, Spotlight, Team, Order, Network } = req.app.locals.models
 
     try {
       let spotlights = await Spotlight.findAll({
