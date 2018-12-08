@@ -39,7 +39,7 @@ module.exports = app => {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
 
-      const user = req.user.toJSON()
+      let user = req.user.toJSON()
 
       // Clean user team
       if (user.team && user.team.users.length > 0) {
@@ -97,12 +97,28 @@ module.exports = app => {
             where: { ip }
           })
 
-          if(network && network.ip.startsWith('172.16.98.')) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
-            await user.addNetwork(network)
+          if(network && (network.ip.startsWith('172.16.98.') || network.ip.startsWith('172.16.99.'))) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
+            console.log('1')
+            user = await User.findById(user.id, {
+              include: [{
+                model: Team,
+                attributes: ['id'],
+                include: [{
+                  model: Spotlight,
+                  attributes: ['id', 'shortName']
+                }]
+              }]
+            })
+            console.log('1,1')
+            await network.setUser(user)
+            console.log('2')
             log.info(`Added user ${user.name} to ip ${ip}.`)
             let allnetworks = await Network.findAll({ attributes: ['ip'] })
+            console.log('2')
             let spotlight = 'libre'
             let subnet = ''
+            console.log(user.team ? `HAS TEAM${user.team.id}` : 'HAS NO TEAM')
+            if(user.team) console.log(user.team.spotlight ? `HAS SPOTLIGHT ${user.team.spotlight.shortName}` : 'HAS NO SPOTLIGHT')
             if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
             switch (spotlight){
               case 'LoL (pro)':
@@ -117,7 +133,7 @@ module.exports = app => {
               case 'CS:GO':
                 subnet = '172.16.50.'
                 break
-              case 'HS':
+              case 'Hearthstone':
                 subnet = '172.16.53.'
                 break
               case 'osu!':
@@ -127,25 +143,32 @@ module.exports = app => {
                 subnet = '172.16.55.'
                 break
               default:
-                subnet = '172.16.98.' //poubelle
+                subnet = '172.16.55.' //poubelle dans le libre
                 break
             }
-            allnetworks = allnetworks.filter(nw => nw.ip.startsWith(subnet)).sort((a, b) => {
-              const ip1 = a.ip.split('.')[3]
-              const ip2 = b.ip.split('.')[3]
-              if(ip1 > ip2) return 1
-              if(ip1 < ip2) return -1
+            allnetworks = allnetworks.filter(nw => nw && nw.ip && nw.ip.startsWith(subnet))
+            let allIp = allnetworks.map(nw => nw.ip.split('.')[3]).sort((a, b) => {
+              if(parseInt(a, 10) > parseInt(b, 10)) return 1
+              if(parseInt(a, 10) < parseInt(b, 10)) return -1
               return 0
             })
-            let allIp = allnetworks.map(nw => nw.ip.split('.')[3])
+            console.log(allIp)
             let newIp = 1
             while(newIp === parseInt(allIp[newIp - 1], 10)) {
               newIp++
             }
-            network.ip = `${subnet}${newIp}`
-            await network.save()
-            log.info(`changed user ${user.name}'s ip to ${newIp}.`)
-            hasChangedIp = true
+            let finalip = `${subnet}${newIp}`
+            let found = await Network.findOne({ where: {
+              ip: finalip
+            } })
+            if (!found) {
+              network.ip = finalip
+              await network.save()
+              log.info(`changed user ${user.name}'s ip to ${network.ip}.`)
+              hasChangedIp = true
+            } else {
+              console.log('DUPLICATE IP')
+            }
           }
           else {
             log.info(`Could not add user ip, ${ip} does not exist or ip has not updated yet`)
