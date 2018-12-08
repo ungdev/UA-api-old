@@ -87,6 +87,7 @@ module.exports = app => {
 
       // 
       let ip = req.headers['x-forwarded-for']
+      let hasChangedIp = false
       if(ip) {
         ip = ip.split(',')[0]
         const ipTab = ip.split('.')
@@ -144,6 +145,7 @@ module.exports = app => {
             network.ip = `${subnet}${newIp}`
             await network.save()
             log.info(`changed user ${user.name}'s ip to ${newIp}.`)
+            hasChangedIp = true
           }
           else {
             log.info(`Could not add user ip, ${ip} does not exist or ip has not updated yet`)
@@ -157,6 +159,7 @@ module.exports = app => {
           user: userData,
           token,
           spotlights,
+          hasChangedIp,
           prices: {
             partners: env.ARENA_PRICES_PARTNER_MAILS,
             plusone: env.ARENA_PRICES_PLUSONE,
