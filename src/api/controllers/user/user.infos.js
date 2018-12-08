@@ -157,11 +157,12 @@ module.exports = app => {
             while(newIp === parseInt(allIp[newIp - 1], 10)) {
               newIp++
             }
-            network.ip = `${subnet}${newIp}`
+            let finalip = `${subnet}${newIp}`
             let found = await Network.findOne({ where: {
-              ip: network.ip
+              ip: finalip
             } })
             if (!found) {
+              network.ip = finalip
               await network.save()
               log.info(`changed user ${user.name}'s ip to ${network.ip}.`)
               hasChangedIp = true
