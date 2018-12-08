@@ -135,7 +135,7 @@ module.exports = app => {
                 subnet = '172.16.98.' //poubelle
                 break
             }
-            allnetworks = allnetworks.filter(nw => nw.ip.startsWith(subnet))
+            allnetworks = allnetworks.filter(nw => nw && nw.ip && nw.ip.startsWith(subnet))
             let allIp = allnetworks.map(nw => nw.ip.split('.')[3]).sort((a, b) => {
               if(parseInt(a, 10) > parseInt(b, 10)) return 1
               if(parseInt(a, 10) < parseInt(b, 10)) return -1
