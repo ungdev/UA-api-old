@@ -99,7 +99,16 @@ module.exports = app => {
 
           if(network && network.ip.startsWith('172.16.98.')) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
             console.log('1')
-            user = await User.findById(user.id)
+            user = await User.findById(user.id, {
+              include: [{
+                model: Team,
+                attributes: ['id'],
+                include: [{
+                  model: Spotlight,
+                  attributes: ['id', 'shortName']
+                }]
+              }]
+            })
             console.log('1,1')
             await network.setUser(user)
             console.log('2')
