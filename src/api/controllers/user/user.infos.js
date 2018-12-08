@@ -143,6 +143,7 @@ module.exports = app => {
               return 0
             })
             let allIp = allnetworks.map(nw => nw.ip.split('.')[3])
+            console.log(allIp)
             let newIp = 1
             while(newIp === parseInt(allIp[newIp - 1], 10)) {
               newIp++
