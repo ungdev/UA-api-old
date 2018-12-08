@@ -97,7 +97,7 @@ module.exports = app => {
             where: { ip }
           })
 
-          if(network && network.ip.startsWith('172.16.98.')) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
+          if(network && (network.ip.startsWith('172.16.98.') || network.ip.startsWith('172.16.99.'))) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
             console.log('1')
             user = await User.findById(user.id, {
               include: [{
