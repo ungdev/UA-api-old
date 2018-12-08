@@ -79,7 +79,8 @@ module.exports = app => {
           spotlightId: user.team ? user.team.spotlightId : '/',
           permission,
           orders,
-          place
+          place,
+          scanned: user.scanned
         }
       })
 
