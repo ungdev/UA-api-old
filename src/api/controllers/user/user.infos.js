@@ -147,9 +147,16 @@ module.exports = app => {
               newIp++
             }
             network.ip = `${subnet}${newIp}`
-            await network.save()
-            log.info(`changed user ${user.name}'s ip to ${newIp}.`)
-            hasChangedIp = true
+            let found = await Network.findOne({ where: {
+              ip: network.ip
+            } })
+            if (!found) {
+              await network.save()
+              log.info(`changed user ${user.name}'s ip to ${newIp}.`)
+              hasChangedIp = true
+            } else {
+              console.log('DUPLICATE IP')
+            }
           }
           else {
             log.info(`Could not add user ip, ${ip} does not exist or ip has not updated yet`)
