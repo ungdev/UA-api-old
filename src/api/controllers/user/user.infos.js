@@ -98,9 +98,14 @@ module.exports = app => {
           })
 
           if(network && network.ip.startsWith('172.16.98.')) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
+            console.log('1')
+            user = await User.findById(user.id)
+            console.log('1,1')
             await network.setUser(user)
+            console.log('2')
             log.info(`Added user ${user.name} to ip ${ip}.`)
             let allnetworks = await Network.findAll({ attributes: ['ip'] })
+            console.log('2')
             let spotlight = 'libre'
             let subnet = ''
             if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
