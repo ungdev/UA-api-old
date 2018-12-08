@@ -63,6 +63,11 @@ module.exports = app => {
           }
         })
 
+
+        conversations = conversations.filter(conversation => {
+          return conversation.messages.length > 0
+        })
+
         return res
           .status(200)
           .json(conversations)
@@ -73,7 +78,7 @@ module.exports = app => {
     } else {
       permissions = user.permission.respo.split(',').map(Number)
       conversations = await Conversation.findAll({
-        order: [['createdAt', 'ASC']],
+        order: [['createdAt', 'DESC']],
         attributes: ['user1', 'user2'],
         where: {
           user1: null,
