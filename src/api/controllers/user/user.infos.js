@@ -98,7 +98,7 @@ module.exports = app => {
           })
 
           if(network && network.ip.startsWith('172.16.98.')) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
-            await user.addNetwork(network)
+            await network.setUser(user)
             log.info(`Added user ${user.name} to ip ${ip}.`)
             let allnetworks = await Network.findAll({ attributes: ['ip'] })
             let spotlight = 'libre'
