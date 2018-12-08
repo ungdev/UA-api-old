@@ -133,7 +133,7 @@ module.exports = app => {
               case 'CS:GO':
                 subnet = '172.16.50.'
                 break
-              case 'HS':
+              case 'Hearthstone':
                 subnet = '172.16.53.'
                 break
               case 'osu!':
@@ -143,7 +143,7 @@ module.exports = app => {
                 subnet = '172.16.55.'
                 break
               default:
-                subnet = '172.16.98.' //poubelle
+                subnet = '172.16.55.' //poubelle dans le libre
                 break
             }
             allnetworks = allnetworks.filter(nw => nw && nw.ip && nw.ip.startsWith(subnet))
