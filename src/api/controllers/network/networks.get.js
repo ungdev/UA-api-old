@@ -35,6 +35,8 @@ module.exports = app => {
       const { user } = nw
       let spotlight = 'libre'
       if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
+      if(!spotlight) spotlight = 'libre'
+      if(spotlight === 'SSBU') spotlight = 'libre'
       res
         .status(200)
         .json({
