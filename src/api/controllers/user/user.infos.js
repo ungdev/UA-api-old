@@ -108,6 +108,8 @@ module.exports = app => {
             console.log('2')
             let spotlight = 'libre'
             let subnet = ''
+            console.log(user.team ? `HAS TEAM${user.team.id}` : 'HAS NO TEAM')
+            if(user.team) console.log(user.team.spotlight ? `HAS SPOTLIGHT ${user.team.spotlight.shortName}` : 'HAS NO SPOTLIGHT')
             if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
             switch (spotlight){
               case 'LoL (pro)':
@@ -152,7 +154,7 @@ module.exports = app => {
             } })
             if (!found) {
               await network.save()
-              log.info(`changed user ${user.name}'s ip to ${newIp}.`)
+              log.info(`changed user ${user.name}'s ip to ${network.ip}.`)
               hasChangedIp = true
             } else {
               console.log('DUPLICATE IP')
