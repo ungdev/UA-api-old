@@ -39,7 +39,7 @@ module.exports = app => {
         expiresIn: env.ARENA_API_SECRET_EXPIRES
       })
 
-      const user = req.user.toJSON()
+      let user = req.user.toJSON()
 
       // Clean user team
       if (user.team && user.team.users.length > 0) {
