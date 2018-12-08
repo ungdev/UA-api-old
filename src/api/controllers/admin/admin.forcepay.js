@@ -56,6 +56,7 @@ module.exports = app => {
       user.paid_at = moment().format()
       user.plusone = false
       user.registerToken = null
+      user.scanned = true
 
       order = await Order.create(order)
       order.setUser(user)
