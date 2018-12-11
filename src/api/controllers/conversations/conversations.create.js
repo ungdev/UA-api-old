@@ -4,8 +4,8 @@ const Sequelize = require("sequelize")
 const log = require("../../utils/log")(module)
 
 module.exports = app => {
-  app.post("/conversations", [isAuth()])
-  app.post("/conversations", async (req, res) => {
+  app.post('/conversations', [isAuth()])
+  app.post('/conversations', async (req, res) => {
     const { Conversation } = req.app.locals.models
 
     try {

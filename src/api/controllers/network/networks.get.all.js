@@ -37,6 +37,8 @@ module.exports = app => {
         if (user) {
           spotlight = 'libre'
           if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
+          if(!spotlight) spotlight = 'libre'
+          if(spotlight === 'SSBU') spotlight = 'libre'
           place = user.tableLetter && user.placeNumber ? `${user.tableLetter}${user.placeNumber}` : null
         }
         return {
