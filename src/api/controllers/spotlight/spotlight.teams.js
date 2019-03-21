@@ -1,4 +1,6 @@
 const isAuth = require('../../middlewares/isAuth')
+const isAdmin = require('../../middlewares/isAdmin')
+const isRespo = require('../../middlewares/isRespo')
 const errorHandler = require('../../utils/errorHandler')
 const isInSpotlight = require('../../utils/isInSpotlight')
 const { outputFields } = require('../../utils/publicFields')
@@ -53,14 +55,28 @@ module.exports = app => {
           delete team.AskingUser
         }
         team.isInSpotlight = await isInSpotlight(team.id, req)
+
+        let isRespo = false
+
+        if(req.user && req.user.permission) {
+          if(req.user.permission.admin) {
+            isRespo = true
+          }
+          else if(req.user.permission.respo && req.user.permission.respo.includes(req.params.id)) {
+            isRespo = true
+          }
+        }
+
         return {
           ...team,
           users: team.users.map(user => {
-          return {
-            id: user.id,
-            name: user.name,
-            role: user.role,
-          }})
+            return {
+              id: user.id,
+              name: user.name,
+              role: user.role,
+              // If respo, returns the user's place otherwise, nothing. If he isn't placed, returns /
+              place: isRespo ? (user.tableLetter != null ? user.tableLetter + user.placeNumber : '/') : ''
+            }})
         }
       }))
       return res
