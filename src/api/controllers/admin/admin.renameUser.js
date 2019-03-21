@@ -7,8 +7,7 @@ const validateBody = require('../../middlewares/validateBody')
 
 /**
  * PUT /admin/renameUser/:id
- *
- * Body {
+ * {
  *   name
  *   firstname
  *   lastname
