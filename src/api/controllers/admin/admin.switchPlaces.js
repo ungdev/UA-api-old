@@ -23,8 +23,8 @@ module.exports = app => {
         .end()
       }
 
-      let user1 = await User.findById(req.params.id1)
-      let user2 = await User.findById(req.params.id2)
+      let user1 = await User.findByPk(req.params.id1)
+      let user2 = await User.findByPk(req.params.id2)
 
       let tmpTableLetter = user1.tableLetter
       let tmpPlaceNumber = user1.placeNumber

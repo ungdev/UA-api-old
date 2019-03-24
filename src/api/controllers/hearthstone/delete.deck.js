@@ -20,7 +20,7 @@ module.exports = app => {
     const { user } = req
 
     try {
-      let deck = await Deck.findById(req.params.id)
+      let deck = await Deck.findByPk(req.params.id)
       if (!user.team || user.team.id !== deck.teamId) {
         return res
           .status(403)

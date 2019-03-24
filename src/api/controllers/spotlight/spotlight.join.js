@@ -22,7 +22,7 @@ module.exports = app => {
     const { Team, User, Spotlight, AskingUser } = req.app.locals.models
 
     try {
-      const spotlight = await Spotlight.findById(req.params.id, {
+      const spotlight = await Spotlight.findByPk(req.params.id, {
         include: [
           {
             model: Team,

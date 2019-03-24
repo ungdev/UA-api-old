@@ -35,8 +35,8 @@ module.exports = app => {
   app.post('/team/:id/accept', async (req, res) => {
     try {
       const { User, Team, Spotlight } = req.app.locals.models
-      const user = await User.findById(req.body.user)
-      const captain = await User.findById(req.user.id, {
+      const user = await User.findByPk(req.body.user)
+      const captain = await User.findByPk(req.user.id, {
         include: [
           {
             model: Team,

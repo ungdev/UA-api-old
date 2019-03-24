@@ -27,7 +27,7 @@ module.exports = app => {
       const { value } = req.body
       const spotlightId = req.params.id
       
-      let spotlight = await Spotlight.findById(spotlightId)
+      let spotlight = await Spotlight.findByPk(spotlightId)
       if(!spotlight) {
         return res
           .status(404)

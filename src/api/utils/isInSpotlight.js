@@ -3,8 +3,8 @@ const moment = require('moment')
 
 module.exports = async function isInSpotlight(teamId, req) {
   const { User, Team, Spotlight, Order } = req.app.locals.models
-  let team = await Team.findById(teamId, { include:[User] })
-  const spotlight = await Spotlight.findById(team.spotlightId, {
+  let team = await Team.findByPk(teamId, { include:[User] })
+  const spotlight = await Spotlight.findByPk(team.spotlightId, {
     include: [
       {
         model: Team,

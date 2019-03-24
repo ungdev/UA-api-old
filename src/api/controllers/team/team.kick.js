@@ -58,7 +58,7 @@ module.exports = app => {
         await req.user.team.destroy()
       } else {
         log.info(`user ${req.user.name} kicked ${user.name}`)
-        let u = await User.findById(req.params.id, {})
+        let u = await User.findByPk(req.params.id, {})
         u.joined_at = null
         u.teamId = null
         await u.save()

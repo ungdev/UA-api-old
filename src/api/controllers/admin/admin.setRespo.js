@@ -22,7 +22,7 @@ module.exports = app => {
           .end()
       }
 
-      let permission = await Permission.find({
+      let permission = await Permission.findOne({
         where: { userId: req.params.id }
       })
 

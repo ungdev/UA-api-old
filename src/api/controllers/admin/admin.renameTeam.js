@@ -28,7 +28,7 @@ module.exports = app => {
 
     try {
 
-      let team = await Team.findById(req.params.id)
+      let team = await Team.findByPk(req.params.id)
       team.name = req.body.name
 
       await team.save()

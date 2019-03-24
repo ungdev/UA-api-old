@@ -34,7 +34,7 @@ module.exports = app => {
       const spotlightId = req.params.id
       const { title, desc, popover } = req.body
 
-      let spotlight = await Spotlight.findById(spotlightId)
+      let spotlight = await Spotlight.findByPk(spotlightId)
       if(!spotlight) {
         return res
           .status(404)

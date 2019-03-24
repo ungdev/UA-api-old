@@ -20,7 +20,7 @@ module.exports = app => {
     const { Spotlight } = req.app.locals.models
     try {
       const { expiresIn, resetAccessToken, accessToken } = req.app.locals.toornament
-      const spotlight = await Spotlight.findById(req.params.id)
+      const spotlight = await Spotlight.findByPk(req.params.id)
       const toornamentID = spotlight.toJSON().toornamentID
       if (expiresIn < Date.now()) {
         resetAccessToken();

@@ -28,13 +28,14 @@ module.exports = app => {
         .end()
       }
 
-      let permission = await Permission.find({
+      let permission = await Permission.findOne({
         where: { userId: req.params.id }
       })
 
       if(permission) {
-        permission.admin = req.body.admin
-        await permission.save()
+        await permission.update({
+          admin: req.body.admin
+        })
       }
       else {
         permission = await Permission.create({

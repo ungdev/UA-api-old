@@ -33,7 +33,7 @@ module.exports = app => {
 
   app.post('/team/:id/refuse', async (req, res) => {
     try {
-      const user = await req.app.locals.models.User.findById(req.body.user)
+      const user = await req.app.locals.models.User.findByPk(req.body.user)
 
       await req.app.locals.models.AskingUser.destroy({
         where: {

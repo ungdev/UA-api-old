@@ -39,7 +39,7 @@ module.exports = app => {
 
     try {
 
-      let user = await User.findById(req.params.id)
+      let user = await User.findByPk(req.params.id)
       user.name = req.body.name
       user.firstname = req.body.firstname
       user.lastname = req.body.lastname

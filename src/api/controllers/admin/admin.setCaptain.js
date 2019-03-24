@@ -25,7 +25,7 @@ module.exports = app => {
           .end()
       }
 
-      let team = await Team.find({
+      let team = await Team.findOne({
         where: { id: req.params.id }
       })
 

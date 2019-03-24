@@ -19,12 +19,12 @@ module.exports = app => {
     } = req.app.locals.models
     let conversation = null
     try {
-      const user = await User.findById(req.user.id, {
+      const user = await User.findByPk(req.user.id, {
         include: [Permission]
       })
       const userTo = _.isUndefined(req.body.to)
         ? null
-        : await User.findById(req.body.to)
+        : await User.findByPk(req.body.to)
 
       // Find if conversation exists
       if (!user.permission || (!user.permission.admin && !user.permission.respo)) {
@@ -45,10 +45,10 @@ module.exports = app => {
       if (!conversation) {
         let team = ''
         if(user.permission && (user.permission.admin || user.permission.respo !== null)) {
-          team = await Team.findById(userTo.teamId)
+          team = await Team.findByPk(userTo.teamId)
         }
         else{
-          team = await Team.findById(user.teamId)
+          team = await Team.findByPk(user.teamId)
         }
 
         conversation = await Conversation.create({
