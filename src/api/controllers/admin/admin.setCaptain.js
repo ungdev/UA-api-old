@@ -29,8 +29,9 @@ module.exports = app => {
         where: { id: req.params.id }
       })
 
-      team.captainId = req.body.userId
-      await team.save()
+      await team.update({
+        captainId: req.body.userId
+      })
 
       return res
         .status(200)

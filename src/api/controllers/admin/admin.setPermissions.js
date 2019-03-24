@@ -29,8 +29,9 @@ module.exports = app => {
       })
 
       if (permission) {
-        permission.permission = reqPermission.toString()
-        await permission.save()
+        await permission.update({
+          permission: reqPermission.toString()
+        })
       } else {
         permission = await Permission.create({
           userId: req.params.id,

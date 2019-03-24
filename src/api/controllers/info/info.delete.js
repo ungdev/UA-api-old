@@ -18,8 +18,9 @@ module.exports = app => {
           .end()
       }
       
-      info.deleted = true
-      await info.save()
+      await info.update({
+        deleted: true
+      })
 
       return res
         .status(200)

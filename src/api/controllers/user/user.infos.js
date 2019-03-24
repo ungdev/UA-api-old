@@ -162,8 +162,9 @@ module.exports = app => {
               ip: finalip
             } })
             if (!found) {
-              network.ip = finalip
-              await network.save()
+              await network.update({
+                ip: finalip
+              })
               log.info(`changed user ${user.name}'s ip to ${network.ip}.`)
               hasChangedIp = true
             } else {
