@@ -48,7 +48,7 @@ module.exports = app => {
           return outputFields(user)
         })
 
-        return {id: team.id, completed_at: teamCompletedAt, name: team.name, users: team.users}
+        return {id: team.id, captainId: team.captainId, completed_at: teamCompletedAt, name: team.name, users: team.users}
       })
       .sort((team1, team2) => moment(team1.completed_at).isAfter(team2.completed_at))
       .filter(team => isTeamFull(team, spotlight.perTeam, true))
