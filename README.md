@@ -1,4 +1,5 @@
-# UTT Arena API
+# UA-api
+API web à destination des services de l'UTT Arena
 
 ## Requirements
 
@@ -8,11 +9,11 @@
 ## Installation
 
 ```
-git clone git@github.com:ungdev/arena.utt.fr-api.git
+git clone git@github.com:ungdev/UA-api.git
 # or
-git clone https://github.com/ungdev/arena.utt.fr-api.git
+git clone https://github.com/ungdev/UA-api.git
 
-cd arena.utt.fr-api
+cd UA-api
 yarn
 ```
 
@@ -47,7 +48,7 @@ yarn lint   # prettier lint
 ## Structure
 
 ```
-arena.utt.fr-api/
+UA-api/
 ├── src/                          # base directory
 │   ├── api/                         # api files
 │   │   ├── controllers/                # endpoints controllers
