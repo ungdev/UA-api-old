@@ -40,6 +40,11 @@ module.exports = app => {
           include: [
             {
               model: Order
+            },
+            {
+              model: Team,
+              attributes: ['name'],
+              include: [{ model: Spotlight, attributes: ['name'] }]
             }
           ]
         })
@@ -81,17 +86,27 @@ module.exports = app => {
 
       // Get place
       let place = ''
-              
-      if(user.tableLetter && user.placeNumber) {
+
+      if (user.tableLetter && user.placeNumber) {
         place = `${user.tableLetter}${user.placeNumber}`
       }
 
+      const team = user.teamId ? `${user.team.name}` : `soloteam`
+
+      const spotlight = user.team.spotlightId
+        ? `${user.team.spotlight.name}`
+        : 'Tournoi Libre'
+
       return res
         .status(200)
-        .json({ user: {
-          ...outputFields(user),
-          place
-        }})
+        .json({
+          user: {
+            ...outputFields(user),
+            place,
+            team,
+            spotlight
+          }
+        })
         .end()
     } catch (err) {
       errorHandler(err, res)
