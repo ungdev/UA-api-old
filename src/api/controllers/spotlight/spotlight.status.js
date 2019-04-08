@@ -1,6 +1,4 @@
 const pick = require('lodash.pick')
-const env = require('../../../env')
-const { isSpotlightFull } = require('../../utils/isFull')
 const errorHandler = require('../../utils/errorHandler')
 const isAuth = require('../../middlewares/isAuth')
 
@@ -28,9 +26,7 @@ module.exports = app => {
       spotlights = spotlights.map(spotlight => {
         spotlight = spotlight.toJSON()
 
-        spotlight.isFull = isSpotlightFull(spotlight, true)
-
-        return pick(spotlight, ['id', 'name', 'shortName', 'perTeam', 'maxPlayers', 'isFull', 'states', 'state', 'toornamentID'])
+        return pick(spotlight, ['id', 'name', 'shortName', 'perTeam', 'maxPlayers', 'states', 'state', 'toornamentID'])
       })
 
       return res
