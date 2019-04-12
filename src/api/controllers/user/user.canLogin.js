@@ -14,7 +14,7 @@ const log = require ('../../utils/log')(module)
  */
 module.exports = app => {
   app.get('/user/canLogin', async (req, res) => {
-    res
+    return res
       .status(200)
       .json({ canLogin: env.ARENA_API_DISABLE_LOGIN === '0' })
       .end()

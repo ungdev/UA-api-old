@@ -17,20 +17,6 @@ const Basket = etupay.Basket
 const euro = 100
 const gender = { H: 'Homme', F: 'Femme' }
 
-/**
- * POST /user/pay
- * {
- *    plusone: Boolean,
- *    ethernet: Boolean,
- *    shirtGender: String?,
- *    shirtSize: String?
- * }
- *
- * Response:
- * {
- *    url: String
- * }
- */
 module.exports = app => {
   app.post('/user/pay', [isAuth('user-pay')])
 
@@ -76,37 +62,63 @@ module.exports = app => {
   ])
 
   app.post('/user/pay', async (req, res) => {
-    if(env.ARENA_PAYMENT_DISABLED === '1') return res.status(404).json({ error: 'PAYMENT_DISABLED' }).end()
-    const { User, Team, Spotlight } = req.app.locals.models
+    if(env.ARENA_PAYMENT_DISABLED === '1') {
+      return res
+        .status(404)
+        .json({ error: 'PAYMENT_DISABLED' })
+        .end()
+    }
+
+    const { User, Team, Spotlight, Order } = req.app.locals.models
+
     let totalPaidPlayers = await User.findAll({
       where: {
         paid: 1,
         plusone: 0
       },
       attributes: ['id'],
-      include: [
-        {
-          model: Team,
+      include: [{
+        model: Team,
+        attributes: ['id'],
+        include: [{
+          model: Spotlight,
           attributes: ['id'],
-          include: [
-            {
-              model: Spotlight,
-              attributes: ['id'],
-            }
-          ]
-        }
-      ]
+        }]
+      }]
     })
+
     totalPaidPlayers = totalPaidPlayers.filter(player => !player.team || (player.team && player.team.spotlight && player.team.spotlight.id !== 6)).length // remove SSBU
-    //return res.status(404).json({ error: totalPaidPlayers }).end()
-    if(totalPaidPlayers >= env.ARENA_MAX_PLACES) return res.status(404).json({ error: 'LAN_FULL' }).end()
+
+    // Check if LAN is already full
+    // TODO : ARENA_MAX_PLAYER_PLACES ??
+    if(totalPaidPlayers >= env.ARENA_MAX_PLACES) {
+      return res
+        .status(404)
+        .json({ error: 'LAN_FULL' })
+        .end()
+    }
+
     try {
-      const { Order } = req.app.locals.models
-      if (req.user.paid) return res.status(404).json('ALREADY_PAID').end()
+      // Check if user has already paid his ticket
+      if (req.user.paid) {
+        return res
+          .status(404)
+          .json('ALREADY_PAID')
+          .end()
+      }
+
+      // If user buy a visitor place
       if (req.body.plusone) {
         const count = await Order.count({ where: { plusone: true, paid: true } })
-        if (count >= env.ARENA_VISITOR_LIMIT) return res.status(404).json({ error: 'VISITOR_FULL'}).end()
+
+        if (count >= env.ARENA_VISITOR_LIMIT) {
+          return res
+            .status(404)
+            .json({ error: 'VISITOR_FULL'})
+            .end()
+        }
       }
+      
       // step 1 : save user's payment profile (place type, shirt, ethernet cable)
       let order = { place: true }
       order.plusone = req.body.plusone ? req.body.plusone : false
