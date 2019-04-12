@@ -24,4 +24,17 @@ const isSpotlightFull = spotlight => {
   return teams >= maxTeams
 }
 
-module.exports = { isTeamFull, isSpotlightFull }
+const remainingPlaces = spotlight => {
+  const maxTeams = spotlight.maxPlayers / spotlight.perTeam
+  if(!spotlight.teams) {
+    return false
+  }
+  let teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true)).length
+
+  const remaining =  maxTeams - teams
+
+  return remaining <= 5 && remaining > 0 ? remaining : '/'
+
+}
+
+module.exports = { isTeamFull, isSpotlightFull, remainingPlaces }

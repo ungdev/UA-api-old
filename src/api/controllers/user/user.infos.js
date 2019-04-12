@@ -4,7 +4,7 @@ const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const { outputFields } = require('../../utils/publicFields')
-const { isSpotlightFull } = require('../../utils/isFull')
+const { isSpotlightFull, remainingPlaces } = require('../../utils/isFull')
 const isInSpotlight = require('../../utils/isInSpotlight')
 
 /**
@@ -41,19 +41,23 @@ module.exports = app => {
 
       let user = req.user.toJSON()
 
-      // Clean user team
-      if (user.team && user.team.users.length > 0) {
-        user.team.users = user.team.users.map(outputFields)
-        user.team.isInSpotlight = await isInSpotlight(user.team.id, req)
-      }
 
       spotlights = spotlights.map(spotlight => {
         spotlight = spotlight.toJSON()
 
         spotlight.isFull = isSpotlightFull(spotlight)
 
+        spotlight.remainingPlaces = remainingPlaces(spotlight)
+
         return spotlight
       })
+
+      // Clean user team
+      if (user.team && user.team.users.length > 0) {
+        user.team.users = user.team.users.map(outputFields)
+        user.team.isInSpotlight = await isInSpotlight(user.team.id, req)
+        user.team.remainingPlaces = spotlights.find(spotlight => spotlight.id === user.team.spotlight.id).remainingPlaces
+      }
 
       // Get permission
       const permission = await Permission.findOne({
