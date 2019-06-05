@@ -9,7 +9,7 @@ module.exports = app => {
     const { Info } = req.app.locals.models
 
     try {
-      const info = await Info.findById(req.params.infoId)
+      const info = await Info.findByPk(req.params.infoId)
 
       if(info.spotlightId !== parseInt(req.params.id)) {
         return res
@@ -18,8 +18,9 @@ module.exports = app => {
           .end()
       }
       
-      info.deleted = true
-      await info.save()
+      await info.update({
+        deleted: true
+      })
 
       return res
         .status(200)

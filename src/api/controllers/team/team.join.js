@@ -35,7 +35,7 @@ module.exports = app => {
     }
 
     try {
-      const team = await Team.findById(req.params.id, {
+      const team = await Team.findByPk(req.params.id, {
         include: [User, Spotlight]
       })
 

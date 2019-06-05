@@ -16,7 +16,7 @@ module.exports = app => {
   app.get('/hearthstone/decks/:id', async (req, res) => {
     try {
       const { Deck } = req.app.locals.models
-      const deck = await Deck.findById(req.params.id)
+      const deck = await Deck.findByPk(req.params.id)
       if(!deck) return res.status('404').json({ error: 'NOT_FOUND' }).end()
       const decoded = decode(deck.deckstring)
       const deckcards = decoded.cards.map(card => {

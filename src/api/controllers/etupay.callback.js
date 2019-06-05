@@ -10,23 +10,25 @@ const etupay = require('@ung/node-etupay')({
   key: env.ARENA_ETUPAY_KEY
 })
 async function leaveTeam(user, Team, User) {
-  let team = await Team.findById(user.teamId)
+  let team = await Team.findByPk(user.teamId)
   if (team){
     if (team.captainId === user.id) {
       log.info(`user ${user.name} left ${team.name} and destroyed it, as captain`)
       let users = await User.findAll({ where: { teamId: team.id } })
       for (let u of users) {
-        u.joined_at = null
-        u.teamId = null
-        await u.save()
+        await u.update({
+          joined_at: null,
+          teamId: null
+        })
         await team.removeUser(u.id)
       }
       await team.destroy()
     } else {
       log.info(`User ${user.name} left his team because he paid a visitor place`)
-      user.joined_at = null
-      user.teamId = null
-      await user.save()
+      await user.update({
+        joined_at: null,
+        teamId: null
+      })
       await team.removeUser(user.id)
     }
   }
@@ -37,12 +39,12 @@ async function handlePayload(models, payload) {
   try {
     const data = JSON.parse(Base64.decode(payload.serviceData))
     const { orderId, isInscription, userId } = data
-    const user = await User.findById(userId, { include: [Team] })
+    const user = await User.findByPk(userId, { include: [Team] })
 
 
     if (!user) return { user: null, shouldSendMail: false, error: 'NULL_USER', transactionState: 'error' }
     if (isInscription) {
-      let order = await Order.findById(orderId)
+      let order = await Order.findByPk(orderId)
       if(user.paid || order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID', transactionState: 'error' }
   
       order.transactionId = payload.transactionId
@@ -68,7 +70,7 @@ async function handlePayload(models, payload) {
       }
     }
     else {
-      let order = await Order.findById(orderId)
+      let order = await Order.findByPk(orderId)
       if(order.paid) return { user, shouldSendMail: false, error: 'ALREADY_PAID' }
 
       order.transactionId = payload.transactionId
@@ -109,7 +111,7 @@ module.exports = app => {
     if (error) return res.status(200).end()
     if (shouldSendMail) {
       const { User, Team, Order, Spotlight } = req.app.locals.models
-      user = await User.findById(user.id, { include: [{ model: Team, include: [Spotlight] }, Order] }) //add order to user
+      user = await User.findByPk(user.id, { include: [{ model: Team, include: [Spotlight] }, Order] }) //add order to user
       await sendPdf(user)
       await sendInfosMail(user)
       log.info(`Mail sent to ${user.name}`)
@@ -136,7 +138,7 @@ module.exports = app => {
       }
       if (shouldSendMail) {
         const { User, Team, Order, Spotlight } = req.app.locals.models
-        user = await User.findById(user.id, { include: [{model: Team, include: [Spotlight]}, Order] }) //add order to user
+        user = await User.findByPk(user.id, { include: [{model: Team, include: [Spotlight]}, Order] }) //add order to user
         await sendPdf(user)
         await sendInfosMail(user)
         log.info(`Mail sent to ${user.name}`)

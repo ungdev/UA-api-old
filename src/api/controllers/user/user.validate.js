@@ -44,8 +44,9 @@ module.exports = app => {
           .end()
       }
 
-      user.registerToken = null
-      await user.save()
+      await user.update({
+        registerToken: null
+      })
 
       log.info(`user ${user.name} was validated`)
 

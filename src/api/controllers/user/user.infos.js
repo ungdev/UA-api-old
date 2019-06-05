@@ -103,7 +103,7 @@ module.exports = app => {
 
           if(network && (network.ip.startsWith('172.16.98.') || network.ip.startsWith('172.16.99.'))) { // if doesnt start with 172.16.98., it means that the ip has been set, but the pc has not updated his ip yet
             console.log('1')
-            user = await User.findById(user.id, {
+            user = await User.findByPk(user.id, {
               include: [{
                 model: Team,
                 attributes: ['id'],
@@ -166,8 +166,9 @@ module.exports = app => {
               ip: finalip
             } })
             if (!found) {
-              network.ip = finalip
-              await network.save()
+              await network.update({
+                ip: finalip
+              })
               log.info(`changed user ${user.name}'s ip to ${network.ip}.`)
               hasChangedIp = true
             } else {

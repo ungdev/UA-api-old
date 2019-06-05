@@ -23,9 +23,10 @@ module.exports = app => {
     try {
       const nw = await Network.findOne({ where: { mac } })
       if(!nw) return res.status(404).end()
-      nw.switchId = switchId
-      nw.switchPort = switchPort
-      await nw.save()
+      await nw.update({
+        switchId: switchId,
+        switchPort: switchPort
+      })
       res
         .status(200)
         .end() // everything's fine

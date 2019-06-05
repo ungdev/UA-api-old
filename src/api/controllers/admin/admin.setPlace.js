@@ -26,10 +26,11 @@ module.exports = app => {
         .end()
       }
 
-      let user = await User.findById(req.params.id)
-      user.tableLetter = placeLetter || null
-      user.placeNumber = placeNumber || null
-      await user.save()
+      let user = await User.findByPk(req.params.id)
+      await user.update({
+        tableLetter: placeLetter || null,
+        placeNumber: placeNumber || null
+      })
 
       return res
         .status(200)

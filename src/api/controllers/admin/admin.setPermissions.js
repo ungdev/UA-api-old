@@ -24,13 +24,14 @@ module.exports = app => {
           .end()
       }
 
-      let permission = await Permission.find({
+      let permission = await Permission.findOne({
         where: { userId: req.params.id }
       })
 
       if (permission) {
-        permission.permission = reqPermission.toString()
-        await permission.save()
+        await permission.update({
+          permission: reqPermission.toString()
+        })
       } else {
         permission = await Permission.create({
           userId: req.params.id,

@@ -19,7 +19,7 @@ module.exports = app => {
     const { Spotlight, Team } = req.app.locals.models
 
     try {
-      let spotlights = await Spotlight.findById(req.params.id, {
+      let spotlights = await Spotlight.findByPk(req.params.id, {
         include: [
           {
             model: Team

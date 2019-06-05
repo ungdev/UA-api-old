@@ -19,11 +19,12 @@ module.exports = app => {
       const places = req.body.places
 
       places.forEach(async (place) => {
-        let user = await User.findById(place.id)
+        let user = await User.findByPk(place.id)
         if(user) {
-          user.tableLetter = (place.tableLetter && place.tableLetter !== '') ? place.tableLetter : null
-          user.placeNumber = (place.placeNumber && place.placeNumber !== '') ? place.placeNumber : null
-          await user.save()
+          await user.update({
+            tableLetter: (place.tableLetter && place.tableLetter !== '') ? place.tableLetter : null,
+            placeNumber: (place.placeNumber && place.placeNumber !== '') ? place.placeNumber : null
+          })
         }
       })
 

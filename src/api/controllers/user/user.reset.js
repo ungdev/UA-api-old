@@ -48,8 +48,9 @@ module.exports = app => {
           .end()
       }
 
-      user.resetToken = uuid()
-      await user.save()
+      await user.update({
+        resetToken: uuid()
+      })
       await mail('user.reset', user.email, {
         mail: user.email,
         link: `${env.ARENA_WEBSITE}/reset/${user.resetToken}`

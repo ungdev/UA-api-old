@@ -14,7 +14,7 @@ module.exports = app => {
       Permission,
       Message
     } = req.app.locals.models
-    const user = await User.findById(req.user.id, {
+    const user = await User.findByPk(req.user.id, {
       include: [Permission]
     })
     if (!user)

@@ -23,20 +23,21 @@ module.exports = app => {
         .end()
       }
 
-      let user1 = await User.findById(req.params.id1)
-      let user2 = await User.findById(req.params.id2)
+      let user1 = await User.findByPk(req.params.id1)
+      let user2 = await User.findByPk(req.params.id2)
 
       let tmpTableLetter = user1.tableLetter
       let tmpPlaceNumber = user1.placeNumber
 
-      user1.tableLetter = user2.tableLetter
-      user1.placeNumber = user2.placeNumber
-      
-      user2.tableLetter = tmpTableLetter
-      user2.placeNumber = tmpPlaceNumber
+      await user1.update({
+        tableLetter: user2.tableLetter,
+        placeNumber: user2.placeNumber
+      })
 
-      await user1.save()
-      await user2.save()
+      await user2.update({
+        tableLetter: tmpTableLetter,
+        placeNumber: tmpPlaceNumber
+      })
 
       return res
         .status(200)

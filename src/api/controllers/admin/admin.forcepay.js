@@ -64,7 +64,7 @@ module.exports = app => {
       await order.save()
       log.info(`Forced ${user.name}'s payment`)
 
-      user = await User.findById(user.id, { include: [Team, Order] }) //add order to user
+      user = await User.findByPk(user.id, { include: [Team, Order] }) //add order to user
       await sendPdf(user)
       log.info(`Mail sent to ${user.name}`)
 

@@ -28,10 +28,10 @@ module.exports = app => {
 
     try {
 
-      let team = await Team.findById(req.params.id)
-      team.name = req.body.name
-
-      await team.save()
+      let team = await Team.findByPk(req.params.id)
+      await team.update({
+        name: req.body.name
+      })
 
       return res
         .status(200)

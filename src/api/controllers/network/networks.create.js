@@ -26,8 +26,7 @@ module.exports = app => {
       } })
       if(!nw) nw = await Network.create({ mac, ip })
       else {
-        nw.ip = ip
-        await nw.save()
+        await nw.update({ ip })
       }
       return res
         .status(200)

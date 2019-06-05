@@ -35,7 +35,7 @@ module.exports = app => {
     const { Spotlight, Team, User } = req.app.locals.models
 
     try {
-      const spotlight = await Spotlight.findById(req.body.spotlight, {
+      const spotlight = await Spotlight.findByPk(req.body.spotlight, {
         include: [
           {
             model: Team,

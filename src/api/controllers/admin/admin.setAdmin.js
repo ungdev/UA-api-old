@@ -6,7 +6,7 @@ const errorHandler = require('../../utils/errorHandler')
  * PUT /admin/setAdmin/:id
  *
  * Response: none
- * 
+ *
  */
 module.exports = app => {
   app.put('/admin/setAdmin/:id', [isAuth(), isAdmin()])
@@ -17,15 +17,15 @@ module.exports = app => {
     try {
       if(req.body.admin === null) {
         return res
-        .status(400)  // Bad request
-        .json({ error: 'BAD_REQUEST' })
-        .end()
+          .status(400)  // Bad request
+          .json({ error: 'BAD_REQUEST' })
+          .end()
       }
       else if(req.params.id === req.user.id) {
         return res
-        .status(403)  // Forbidden
-        .json({ error: 'NOT_ALLOWED' })
-        .end()
+          .status(403)  // Forbidden
+          .json({ error: 'NOT_ALLOWED' })
+          .end()
       }
 
       let permission = await Permission.find({

@@ -22,7 +22,7 @@ module.exports = route => async (req, res, next) => {
   try {
     const decoded = await jwt.verify(auth, env.ARENA_API_SECRET)
 
-    const user = await User.findById(decoded.id, {
+    const user = await User.findByPk(decoded.id, {
       include:
       [
         {

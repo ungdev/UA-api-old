@@ -39,11 +39,12 @@ module.exports = app => {
 
     try {
 
-      let user = await User.findById(req.params.id)
-      user.name = req.body.name
-      user.firstname = req.body.firstname
-      user.lastname = req.body.lastname
-      await user.save()
+      let user = await User.findByPk(req.params.id)
+      await user.update({
+        name: req.body.name,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname
+      })
 
       return res
         .status(200)

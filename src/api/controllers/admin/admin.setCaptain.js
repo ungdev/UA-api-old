@@ -25,12 +25,13 @@ module.exports = app => {
           .end()
       }
 
-      let team = await Team.find({
+      let team = await Team.findOne({
         where: { id: req.params.id }
       })
 
-      team.captainId = req.body.userId
-      await team.save()
+      await team.update({
+        captainId: req.body.userId
+      })
 
       return res
         .status(200)
