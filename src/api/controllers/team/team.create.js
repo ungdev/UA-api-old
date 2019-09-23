@@ -2,7 +2,7 @@ const { check } = require('express-validator/check')
 const validateBody = require('../../middlewares/validateBody')
 const isAuth = require('../../middlewares/isAuth')
 const isNotInTeam = require('../../middlewares/isNotInTeam')
-const { isSpotlightFull } = require('../../utils/isFull')
+const { isTournamentFull } = require('../../utils/isFull')
 const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
 const moment = require('moment')
@@ -44,7 +44,7 @@ module.exports = app => {
         ]
       })
 
-      if (isSpotlightFull(spotlight)) {
+      if (isTournamentFull(spotlight)) {
         return res
           .status(400)
           .json({ error: 'SPOTLIGHT_FULL' })

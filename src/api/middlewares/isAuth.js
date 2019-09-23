@@ -25,11 +25,11 @@ module.exports = route => async (req, res, next) => {
     const user = await User.findByPk(decoded.id, {
       include:
       [
-        {
+        // todo: decommenter ça
+        /*{
           model: Team,
           include: [User, Spotlight]
-        },
-        Permission
+        }*/
       ]
     })
 

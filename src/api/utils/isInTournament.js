@@ -1,4 +1,4 @@
-const { isSpotlightFull, isTeamFull } = require('./isFull')
+const { isTournamentFull, isTeamFull } = require('./isFull')
 const moment = require('moment')
 
 module.exports = async function isInSpotlight(teamId, req) {
@@ -27,7 +27,7 @@ module.exports = async function isInSpotlight(teamId, req) {
   if(!team.users) return false // no paid players in team
   if(team.users.length < spotlight.perTeam) return false //not enough paid players in team
   
-  if(!isSpotlightFull(spotlight)) return true //if spotlight isn't full, the team must be in the spotlight
+  if(!isTournamentFull(spotlight)) return true //if spotlight isn't full, the team must be in the spotlight
 
 
   spotlight.teams = spotlight.teams.map(team => {

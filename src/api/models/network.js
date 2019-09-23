@@ -1,6 +1,7 @@
 
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('network', {
+    id: {primaryKey: true, type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4},
     ip: { type: DataTypes.STRING, defaultValue: null },
     mac: { type: DataTypes.STRING, defaultValue: null },
     switchId: { type: DataTypes.INTEGER, defaultValue: null },

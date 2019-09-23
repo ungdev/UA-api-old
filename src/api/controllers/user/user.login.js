@@ -13,7 +13,7 @@ const isLoginEnabled = require('../../middlewares/isLoginEnabled')
 /**
  * PUT /user/login
  * {
- *    name: String
+ *    username: String
  *    password: String
  * }
  *
@@ -27,7 +27,7 @@ module.exports = app => {
   app.put('/user/login', [isLoginEnabled()])
 
   app.put('/user/login', [
-    check('name')
+    check('username')
       .exists()
       .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ \-]+/i),
     check('password')
@@ -39,13 +39,12 @@ module.exports = app => {
     const { User, Network } = req.app.locals.models
 
     try {
-      const username = req.body.name
-      const password = req.body.password
+      const { username, password } = req.body
 
       // Get user
       const user = await User.findOne({
         where: {
-          [Op.or]: [{ name: username }, { email: username }]
+          [Op.or]: [{ username }, { email: username }]
         }
       })
 

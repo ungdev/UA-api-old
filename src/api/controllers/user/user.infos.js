@@ -4,8 +4,8 @@ const isAuth = require('../../middlewares/isAuth')
 const env = require('../../../env')
 const errorHandler = require('../../utils/errorHandler')
 const { outputFields } = require('../../utils/publicFields')
-const { isSpotlightFull, remainingPlaces } = require('../../utils/isFull')
-const isInSpotlight = require('../../utils/isInSpotlight')
+const { isTournamentFull, remainingPlaces } = require('../../utils/isFull')
+const isInTournament = require('../../utils/isInTournament')
 
 /**
  * GET /user
@@ -24,10 +24,10 @@ module.exports = app => {
   app.get('/user', [isAuth()])
 
   app.get('/user', async (req, res) => {
-    const { User, Permission, Spotlight, Team, Order, Network } = req.app.locals.models
+    const { User, Tournament, Team, Order, Network } = req.app.locals.models
 
     try {
-      let spotlights = await Spotlight.findAll({
+      let tournaments = await Tournament.findAll({
         include: [{
           model: Team,
           include: [User]
@@ -42,54 +42,30 @@ module.exports = app => {
       let user = req.user.toJSON()
 
 
-      spotlights = spotlights.map(spotlight => {
-        spotlight = spotlight.toJSON()
+      tournaments = tournaments.map(tournament => {
+        tournament = tournament.toJSON()
 
-        spotlight.isFull = isSpotlightFull(spotlight)
+        tournament.isFull = isTournamentFull(tournament)
 
-        spotlight.remainingPlaces = remainingPlaces(spotlight)
+        tournament.remainingPlaces = remainingPlaces(tournament)
 
-        return spotlight
+        return tournament
       })
 
       // Clean user team
       if (user.team && user.team.users.length > 0) {
         user.team.users = user.team.users.map(outputFields)
-        user.team.isInSpotlight = await isInSpotlight(user.team.id, req)
-        user.team.remainingPlaces = spotlights.find(spotlight => spotlight.id === user.team.spotlight.id).remainingPlaces
-      }
-
-      // Get permission
-      const permission = await Permission.findOne({
-        where: { userId: user.id }
-      })
-
-      let permissionData = null
-
-      if(permission) {
-        permissionData = {
-          admin: permission.admin,
-          respo: permission.respo,
-          permission: permission.permission
-        }
-      }
-      else {
-        log.info(`No permission found for user ${user.name}`)
+        user.team.isInTournament = await isInTournament(user.team.id, req)
+        user.team.remainingPlaces = tournaments.find(tournament => tournament.id === user.team.tournament.id).remainingPlaces
       }
 
       // Select returned information about user
       let userData = {
         ...outputFields(user),
-        permission: permissionData,
-        orders: await Order.findAll({
-          where: { userId: user.id }
-        }),
         team: user.team,
-        place: (user.tableLetter + user.placeNumber) || ''
       }
 
-
-      // 
+      /*
       let ip = req.headers['x-forwarded-for']
       let hasChangedIp = false
       if(ip) {
@@ -108,7 +84,7 @@ module.exports = app => {
                 model: Team,
                 attributes: ['id'],
                 include: [{
-                  model: Spotlight,
+                  model: Tournament,
                   attributes: ['id', 'shortName']
                 }]
               }]
@@ -119,12 +95,12 @@ module.exports = app => {
             log.info(`Added user ${user.name} to ip ${ip}.`)
             let allnetworks = await Network.findAll({ attributes: ['ip'] })
             console.log('2')
-            let spotlight = 'libre'
+            let tournament = 'libre'
             let subnet = ''
             console.log(user.team ? `HAS TEAM${user.team.id}` : 'HAS NO TEAM')
             if(user.team) console.log(user.team.spotlight ? `HAS SPOTLIGHT ${user.team.spotlight.shortName}` : 'HAS NO SPOTLIGHT')
-            if(user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName
-            switch (spotlight){
+            if(user.team && user.team.spotlight) tournament = user.team.spotlight.shortName
+            switch (tournament){
               case 'LoL (pro)':
                 subnet = '172.16.51.'
                 break
@@ -179,35 +155,15 @@ module.exports = app => {
             log.info(`Could not add user ip, ${ip} does not exist or ip has not updated yet`)
           }
         }
-      }
+      }*/
 
       return res
         .status(200)
         .json({
           user: userData,
           token,
-          spotlights,
-          hasChangedIp,
-          prices: {
-            partners: env.ARENA_PRICES_PARTNER_MAILS,
-            plusone: env.ARENA_PRICES_PLUSONE,
-            partner: env.ARENA_PRICES_PARTNER,
-            default: env.ARENA_PRICES_DEFAULT,
-            ethernet: env.ARENA_PRICES_ETHERNET,
-            ethernet7: env.ARENA_PRICES_ETHERNET7,
-            shirt: env.ARENA_PRICES_SHIRT,
-            laptop: env.ARENA_PRICES_LAPTOP,
-            screen27: env.ARENA_PRICES_SCREEN27,
-            kaliento: env.ARENA_PRICES_KALIENTO,
-            mouse: env.ARENA_PRICES_MOUSE,
-            headset: env.ARENA_PRICES_HEADSET,
-            keyboard: env.ARENA_PRICES_KEYBOARD,
-            chair: env.ARENA_PRICES_CHAIR,
-            streamingPC: env.ARENA_PRICES_STREAMING_PC,
-            gamingPC: env.ARENA_PRICES_GAMING_PC,
-            screen24: env.ARENA_PRICES_SCREEN24,
-            tombola: env.ARENA_PRICES_TOMBOLA,
-          }
+          tournaments,
+          //hasChangedIp
         })
         .end()
     }

@@ -42,6 +42,11 @@
     "start": "node ./bin/start.js",
     "serve": "pm2 start ./bin/start.js -i max --wait-ready --name arena.utt.fr-api",
     "reload": "pm2 reload arena.utt.fr-api --update-env",
-    "lint": "prettier --single-quote --print-width 100 --tab-width 2 --no-semi --write \"{src,bin}/**/*.js\""
+    "lint": "prettier --single-quote --print-width 100 --tab-width 2 --no-semi --write \"{src,bin}/**/*.js\"",
+    "seed": "sequelize-cli db:seed:all",
+    "seed-undo": "sequelize-cli db:seed:undo:all"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.1"
   }
 }

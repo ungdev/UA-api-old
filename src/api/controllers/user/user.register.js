@@ -15,7 +15,7 @@ const hash = require('util').promisify(bcrypt.hash)
 /**
  * POST /user
  * {
- *    name: String
+ *    username: String
  *    password: String
  *    email: String
  * }
@@ -29,7 +29,7 @@ module.exports = app => {
   app.post('/user', [isLoginEnabled()])
 
   app.post('/user', [
-    check('name')
+    check('username')
       .exists()
       .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ \-]+/i)
       .isLength({ min: 3, max: 90 }),
@@ -41,8 +41,6 @@ module.exports = app => {
       .exists()
       .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ \-]+/i)
       .isLength({ min: 2, max: 200 }),
-    check('gender')
-      .exists(),
     check('password')
       .exists()
       .isLength({ min: 6 }),

@@ -37,4 +37,4 @@ const remainingPlaces = spotlight => {
 
 }
 
-module.exports = { isTeamFull, isSpotlightFull, remainingPlaces }
+module.exports = { isTeamFull, isTournamentFull: isSpotlightFull, remainingPlaces }

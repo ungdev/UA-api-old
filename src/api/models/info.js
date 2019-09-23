@@ -1,9 +1,7 @@
-
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('info', {
-    title: { type: DataTypes.STRING },
+    id: { primaryKey: true, type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
+    title: { type: DataTypes.STRING, allowNull: false},
     content: { type: DataTypes.STRING },
-    deleted: { type: DataTypes.BOOLEAN, defaultValue: false },
-    spotlightId: { type: DataTypes.INTEGER }
   })
 }

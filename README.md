@@ -28,9 +28,9 @@ CREATE DATABASE arena CHARACTER SET utf8;
 
 ```
 # copy env file for all environments
-cp .env .env.local
-# makes your changes in .env.local, which will not be pushed
-nano .env.local
+cp .env.example .env
+# makes your changes in .env, which will not be pushed
+nano .env
 # you should change ARENA_DB for your database and ARENA_API_DISABLE_LOGIN to enable login
 ```
 

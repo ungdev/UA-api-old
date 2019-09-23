@@ -1,6 +1,6 @@
 const isAuth = require('../../middlewares/isAuth')
 const { outputFields } = require('../../utils/publicFields')
-const { isSpotlightFull, isTeamFull } = require('../../utils/isFull')
+const { isTournamentFull, isTeamFull } = require('../../utils/isFull')
 const errorHandler = require('../../utils/errorHandler')
 const log = require('../../utils/log')(module)
 
@@ -32,7 +32,7 @@ module.exports = app => {
       })
 
       // spotlight is full
-      if (isSpotlightFull(spotlight)) {
+      if (isTournamentFull(spotlight)) {
         log.warn(`user ${req.user.name} tried to join ${spotlight.name}, but it's full`)
 
         return res
