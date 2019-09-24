@@ -12,14 +12,7 @@ const credentials = {
   }
 };
 
-if (process.env.NODE_ENV === 'development') {
-  module.exports = {
-    development: credentials
-  }
-}
-
-else {
-  module.exports = {
-    production: credentials
-  }
+module.exports = {
+  development: credentials,
+  production: credentials
 }
