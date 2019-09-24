@@ -1,4 +1,4 @@
-module.exports = function(sequelize) {
+module.exports = function (sequelize) {
   const Cart = sequelize.import(`${__dirname}/cart`);
   const CartItem = sequelize.import(`${__dirname}/cartItem`);
   const Info = sequelize.import(`${__dirname}/info`);
@@ -26,11 +26,11 @@ module.exports = function(sequelize) {
   User.hasMany(Cart);
 
   // Associations
-  User.belongsTo(Team, {as: 'askingTeam', constraints: false})
-  Team.belongsTo(User, {as: 'captain', constraints: false})
-  CartItem.belongsTo(User, {as: 'forUser', constraints: false})
-  Tournament.belongsTo(State, {as: 'index', constraints: false})
+  User.belongsTo(Team, { as: 'askingTeam', constraints: false });
+  Team.belongsTo(User, { as: 'captain', constraints: false });
+  CartItem.belongsTo(User, { as: 'forUser', constraints: false });
+  Tournament.belongsTo(State, { as: 'index', constraints: false });
 
 
-  return { Cart, CartItem, Info, Item, Message, Network, State, Team, Tournament, User }
+  return { Cart, CartItem, Info, Item, Message, Network, State, Team, Tournament, User };
 };

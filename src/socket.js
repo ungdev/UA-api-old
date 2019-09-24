@@ -1,18 +1,18 @@
-const socketIo = require('socket.io')
+const socketIo = require('socket.io');
 
 module.exports = (http, sequelize, models) => {
-  const io = socketIo(http)
+  const io = socketIo(http);
 
   io.locals = {
     db: sequelize,
-    models: models
-  }
+    models,
+  };
 
-  io.on('connection', socket => {
-    socket.app = io
+  io.on('connection', (socket) => {
+    socket.app = io;
 
-    require('./api/live')(socket)
-  })
+    require('./api/live')(socket);
+  });
 
-  return io
-}
+  return io;
+};

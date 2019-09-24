@@ -1,40 +1,38 @@
-const log = require('./log')(module)
-
 const isTeamFull = (team, max, paid = false) => {
-  let count
-  if(!team.users){
-    return false
+  let count;
+  if (!team.users) {
+    return false;
   }
 
   if (paid) {
-    count = team.users.filter(user => user.paid).length
-  } else {
-    count = team.users.length
+    count = team.users.filter((user) => user.paid).length;
+  }
+  else {
+    count = team.users.length;
   }
 
-  return count >= max
-}
+  return count >= max;
+};
 
-const isSpotlightFull = spotlight => {
-  const maxTeams = spotlight.maxPlayers / spotlight.perTeam
-  if(!spotlight.teams) {
-    return false
+const isSpotlightFull = (spotlight) => {
+  const maxTeams = spotlight.maxPlayers / spotlight.perTeam;
+  if (!spotlight.teams) {
+    return false;
   }
-  let teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true)).length
-  return teams >= maxTeams
-}
+  const teams = spotlight.teams.filter((team) => isTeamFull(team, spotlight.perTeam, true)).length;
+  return teams >= maxTeams;
+};
 
-const remainingPlaces = spotlight => {
-  const maxTeams = spotlight.maxPlayers / spotlight.perTeam
-  if(!spotlight.teams) {
-    return false
+const remainingPlaces = (spotlight) => {
+  const maxTeams = spotlight.maxPlayers / spotlight.perTeam;
+  if (!spotlight.teams) {
+    return false;
   }
-  let teams = spotlight.teams.filter(team => isTeamFull(team, spotlight.perTeam, true)).length
+  const teams = spotlight.teams.filter((team) => isTeamFull(team, spotlight.perTeam, true)).length;
 
-  const remaining =  maxTeams - teams
+  const remaining = maxTeams - teams;
 
-  return remaining <= 5 && remaining > 0 ? remaining : '/'
+  return remaining <= 5 && remaining > 0 ? remaining : '/';
+};
 
-}
-
-module.exports = { isTeamFull, isTournamentFull: isSpotlightFull, remainingPlaces }
+module.exports = { isTeamFull, isTournamentFull: isSpotlightFull, remainingPlaces };

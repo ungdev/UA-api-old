@@ -1,11 +1,11 @@
-const winston = require('winston')
+const winston = require('winston');
 
-module.exports = loggedModule => {
+module.exports = (loggedModule) => {
   const path = loggedModule.filename
     .split('/')
     .slice(-2)
     .join('/')
-    .split('.js')[0]
+    .split('.js')[0];
 
   const consoleTransport = new winston.transports.Console({
     timestamp: () => new Date().toISOString(),
@@ -13,16 +13,16 @@ module.exports = loggedModule => {
     name: 'console',
     prettyPrint: true,
     colorize: true,
-    label: path
-  })
+    label: path,
+  });
 
   const logger = new winston.Logger({
-    transports: [consoleTransport]
-  })
+    transports: [consoleTransport],
+  });
 
   logger.stream = {
-    write: (message, encoding) => logger.info(message)
-  }
+    write: (message, encoding) => logger.info(message),
+  };
 
-  return logger
-}
+  return logger;
+};

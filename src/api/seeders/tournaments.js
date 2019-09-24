@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -11,39 +11,37 @@ module.exports = {
       name: 'League of Legends (amateur)',
       shortName: 'LoL (amateur)',
       maxPlayers: 80,
-      playersPerTeam: 5
+      playersPerTeam: 5,
     }, {
       name: 'Fortnite',
       shortName: 'Fortnite',
       maxPlayers: 96,
-      playersPerTeam: 4
+      playersPerTeam: 4,
     }, {
       name: 'Counter Strike : Global Offensive',
       shortName: 'CS:GO',
       maxPlayers: 40,
-      playersPerTeam: 5
+      playersPerTeam: 5,
     }, {
       name: 'Super Smash Bros Ultimate',
       shortName: 'SSBU',
       maxPlayers: 64,
-      playersPerTeam: 1
+      playersPerTeam: 1,
     }, {
       name: 'osu!',
       shortName: 'osu!',
       maxPlayers: 16,
-      playersPerTeam: 1
-    }]
+      playersPerTeam: 1,
+    }];
 
-    tournaments = tournaments.map(tournament => ({
+    tournaments = tournaments.map((tournament) => ({
       ...tournament,
       createdAt: new Date(),
-      updatedAt: new Date()
-    }))
+      updatedAt: new Date(),
+    }));
 
-    return queryInterface.bulkInsert('tournaments', tournaments)
+    return queryInterface.bulkInsert('tournaments', tournaments);
   },
 
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('tournaments', null)
-  }
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('tournaments', null),
 };
