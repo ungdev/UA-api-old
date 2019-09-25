@@ -32,12 +32,6 @@ module.exports = (app) => {
           include: [User],
         }],
       });
-
-      // Generate new token
-      const token = jwt.sign({ id: req.user.id }, process.env.ARENA_API_SECRET, {
-        expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
-      });
-
       const user = req.user.toJSON();
 
 
@@ -70,7 +64,6 @@ module.exports = (app) => {
         .status(200)
         .json({
           user: userData,
-          token,
           tournaments,
           // hasChangedIp
         })

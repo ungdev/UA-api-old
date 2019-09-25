@@ -6,11 +6,11 @@ const credentials = {
   port: process.env.ARENA_DB_PORT,
   dialect: process.env.ARENA_DB_TYPE,
   dialectOptions: {
-    multipleStatements: true
-  }
+    multipleStatements: true,
+  },
 };
 
 module.exports = {
   development: credentials,
-  production: credentials
-}
+  production: credentials,
+};
