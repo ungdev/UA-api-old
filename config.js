@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const credentials = {
   username: process.env.ARENA_DB_USER,
   password: process.env.ARENA_DB_PASSWORD,

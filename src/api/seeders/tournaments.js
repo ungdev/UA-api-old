@@ -20,7 +20,7 @@ module.exports = {
     }, {
       name: 'Counter Strike : Global Offensive',
       shortName: 'CS:GO',
-      maxPlayers: 40,
+      maxPlayers: 80,
       playersPerTeam: 5,
     }, {
       name: 'Super Smash Bros Ultimate',
@@ -30,7 +30,12 @@ module.exports = {
     }, {
       name: 'osu!',
       shortName: 'osu!',
-      maxPlayers: 16,
+      maxPlayers: 24,
+      playersPerTeam: 1,
+    }, {
+      name: 'Libre',
+      shortName: 'Libre',
+      maxPlayers: 24,
       playersPerTeam: 1,
     }];
 
