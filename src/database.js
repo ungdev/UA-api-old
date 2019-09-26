@@ -9,7 +9,7 @@ module.exports = async function database() {
   const sequelize = new Sequelize(process.env.ARENA_DB_NAME, process.env.ARENA_DB_USER, process.env.ARENA_DB_PASSWORD, {
     ...credentials.production,
     operatorsAliases: Sequelize.Op,
-    logging: (sql) => log.debug(sql),
+    logging: (sql) => log.info(sql),
   });
 
   process.on('SIGINT', async () => {
