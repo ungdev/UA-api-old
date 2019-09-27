@@ -3,7 +3,7 @@ API web à destination des services de l'UTT Arena
 
 ## Requirements
 
-* [Node.js](https://nodejs.org/)
+* [Node.js](https://nodejs.org/) (*LTS Version prefered*)
 * [yarn](https://yarnpkg.com/)
 
 ## Installation
@@ -14,14 +14,12 @@ git clone git@github.com:ungdev/UA-api.git
 git clone https://github.com/ungdev/UA-api.git
 
 cd UA-api
+
+# To install all the depedencies
 yarn
-```
 
-## Database
-
-```
-# create the databse 'arena', should be in utf8 not utf8mb4, otherwise it wont work
-CREATE DATABASE arena CHARACTER SET utf8;
+# To create the database and add some fake datas
+yarn seed
 ```
 
 ## Configuration

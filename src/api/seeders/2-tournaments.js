@@ -47,6 +47,4 @@ module.exports = {
 
     return queryInterface.bulkInsert('tournaments', tournaments);
   },
-
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('tournaments', null),
 };
