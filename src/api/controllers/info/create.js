@@ -1,4 +1,4 @@
-const { check } = require('express-validator/check');
+const { check } = require('express-validator');
 const errorHandler = require('../../utils/errorHandler');
 const isRespo = require('../../middlewares/isRespo');
 const isAuth = require('../../middlewares/isAuth');

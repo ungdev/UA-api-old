@@ -29,7 +29,6 @@ module.exports = (app) => {
 
       return res
         .status(200)
-        .json({})
         .end();
     }
     catch (err) {

@@ -1,4 +1,4 @@
-const { check } = require('express-validator/check');
+const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');

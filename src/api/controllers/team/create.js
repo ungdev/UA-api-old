@@ -1,10 +1,9 @@
-const { check } = require('express-validator/check');
-const moment = require('moment');
+const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 const isAuth = require('../../middlewares/isAuth');
 const isNotInTeam = require('../../middlewares/isNotInTeam');
-const { isTournamentFull } = require('../../utils/isFull');
 const errorHandler = require('../../utils/errorHandler');
+const { isTournamentFull } = require('../../utils/isFull');
 const log = require('../../utils/log')(module);
 
 /**
@@ -19,23 +18,24 @@ const log = require('../../utils/log')(module);
  * }
  */
 module.exports = (app) => {
-  app.post('/team', [isAuth('team-create'), isNotInTeam('team-create')]);
+  app.post('/teams', [isAuth(), isNotInTeam()]);
 
-  app.post('/team', [
+  app.post('/teams', [
     check('name')
       .exists()
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i),
-    check('spotlight')
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]{3,}$/i)
+      .isLength({ max: 40 }),
+    check('tournament')
       .exists()
       .matches(/\d/),
     validateBody(),
   ]);
 
-  app.post('/team', async (req, res) => {
-    const { Spotlight, Team, User } = req.app.locals.models;
+  app.post('/teams', async (req, res) => {
+    const { Tournament, Team, User } = req.app.locals.models;
 
     try {
-      const spotlight = await Spotlight.findByPk(req.body.spotlight, {
+      const tournament = await Tournament.findByPk(req.body.tournament, {
         include: [
           {
             model: Team,
@@ -43,29 +43,27 @@ module.exports = (app) => {
           },
         ],
       });
-
-      if (isTournamentFull(spotlight)) {
+      const tournamentFull = await isTournamentFull(tournament, req);
+      if (tournamentFull) {
         return res
           .status(400)
-          .json({ error: 'SPOTLIGHT_FULL' })
+          .json({ error: 'TOURNAMENT_FULL' })
           .end();
       }
 
       const team = await Team.create({
         name: req.body.name,
-        spotlightId: req.body.spotlight,
-        captainId: req.user.id,
       });
-
-      await req.user.setTeam(team);
-      req.user.joined_at = moment().format();
+      await team.addUser(req.user);
+      await team.setCaptain(req.user);
+      await tournament.addTeam(team);
       await req.user.save();
 
-      log.info(`user ${req.user.name} created team ${req.body.name}`);
+      log.info(`user ${req.user.username} created team ${req.body.name}`);
 
       return res
         .status(200)
-        .json({ team })
+        .json({ ...team.toJSON(), tournament: tournament.toJSON() })
         .end();
     }
     catch (err) {

@@ -1,68 +1,53 @@
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
-const isInSpotlight = require('../../utils/isInTournament');
-const { outputFields } = require('../../utils/publicFields');
+const isTeamPaid = require('../../utils/isTeamPaid');
 
 /**
- * GET /user
+ * GET /teams
+ *
+ * Params: {
+ *  onlyPaid: true Display only full team paid
+ * }
  *
  * Response:
- * {
- *    user: User
- *    token: String,
- *    spotlights: [Spotlight]
- *    teams: [Team]
- *    teamfinders: [Teamfinder],
- *    prices: Object
- * }
+ * [Team]
  */
 module.exports = (app) => {
   app.get('/teams', [isAuth()]);
 
   app.get('/teams', async (req, res) => {
-    const { Team, User, AskingUser } = req.app.locals.models;
+    const { Team, User, Tournament } = req.app.locals.models;
 
     try {
+      let tournaments;
       let teams = await Team.findAll({
-        include: [
-          {
-            model: User,
-          },
-          {
-            model: User,
-            through: AskingUser,
-            as: 'AskingUser',
-          },
-        ],
+        include: [{
+          model: User,
+        }],
         order: [
           ['name', 'ASC'],
         ],
       });
+      if (req.query.paidOnly === 'true') {
+        tournaments = await Tournament.findAll({
+          attributes: ['playersPerTeam', 'id'],
+        });
+      }
       teams = await Promise.all(teams.map(async (team) => {
-        team = team.toJSON();
-        if (team.AskingUser) {
-          team.askingUsers = team.AskingUser.map((teamUser) => {
-            // clean the user
-            const cleanedUser = outputFields(teamUser);
-
-            // add data from join table
-            cleanedUser.askingMessage = teamUser.askingUser.message;
-
-            return cleanedUser;
-          });
-
-          delete team.AskingUser;
+        let isPaid = true;
+        if (req.query.paidOnly === 'true') {
+          isPaid = await isTeamPaid(req, team, tournaments);
         }
-        team.isInSpotlight = await isInSpotlight(team.id, req);
-        return {
-          ...team,
+        return (isPaid ? {
+          ...team.toJSON(),
           users: team.users.map((user) => ({
             id: user.id,
-            name: user.name,
-            role: user.role,
+            name: user.username,
+            isCaptain: user.id === team.captainId,
           })),
-        };
+        } : 'empty');
       }));
+      teams = teams.filter((team) => team !== 'empty');
       return res
         .status(200)
         .json(teams)

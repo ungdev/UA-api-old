@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { check } = require('express-validator/check');
+const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 const isAuth = require('../../middlewares/isAuth');
 

@@ -1,4 +1,4 @@
-const { check } = require('express-validator/check');
+const { check } = require('express-validator');
 const { Base64 } = require('js-base64');
 
 const etupay = require('@ung/node-etupay')({

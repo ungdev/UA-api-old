@@ -4,7 +4,7 @@ const socket = require('./socket');
 const arena = require('./arena');
 const toornament = require('./toornament');
 
-module.exports = async function (app) {
+module.exports = async (app) => {
   const { sequelize, models } = await database();
 
   arena(app);

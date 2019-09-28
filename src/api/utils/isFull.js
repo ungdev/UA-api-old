@@ -1,3 +1,5 @@
+const isTeamPaid = require('./isTeamPaid');
+
 const isTeamFull = (team, max, paid = false) => {
   let count;
   if (!team.users) {
@@ -14,12 +16,17 @@ const isTeamFull = (team, max, paid = false) => {
   return count >= max;
 };
 
-const isSpotlightFull = (spotlight) => {
-  const maxTeams = spotlight.maxPlayers / spotlight.perTeam;
-  if (!spotlight.teams) {
+const isTournamentFull = async (tournament, req) => {
+  const maxTeams = tournament.maxPlayers / tournament.playersPerTeam;
+  if (!tournament.teams) {
     return false;
   }
-  const teams = spotlight.teams.filter((team) => isTeamFull(team, spotlight.perTeam, true)).length;
+  let teams = await Promise.all(tournament.teams.map(async (team) => {
+    let isPaid = true;
+    isPaid = await isTeamPaid(req, team, null, tournament.playersPerTeam);
+    return (isPaid ? team : 'empty');
+  }));
+  teams = teams.filter((team) => team !== 'empty').length;
   return teams >= maxTeams;
 };
 
@@ -35,4 +42,4 @@ const remainingPlaces = (spotlight) => {
   return remaining <= 5 && remaining > 0 ? remaining : '/';
 };
 
-module.exports = { isTeamFull, isTournamentFull: isSpotlightFull, remainingPlaces };
+module.exports = { isTeamFull, isTournamentFull, remainingPlaces };
