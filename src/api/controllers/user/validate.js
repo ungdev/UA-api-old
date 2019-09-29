@@ -1,7 +1,8 @@
 const { check } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const validateBody = require('../../middlewares/validateBody');
 
+const validateBody = require('../../middlewares/validateBody');
+const { outputFields } = require('../../utils/publicFields');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
@@ -55,7 +56,7 @@ module.exports = (app) => {
 
       return res
         .status(200)
-        .json({ token })
+        .json({ user: outputFields(user), token })
         .end();
     }
     catch (err) {
