@@ -5,7 +5,7 @@ module.exports = {
     let itemshasattributes = [];
 
     for (let attributeId = 1; attributeId <= 5; attributeId += 1) {
-      itemshasattributes.push({ attributeId, itemId: 1 }, { attributeId, itemId: 2 });
+      itemshasattributes.push({ attributeId, itemId: 6 }, { attributeId, itemId: 7 });
     }
 
     itemshasattributes = itemshasattributes.map((itemattribute) => ({
