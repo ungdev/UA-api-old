@@ -1,7 +1,8 @@
 const { check } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const validateBody = require('../../middlewares/validateBody');
 
+const validateBody = require('../../middlewares/validateBody');
+const { outputFields } = require('../../utils/publicFields');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
@@ -19,7 +20,7 @@ const log = require('../../utils/log')(module);
  */
 module.exports = (app) => {
   app.post('/user/validate', [
-    check('token')
+    check('slug')
       .exists()
       .isUUID(),
     validateBody(),
@@ -27,7 +28,7 @@ module.exports = (app) => {
 
   app.post('/user/validate', async (req, res) => {
     const { User } = req.app.locals.models;
-    const registerToken = req.body.token;
+    const registerToken = req.body.slug;
 
     try {
       const user = await User.findOne({ where: { registerToken } });
@@ -45,17 +46,17 @@ module.exports = (app) => {
         registerToken: null,
       });
 
-      log.info(`user ${user.name} was validated`);
+      log.info(`user ${user.username} was validated`);
 
       const token = jwt.sign({ id: user.id }, process.env.ARENA_API_SECRET, {
         expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
       });
 
-      log.info(`user ${user.name} logged`);
+      log.info(`user ${user.username} logged`);
 
       return res
         .status(200)
-        .json({ token })
+        .json({ user: outputFields(user), token })
         .end();
     }
     catch (err) {
