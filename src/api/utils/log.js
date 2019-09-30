@@ -21,7 +21,7 @@ module.exports = (loggedModule) => {
   });
 
   logger.stream = {
-    write: (message, encoding) => logger.info(message),
+    write: (message) => logger.info(message),
   };
 
   return logger;

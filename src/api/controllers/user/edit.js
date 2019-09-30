@@ -63,7 +63,7 @@ module.exports = (app) => {
 
       log.info(`user ${req.body.name} updated`);
 
-      res
+      return res
         .status(200)
         .json({ user: outputFields(req.user) })
         .end();

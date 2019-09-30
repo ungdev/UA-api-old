@@ -1,7 +1,7 @@
 {
-  "name": "arena.utt.fr-api",
-  "version": "0.1.0",
-  "private": true,
+  "name": "ua-api",
+  "version": "1.0.0",
+  "private": false,
   "dependencies": {
     "@ung/node-etupay": "^2.0.0",
     "axios": "^0.19.0",
@@ -40,9 +40,9 @@
     "eslint-plugin-import": "^2.18.2"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./bin/start.js",
-    "start": "node ./bin/start.js",
-    "serve": "pm2 start ./bin/start.js -i max --wait-ready --name arena.utt.fr-api",
+    "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./start.js",
+    "start": "node ./start.js",
+    "serve": "pm2 start ./start.js -i max --wait-ready --name arena.utt.fr-api",
     "reload": "pm2 reload arena.utt.fr-api --update-env",
     "lint": "eslint src/ --ext .js",
     "lint-fix": "eslint --fix src/ --ext .js",
