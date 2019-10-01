@@ -35,8 +35,8 @@ module.exports = (sequelize) => {
   Cart.belongsTo(User);
 
   Attribute.hasMany(CartItem);
-  Attribute.belongsToMany(Item, { through: 'ItemsHasAttributes' });
-  Item.belongsToMany(Attribute, { through: 'ItemsHasAttributes' });
+  Attribute.belongsToMany(Item, { through: 'itemshasattributes' });
+  Item.belongsToMany(Attribute, { through: 'itemshasattributes' });
 
 
   // Associations

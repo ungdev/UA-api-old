@@ -4,41 +4,41 @@ const validateBody = require('../../middlewares/validateBody');
 const isAuth = require('../../middlewares/isAuth');
 
 const errorHandler = require('../../utils/errorHandler');
-const { outputFields, inputFields } = require('../../utils/publicFields');
 const log = require('../../utils/log')(module);
 
+
 /**
- * PUT /user
+ * PUT /users/:id
  * {
- *    name: String
- *    email: String
- *    [password]: String
+ *   username: String
+ *   lastname: String
+ *   firstname: String
+ *   email: String
+ *   (password): String,
+ *   (oldPassword): String
  * }
  *
- * Response:
+ * Response
  * {
- *    user: User
+ *
  * }
  */
 module.exports = (app) => {
-  app.put('/user', [isAuth('user-edit')]);
+  app.put('/users/:id', [isAuth()]);
 
-  app.put('/user', [
-    check('name')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ -]+/i)
-      .isLength({ min: 3, max: 90 }),
+  app.put('/users/:id', [
+    check('username')
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
+      .isLength({ min: 3, max: 100 }),
     check('lastname')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ -]+/i)
-      .isLength({ min: 2, max: 200 }),
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
+      .isLength({ min: 2, max: 100 }),
     check('firstname')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ -]+/i)
-      .isLength({ min: 2, max: 200 }),
-    check('gender')
-      .isIn(['M', 'F', 'N/A'])
-      .exists(),
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
+      .isLength({ min: 2, max: 100 }),
+    check('oldpassword')
+      .optional()
+      .isLength({ min: 6 }),
     check('password')
       .optional()
       .isLength({ min: 6 }),
@@ -48,24 +48,54 @@ module.exports = (app) => {
     validateBody(),
   ]);
 
-  app.put('/user', async (req, res) => {
+  app.put('/users/:id', async (req, res) => {
     try {
-      if (req.body.password) {
+      // todo: refaire pour admins
+      if (req.params.id !== req.user.id) {
+        return res
+          .status(403)
+          .json({ error: 'UNAUTHORIZED' })
+          .end();
+      }
+
+      if (req.body.password && req.body.oldpassword) {
+        req.body.oldpassword = await bcrypt.hash(
+          req.body.oldpassword,
+          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
+        );
+
+        const passwordMatches = bcrypt.compare(req.body.oldpassword, req.user.password);
+
+        if (!passwordMatches) {
+          return res
+            .status(400)
+            .json({ error: 'WRONG_PASSWORD' })
+            .end();
+        }
+
         req.body.password = await bcrypt.hash(
           req.body.password,
           parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
         );
       }
 
-      const body = inputFields(req.body);
+      const { firstname, lastname, username, password, email } = req.body;
+      const userUpdated = {
+        id: req.params.id,
+        username,
+        firstname,
+        lastname,
+        password,
+        email,
+      };
 
-      await req.user.update(body);
+      await req.user.update(userUpdated);
 
       log.info(`user ${req.body.name} updated`);
 
       return res
         .status(200)
-        .json({ user: outputFields(req.user) })
+        .json(userUpdated)
         .end();
     }
     catch (err) {

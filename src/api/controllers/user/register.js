@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const hash = require('util').promisify(bcrypt.hash);
 const validateBody = require('../../middlewares/validateBody');
-const isLoginEnabled = require('../../middlewares/isLoginEnabled');
 const mail = require('../../mail');
 
 const random = require('../../utils/random');
@@ -11,44 +10,40 @@ const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
 /**
- * POST /user
+ * POST /users
  * {
- *    username: String
- *    password: String
- *    email: String
+ *   username: String
+ *   lastname: String
+ *   firstname: String
+ *   password: String
+ *   email: String
  * }
  *
- * Response:
+ * Response
  * {
  *
  * }
  */
 module.exports = (app) => {
-  app.post('/user', [isLoginEnabled()]);
-
-  app.post('/user', [
+  app.post('/users', [
     check('username')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ -]+/i)
-      .isLength({ min: 3, max: 90 }),
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
+      .isLength({ min: 3, max: 100 }),
     check('lastname')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ -]+/i)
-      .isLength({ min: 2, max: 200 }),
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
+      .isLength({ min: 2, max: 100 }),
     check('firstname')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ -]+/i)
-      .isLength({ min: 2, max: 200 }),
+      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
+      .isLength({ min: 2, max: 100 }),
     check('password')
-      .exists()
+      .optional()
       .isLength({ min: 6 }),
     check('email')
-      .exists()
       .isEmail(),
     validateBody(),
   ]);
 
-  app.post('/user', async (req, res) => {
+  app.post('/users', async (req, res) => {
     const { User } = req.app.locals.models;
 
     try {
@@ -65,9 +60,8 @@ module.exports = (app) => {
 
       log.info(`user ${req.body.name} created`);
 
-      res
-        .status(200)
-        .json({})
+      return res
+        .status(204)
         .end();
     }
     catch (err) {

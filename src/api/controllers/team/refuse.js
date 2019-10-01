@@ -18,7 +18,7 @@ module.exports = (app) => {
 
   app.delete('/teams/:id/request', [
     check('user')
-      .exists(),
+      .isUUID(),
     validateBody(),
   ]);
 

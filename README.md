@@ -19,7 +19,12 @@ cd UA-api
 yarn
 
 # To create the database and add some fake datas
+
+# if you're running on windows and use powershell.exe or Bash for Windows (WSL) or Linux or Max
 yarn seed
+
+# if you're running on windows and use cmd.exe or git bash execute
+yarn seed-win
 ```
 
 ## Configuration

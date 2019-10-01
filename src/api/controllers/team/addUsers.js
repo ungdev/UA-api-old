@@ -24,7 +24,6 @@ module.exports = (app) => {
 
   app.post('/teams/:id/users', [
     check('user')
-      .exists()
       .isUUID(),
     validateBody(),
   ]);
