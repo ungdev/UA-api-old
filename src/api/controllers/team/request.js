@@ -29,7 +29,7 @@ module.exports = (app) => {
           model: User,
           attributes: ['id'],
         }, {
-          Model: Tournament,
+          model: Tournament,
           attributes: ['playersPerTeam'],
         }],
       });
