@@ -1,0 +1,20 @@
+<mjml>
+  <mj-include path="../partials/head.mjml"/>
+  <mj-body width="600px" background-color="#f5f5f5">
+    <mj-include path="../partials/header.mjml"/>
+    <mj-section background-color="#ffffff">
+      <mj-column>
+        <mj-text color="#e20007" align="center" font-family="Montserrat" font-size="35px" padding-top="0px">INSCRIPTION</mj-text>
+        <mj-divider border-width="1px" border-color="#e20007" padding-top="5px"/>
+        <mj-text font-size="18px" font-weight="bold">Bienvenue sur l'UTT Arena, {{ username }} !</mj-text>
+        <mj-text>Merci de vérifier votre e-mail en cliquant sur le bouton ci-dessous</mj-text>
+        <mj-button href="{{ link }}">CONFIRMER l'INSCRIPTION</mj-button>
+        <mj-text>À bientôt pour l'UTT Arena !</mj-text>
+        <mj-text align="right">
+          <i>- Toute l'équipe organisatrice</i>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-include path="../partials/footer.mjml"/>
+  </mj-body>
+</mjml>

@@ -36,7 +36,8 @@
   "devDependencies": {
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "mjml": "^4.5.1"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./start.js",

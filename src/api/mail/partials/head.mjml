@@ -1,0 +1,10 @@
+<mj-head>
+  <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto&display=swap"/>
+  <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap"/>
+  <mj-attributes>
+    <mj-all font-family="Roboto"/>
+    <mj-text align="center"/>
+    <mj-button border-radius="0px" background-color="#e20007" font-size="20px"/>
+    <mj-social-element background-color="transparent"/>
+  </mj-attributes>
+</mj-head>
