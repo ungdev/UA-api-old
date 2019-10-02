@@ -20,7 +20,7 @@ module.exports = (app) => {
 
     try {
       const user = await User.findByPk(req.params.id, {
-        attributes: ['id', 'username', 'firstname', 'lastname', 'email'],
+        attributes: ['id', 'username', 'firstname', 'lastname', 'email', 'askingTeamId'],
         include: {
           model: Team,
           attributes: ['id', 'name'],

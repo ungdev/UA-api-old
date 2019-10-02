@@ -56,6 +56,7 @@ module.exports = (app) => {
       await team.addUser(req.user);
       await team.setCaptain(req.user);
       await tournament.addTeam(team);
+      req.user.askingTeamId = null;
       await req.user.save();
 
       log.info(`user ${req.user.username} created team ${req.body.name}`);
