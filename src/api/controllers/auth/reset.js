@@ -2,10 +2,10 @@ const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const validateBody = require('../../middlewares/validateBody');
-const mail = require('../../mail');
 
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
+const sendMail = require('../../mail/reset');
 
 /**
  * POST /auth/reset
@@ -50,8 +50,9 @@ module.exports = (app) => {
       await user.update({
         resetToken: uuid(),
       });
-      await mail('user.reset', user.email, {
-        mail: user.email,
+
+      await sendMail(user.email, {
+        username: user.username,
         link: `${process.env.ARENA_WEBSITE}/reset/${user.resetToken}`,
       });
 

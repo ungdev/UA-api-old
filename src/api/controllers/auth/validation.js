@@ -8,8 +8,7 @@ const log = require('../../utils/log')(module);
 /**
  * POST /auth/validation
  * {
- *   registerToken: UUID
- *   id: UUID
+ *   slug: UUID
  * }
  * Response
  * {
@@ -18,21 +17,19 @@ const log = require('../../utils/log')(module);
  * }
  */
 module.exports = (app) => {
-  app.post('/auth/validation', [
-    check('registerToken')
-      .isUUID(),
-    check('id')
+  app.post('/auth/validate', [
+    check('slug')
       .isUUID(),
     validateBody(),
   ]);
 
-  app.post('/auth/validation', async (req, res) => {
+  app.post('/auth/validate', async (req, res) => {
     const { User, Team } = req.app.locals.models;
-    const { registerToken, id } = req.body;
+    const { slug } = req.body;
 
     try {
       const user = await User.findOne({
-        where: { id, registerToken },
+        where: { registerToken: slug },
         include: {
           model: Team,
           attributes: ['id', 'name'],
@@ -40,7 +37,7 @@ module.exports = (app) => {
       });
 
       if (!user) {
-        log.warn(`can not validate ${registerToken}, user not found`);
+        log.warn(`can not validate ${slug}, user not found`);
 
         return res
           .status(400)
