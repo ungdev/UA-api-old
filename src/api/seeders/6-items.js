@@ -9,14 +9,14 @@ module.exports = {
       price: 20,
     }, {
       id: 2,
-      name: 'Place visiteur/coach',
+      name: 'Place coach / manager / accompagnateur',
       key: 'visitor',
       price: 12,
       stock: 40,
     }, {
       id: 3,
       name: 'Câble ethernet (5M)',
-      key: 'ethernet',
+      key: 'ethernet5',
       price: 5,
       infos: 'Un câble (5m) est requis pour se brancher aux switchs des tables',
     }, {
@@ -28,19 +28,19 @@ module.exports = {
     }, {
       id: 5,
       name: 'Multiprise 3 trous',
-      key: 'multiprise',
+      key: 'multi-socket',
       price: 5,
       infos: 'Une mutltiprise 3 trous pour brancher tout le setup',
     }, {
       id: 6,
       name: 'T-shirt UA 2019 (Homme)',
-      key: 'maleShirt',
+      key: 'maleTshirt',
       price: 15,
       infos: 'Un t-shirt souvenir de cette LAN de folie',
     }, {
       id: 7,
       name: 'T-shirt UA 2019 (Femme)',
-      key: 'femaleShirt',
+      key: 'femaleTshirt',
       price: 15,
       infos: 'Un t-shirt souvenir de cette LAN de folie',
     }, {
