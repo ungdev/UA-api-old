@@ -34,6 +34,7 @@ module.exports = (sequelize) => {
   User.hasMany(Cart);
   Cart.belongsTo(User);
 
+  CartItem.belongsTo(Attribute);
   Attribute.hasMany(CartItem);
   Attribute.belongsToMany(Item, { through: 'itemshasattributes' });
   Item.belongsToMany(Attribute, { through: 'itemshasattributes' });
@@ -47,7 +48,6 @@ module.exports = (sequelize) => {
   CartItem.belongsTo(User, { as: 'forUser', constraints: false });
   User.hasMany(CartItem, { as: 'forUser', constraints: false });
   Tournament.belongsTo(State, { as: 'index', constraints: false });
-
 
   return { Attribute, Cart, CartItem, Info, Item, Message, Network, State, Team, Tournament, User };
 };
