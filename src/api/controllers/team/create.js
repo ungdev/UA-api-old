@@ -52,10 +52,10 @@ module.exports = (app) => {
 
       const team = await Team.create({
         name: req.body.name,
+        tournamentId: req.body.tournament,
       });
       await team.addUser(req.user);
       await team.setCaptain(req.user);
-      await tournament.addTeam(team);
       req.user.askingTeamId = null;
       await req.user.save();
 
