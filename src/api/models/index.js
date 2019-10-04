@@ -12,39 +12,47 @@ module.exports = (sequelize) => {
   const User = sequelize.import(`${__dirname}/user`);
 
   // Relations
-  Cart.hasMany(CartItem);
-  CartItem.belongsTo(Cart);
-
-  Item.hasOne(CartItem);
-  CartItem.belongsTo(Item);
 
   Team.hasMany(User);
   User.belongsTo(Team);
 
-  Tournament.hasMany(Team);
-  Team.belongsTo(Tournament);
-  Tournament.hasMany(State);
-  State.belongsTo(Tournament);
-  Tournament.hasMany(Info);
-  Info.belongsTo(Tournament);
+  Tournament.hasMany(Team, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Team.belongsTo(Tournament, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+
+  Tournament.hasMany(State, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  State.belongsTo(Tournament, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+
+  Tournament.hasMany(Info, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Info.belongsTo(Tournament, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+
+  User.hasMany(Message, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Message.belongsTo(User, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+
+  User.hasMany(Cart, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Cart.belongsTo(User, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+
+  Cart.hasMany(CartItem, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  CartItem.belongsTo(Cart, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+
+  Item.hasMany(CartItem, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  CartItem.belongsTo(Item, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
   User.hasOne(Network);
-  User.hasMany(Message);
-  Message.belongsTo(User);
-  User.hasMany(Cart);
-  Cart.belongsTo(User);
 
   CartItem.belongsTo(Attribute);
   Attribute.hasMany(CartItem);
+
   Attribute.belongsToMany(Item, { through: 'itemshasattributes' });
   Item.belongsToMany(Attribute, { through: 'itemshasattributes' });
 
 
   // Associations
-  User.belongsTo(Team, { as: 'askingTeam', constraints: false });
   Team.hasMany(User, { as: 'askingTeam', contraints: false });
-  Team.belongsTo(User, { as: 'captain', constraints: false });
+  User.belongsTo(Team, { as: 'askingTeam', constraints: false });
+
   User.hasOne(Team, { as: 'captain', constraints: false });
+  Team.belongsTo(User, { as: 'captain', constraints: false });
+
   CartItem.belongsTo(User, { as: 'forUser', constraints: false });
   User.hasMany(CartItem, { as: 'forUser', constraints: false });
   Tournament.belongsTo(State, { as: 'index', constraints: false });
