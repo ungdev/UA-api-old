@@ -58,12 +58,24 @@ module.exports = (app) => {
       await team.setCaptain(req.user);
       req.user.askingTeamId = null;
       await req.user.save();
+      const outputUser = {
+        id: req.user.id,
+        firstname: req.user.firstname,
+        lastname: req.user.lastname,
+        username: req.user.username,
+        email: req.user.email,
+      };
 
       log.info(`user ${req.user.username} created team ${req.body.name}`);
 
       return res
         .status(200)
-        .json({ ...team.toJSON(), tournament: tournament.toJSON() })
+        .json({
+          ...team.toJSON(),
+          tournament: tournament.toJSON(),
+          users: [outputUser],
+          askingUsers: [],
+        })
         .end();
     }
     catch (err) {
