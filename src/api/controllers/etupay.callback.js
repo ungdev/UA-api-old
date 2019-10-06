@@ -11,7 +11,7 @@ const log = require('../utils/log')(module);
 
 module.exports = (app) => {
   // todo: SLACK HOOKS !!!!! si differents + enregistrer !!!!!!!!!
-  app.post('/carts/callback', (req, res) => res.status(204));
+  app.post('/carts/callback', (req, res) => res.status(204).end());
 
   app.get('/carts/return', etupay.middleware, async (req, res) => {
     // Jamais utilisée car géré par le middleware
@@ -125,7 +125,7 @@ module.exports = (app) => {
       await sendPaymentMail(cart.user.email, {
         username: cart.user.username,
         users,
-        link: '#', // todo: a changer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        link: process.env.ARENA_PURCHASES, // todo: a changer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       }, pdfTickets);
       log.debug(`Mail sent to ${cart.user.email}`);
       return null;
