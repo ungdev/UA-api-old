@@ -11,9 +11,9 @@ const log = require('../utils/log')(module);
 
 module.exports = (app) => {
   // todo: SLACK HOOKS !!!!! si differents + enregistrer !!!!!!!!!
-  app.post('/user/pay/callback', (req, res) => res.status(204));
+  app.post('/carts/callback', (req, res) => res.status(204));
 
-  app.get('/user/pay/return', etupay.middleware, async (req, res) => {
+  app.get('/carts/return', etupay.middleware, async (req, res) => {
     // Jamais utilisée car géré par le middleware
 
     const { Cart, CartItem, Item, Attribute, User } = req.app.locals.models;
