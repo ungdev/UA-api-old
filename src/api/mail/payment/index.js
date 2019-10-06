@@ -11,15 +11,19 @@ const path = require('path');
  * todo: generaliser comme le commit precedent
  */
 
-const template = fs.readFileSync(path.join(__dirname, 'register.html')).toString();
+const template = fs.readFileSync(path.join(__dirname, 'payment.html')).toString();
 
-module.exports = (to, data) => {
+module.exports = (to, data, pdfTickets) => {
   const transporter = nodemailer.createTransport(process.env.ARENA_MAIL_SMTP);
 
   return transporter.sendMail({
     from: process.env.ARENA_MAIL_SENDER,
     to,
-    subject: 'Activez votre compte UTT Arena',
+    subject: 'Confirmation de votre commande',
     html: mustache.render(template, data),
+    attachments: pdfTickets.map((pdfTicket, index) => ({
+      filename: `Ticket_UA_${index + 1}.pdf`,
+      content: pdfTicket,
+    })),
   });
 };
