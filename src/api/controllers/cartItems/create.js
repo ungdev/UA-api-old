@@ -54,13 +54,14 @@ module.exports = (app) => {
         where: {
           id: req.params.cartId,
           userId: req.user.id,
+          transactionState: 'draft',
         },
       });
 
       if (cartCount !== 1) {
         return res
-          .status(403)
-          .json({ error: 'UNAUTHORIZED' })
+          .status(400)
+          .json({ error: 'BAD_REQUEST' })
           .end();
       }
 
