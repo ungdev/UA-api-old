@@ -1,7 +1,7 @@
 const log = require('../utils/log')(module);
 
 module.exports = (err, res) => {
-  log.debug(err);
+  log.info(err);
 
   if (err.name === 'SequelizeUniqueConstraintError') {
     return res

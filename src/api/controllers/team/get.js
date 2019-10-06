@@ -14,25 +14,39 @@ module.exports = (app) => {
     const { Team, User, Tournament } = req.app.locals.models;
 
     try {
-      const team = await Team.findByPk(req.params.id, {
+      const team = await Team.findOne({
+        where: {
+          id: req.params.id,
+        },
         include: [{
           model: User,
         }, {
           model: Tournament,
         }],
-        order: [
-          ['name', 'ASC'],
-        ],
+      });
+      // TODO: C'est moche je pense avec sequelize on peut faire mieux
+      let askingUsers = await User.findAll({
+        where: { askingTeamId: req.params.id },
       });
       if (team) {
-        const users = team.users.map((user) => user.username);
+        const users = team.users.map(
+          ({ username, firstname, lastname, email, id }) => (
+            { username, firstname, lastname, email, id }
+          ),
+        );
+        askingUsers = askingUsers.map(
+          ({ username, firstname, lastname, email, id }) => (
+            { username, firstname, lastname, email, id }
+          ),
+        );
         return res
           .status(200)
-          .json({ ...team.toJSON(), users })
+          .json({ ...team.toJSON(), users, askingUsers })
           .end();
       }
       return res
         .status(404)
+        .json({ error: 'NOT_FOUND' })
         .end();
     }
     catch (err) {
