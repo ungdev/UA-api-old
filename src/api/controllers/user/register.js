@@ -27,13 +27,10 @@ const log = require('../../utils/log')(module);
 module.exports = (app) => {
   app.post('/users', [
     check('username')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
       .isLength({ min: 3, max: 100 }),
     check('lastname')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
       .isLength({ min: 2, max: 100 }),
     check('firstname')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
       .isLength({ min: 2, max: 100 }),
     check('password')
       .optional()

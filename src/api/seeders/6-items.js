@@ -28,7 +28,7 @@ module.exports = {
     }, {
       id: 5,
       name: 'Multiprise 3 trous',
-      key: 'multi-socket',
+      key: 'multiSocket',
       price: 5,
       infos: 'Une mutltiprise 3 trous pour brancher tout le setup',
     }, {
