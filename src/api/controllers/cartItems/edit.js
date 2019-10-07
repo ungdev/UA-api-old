@@ -35,8 +35,6 @@ module.exports = (app) => {
     const { CartItem, User } = req.app.locals.models;
 
     try {
-
-
       const cartItem = await CartItem.findOne({
         where: {
           id: req.params.id,

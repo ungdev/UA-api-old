@@ -39,10 +39,11 @@ module.exports = (app) => {
           .end();
       }
 
-      await Cart.create({ userId: req.params.userId });
+      const newCart = await Cart.create({ userId: req.params.userId });
 
       return res
-        .status(204)
+        .status(200)
+        .json(newCart)
         .end();
     }
 

@@ -47,8 +47,9 @@ module.exports = (app) => {
             .end();
         }
       }
-      else req.body.forUserId = req.user.id;
-
+      else {
+        req.body.forUserId = req.user.id;
+      }
       // A modifier après pour l'admin
       const cartCount = await Cart.count({
         where: {
@@ -73,10 +74,11 @@ module.exports = (app) => {
 
       // Attention: pas de verification d'attribute si ça peut correspondre à un itemId
       // Est-ce utile ?
-      await CartItem.create(cartItem);
+      const newCartItem = await CartItem.create(cartItem);
 
       return res
-        .status(204)
+        .status(200)
+        .json(newCartItem)
         .end();
     }
     catch (err) {
