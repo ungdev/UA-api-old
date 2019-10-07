@@ -6,14 +6,12 @@ const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
-
 /**
  * PUT /users/:id
  * {
  *   username: String
  *   lastname: String
  *   firstname: String
- *   email: String
  *   (password): String,
  *   (oldPassword): String
  * }
@@ -33,9 +31,6 @@ module.exports = (app) => {
       .isLength({ min: 2, max: 100 }),
     check('firstname')
       .isLength({ min: 2, max: 100 }),
-    check('email')
-      .exists()
-      .isEmail(),
     check('oldpassword')
       .optional()
       .isLength({ min: 6 }),
@@ -76,14 +71,13 @@ module.exports = (app) => {
         );
       }
 
-      const { firstname, lastname, username, password, email } = req.body;
+      const { firstname, lastname, username, password } = req.body;
       const userUpdated = {
         id: req.params.id,
         username,
         firstname,
         lastname,
         password,
-        email,
       };
 
       await req.user.update(userUpdated);
