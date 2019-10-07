@@ -28,23 +28,20 @@ module.exports = (app) => {
 
   app.put('/users/:id', [
     check('username')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
       .isLength({ min: 3, max: 100 }),
     check('lastname')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
       .isLength({ min: 2, max: 100 }),
     check('firstname')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
       .isLength({ min: 2, max: 100 }),
+    check('email')
+      .exists()
+      .isEmail(),
     check('oldpassword')
       .optional()
       .isLength({ min: 6 }),
     check('password')
       .optional()
       .isLength({ min: 6 }),
-    check('email')
-      .exists()
-      .isEmail(),
     validateBody(),
   ]);
 
