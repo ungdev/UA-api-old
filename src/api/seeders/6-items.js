@@ -9,7 +9,7 @@ module.exports = {
       price: 20,
     }, {
       id: 2,
-      name: 'Place coach / manager / accompagnateur',
+      name: 'Place accompagnateur / Coach',
       key: 'visitor',
       price: 12,
       stock: 40,
