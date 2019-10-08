@@ -25,7 +25,7 @@ module.exports = (app) => {
       const resp = await axios.get(`${req.query.spotlightID}/matches`, {
         baseURL: 'https://api.toornament.com/organizer/v2/tournaments',
         headers: {
-          'X-Api-Key': env.TOORNAMENT_KEY,
+          'X-Api-Key': process.env.TOORNAMENT_KEY,
           Authorization: `Bearer ${accessToken}`,
           Range: 'matches=0-64' },
         params: { participant_ids: req.params.id } });

@@ -1,12 +1,11 @@
 
+const axios = require('axios');
+const _ = require('lodash');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
-const log = require('../../utils/log')(module);
-const axios = require('axios');
 
 const slack = axios.create({ baseURL: process.env.SLACK_URL });
 
-const _ = require('lodash');
 
 module.exports = (app) => {
   app.post('/messages', [isAuth()]);
@@ -66,6 +65,7 @@ module.exports = (app) => {
       await message.setFrom(
         user.permission && (user.permission.admin || user.permission.respo) ? null : user,
       );
+      // eslint-disable-next-line no-unused-expressions
       userTo
         ? await message.setTo(
           userTo.permission && (userTo.permission.admin || userTo.permission.respo) ? null : userTo,

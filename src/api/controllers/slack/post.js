@@ -93,7 +93,7 @@ module.exports = (app) => {
           Sujet: ${user.topic}\n
           Message: ${user.message}`;
       await slack.post(
-        env.SLACK_CHANNEL_UA_APP,
+        process.env.SLACK_CHANNEL_UA_APP,
         { text },
         { headers: { 'Content-type': 'application/json' } },
       );

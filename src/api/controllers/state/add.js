@@ -3,7 +3,6 @@ const isRespo = require('../../middlewares/isRespo');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
 const validateBody = require('../../middlewares/validateBody');
-const log = require('../../utils/log')(module);
 
 /**
  * GET /users

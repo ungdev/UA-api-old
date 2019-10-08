@@ -27,7 +27,7 @@ module.exports = (app) => {
         switchId,
         switchPort,
       });
-      res
+      return res
         .status(200)
         .end(); // everything's fine
     }

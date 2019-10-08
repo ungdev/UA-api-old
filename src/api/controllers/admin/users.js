@@ -1,7 +1,6 @@
 const errorHandler = require('../../utils/errorHandler');
 const isOrga = require('../../middlewares/isOrga');
 const isAuth = require('../../middlewares/isAuth');
-const log = require('../../utils/log')(module);
 
 /**
  * GET /admin/users

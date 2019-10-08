@@ -38,7 +38,7 @@ module.exports = (app) => {
       if (user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName;
       if (!spotlight) spotlight = 'libre';
       if (spotlight === 'SSBU') spotlight = 'libre';
-      res
+      return res
         .status(200)
         .json({
           name: user.name,

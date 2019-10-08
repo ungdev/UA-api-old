@@ -43,7 +43,7 @@ module.exports = (app) => {
       streamers = auth.filter((nw) => nw.isCaster).length;
       banned = auth.filter((nw) => nw.isBanned).length;
       rows.push(['libre', auth.length, streamers, banned]);
-      res
+      return res
         .status(200)
         .json([
           {

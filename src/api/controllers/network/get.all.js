@@ -56,7 +56,7 @@ module.exports = (app) => {
         };
       });
 
-      res
+      return res
         .status(200)
         .json(nws)
         .end(); // everything's fine

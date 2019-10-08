@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
-const log = require('../../utils/log')(module);
 
 module.exports = (app) => {
   app.get('/messages', [isAuth()]);

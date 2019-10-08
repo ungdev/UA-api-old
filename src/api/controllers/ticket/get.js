@@ -65,7 +65,7 @@ module.exports = (app) => {
       res.setHeader('Content-disposition', 'inline; filename="ticket.pdf"');
       res.setHeader('Content-type', 'application/pdf');
 
-      readStream.pipe(res);
+      return readStream.pipe(res);
     }
     catch (err) {
       return errorHandler(err, res);
