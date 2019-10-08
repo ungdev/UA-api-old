@@ -28,7 +28,7 @@ module.exports = (app) => {
       });
 
       if (!user) return res.status(404).json({ error: 'NOT_FOUND' }).end();
-      if (req.params.id !== user.id) {
+      if (req.user.id !== user.id) {
         return res.status(403)
           .json({ error: 'UNAUTHORIZED' })
           .end();
