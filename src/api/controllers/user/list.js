@@ -6,7 +6,9 @@ const errorHandler = require('../../utils/errorHandler');
 /**
  * GET /users
  * Query Params: {
- *    username: String. Fait une requete LIKE en SQL
+ *    exact: bool. Should the email or the username exactly match in the DB ?
+ *    email: String
+ *    username: String
  * }
  *
  * Response
@@ -20,14 +22,23 @@ module.exports = (app) => {
   app.get('/users', async (req, res) => {
     const { User, Team, Tournament } = req.app.locals.models;
 
+    // Compute 'where' parameter
+    const reqWhere = {};
+    if (req.query.email) {
+      reqWhere.email = typeof req.query.exact !== 'undefined'
+        ? req.query.email
+        : { [Op.like]: req.query.email ? `%${req.query.email}%` : '%%' };
+    }
+    if (req.query.username) {
+      reqWhere.username = typeof req.query.exact !== 'undefined'
+        ? req.query.username
+        : { [Op.like]: req.query.username ? `%${req.query.username}%` : '%%' };
+    }
+
     try {
       const users = await User.findAll({
         attributes: ['username', 'firstname', 'lastname'],
-        where: {
-          username: {
-            [Op.like]: req.query.username ? `%${req.query.username}%` : '%%',
-          },
-        },
+        where: Object.values(reqWhere).length > 0 ? { [Op.or]: [reqWhere] } : {},
         include: {
           model: Team,
           attributes: ['name'],
