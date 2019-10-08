@@ -24,8 +24,7 @@ const validateBody = require('../../middlewares/validateBody');
 module.exports = (app) => {
   app.post('/auth/login', [
     check('username')
-      .exists()
-      .matches(/[0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzªµºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĄąĆćĘęıŁłŃńŒœŚśŠšŸŹźŻżŽžƒˆˇˉμﬁﬂ \-]+/i),
+      .exists(),
     check('password')
       .exists(),
     validateBody(),

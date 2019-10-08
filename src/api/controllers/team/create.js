@@ -22,10 +22,8 @@ module.exports = (app) => {
 
   app.post('/teams', [
     check('name')
-      .matches(/^[A-zÀ-ÿ0-9 '#@!&\-$%]*$/i)
-      .isLength({ max: 40 }),
+      .isLength({ min: 3, max: 40 }),
     check('tournament')
-      .exists()
       .isInt(),
     validateBody(),
   ]);
