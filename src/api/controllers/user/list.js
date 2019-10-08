@@ -45,7 +45,7 @@ module.exports = (app) => {
 
     try {
       const users = await User.findAll({
-        attributes: ['username', 'firstname', 'lastname'],
+        attributes: ['id', 'username', 'firstname', 'lastname'],
         where: Object.values(reqWhere).length > 0
           ? {
             [or ? Op.or : Op.and]: reqWhere,
