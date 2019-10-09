@@ -1,6 +1,4 @@
 <mj-head>
-  <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto&display=swap"/>
-  <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap"/>
   <mj-attributes>
     <mj-all font-family="Roboto"/>
     <mj-text align="center"/>

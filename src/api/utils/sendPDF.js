@@ -35,7 +35,7 @@ module.exports = (user, placeName) => new Promise(async (resolve) => {
     .font(path.join(__dirname, '../utils', 'assets', 'montserrat.ttf'))
     .fontSize(30)
     .fillColor('white')
-    .text(`${user.lastname} ${user.firstname}\n${placeName}\n${user.email}`, 400, 40);
+    .text(`${user.lastname} ${user.firstname}\n${placeName}`, 400, 40);
 
   const barecode = await generateBarcode(user);
 
