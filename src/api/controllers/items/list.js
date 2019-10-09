@@ -21,7 +21,7 @@ module.exports = (app) => {
         attributes: ['name', 'key', 'price', 'infos', 'id'],
         include: {
           model: Attribute,
-          attributes: ['label', 'value'],
+          attributes: ['label', 'value', 'id'],
           through: {
             attributes: [],
           },

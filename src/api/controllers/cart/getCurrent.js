@@ -40,7 +40,7 @@ module.exports = (app) => {
             attributes: ['id', 'name', 'key', 'price', 'stock', 'infos'],
           }, {
             model: Attribute,
-            attributes: ['label', 'value'],
+            attributes: ['label', 'value', 'id'],
           }],
         },
       });
