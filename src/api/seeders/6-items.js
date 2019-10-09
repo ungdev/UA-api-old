@@ -17,7 +17,7 @@ module.exports = {
       id: 3,
       name: 'Câble ethernet (5m)',
       key: 'ethernet5',
-      price: 5,
+      price: 7,
       infos: 'Un câble (5m) est requis pour se brancher aux switchs des tables',
     }, {
       id: 4,
@@ -45,10 +45,10 @@ module.exports = {
       infos: 'Un t-shirt souvenir de cette LAN de folie',
     }, {
       id: 8,
-      name: 'Tombola',
+      name: 'Ticket tombola',
       key: 'tombola',
       price: 1,
-      infos: 'Acheter des tickets de tombola à 1€ par ticket',
+      infos: 'Un ticket de tombola à 1€ l\'unité',
     }, {
       id: 9,
       name: 'Pin\'s',
