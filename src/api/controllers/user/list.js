@@ -3,6 +3,9 @@ const { Op } = require('sequelize');
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 
+const ITEM_PLAYER_ID = 1;
+const ITEM_VISITOR_ID = 2;
+
 /**
  * GET /users
  * Query Params: {
@@ -21,7 +24,7 @@ module.exports = (app) => {
   app.get('/users', [isAuth()]);
 
   app.get('/users', async (req, res) => {
-    const { User, Team, Tournament } = req.app.locals.models;
+    const { User, Team, Tournament, Cart, CartItem } = req.app.locals.models;
 
     const exact = typeof req.query.exact !== 'undefined';
     const or = typeof req.query.or !== 'undefined';
@@ -45,7 +48,7 @@ module.exports = (app) => {
 
     try {
       const users = await User.findAll({
-        attributes: ['id', 'username', 'firstname', 'lastname'],
+        attributes: ['id', 'username', 'firstname', 'lastname', 'type'],
         where: Object.values(reqWhere).length > 0
           ? {
             [or ? Op.or : Op.and]: reqWhere,
@@ -60,6 +63,43 @@ module.exports = (app) => {
           },
         },
       });
+
+      if (users.length === 1) {
+        const isPaid = await Cart.count({
+          where: {
+            transactionState: 'paid',
+          },
+          include: [{
+            model: CartItem,
+            where: {
+              forUserId: users[0].id,
+              itemId: {
+                [Op.in]: [ITEM_PLAYER_ID, ITEM_VISITOR_ID],
+              },
+            },
+          }],
+        });
+        const noTeam = users[0].team === null && users[0].type === 'player';
+        const isNone = users[0].type === 'none';
+        if (isPaid) {
+          return res
+            .status(400)
+            .json({ error: 'ALREADY_PAID' })
+            .end();
+        }
+        if (isNone) {
+          return res
+            .status(400)
+            .json({ error: 'NO_TYPE' })
+            .end();
+        }
+        if (noTeam) {
+          return res
+            .status(400)
+            .json({ error: 'NO_TEAM' })
+            .end();
+        }
+      }
 
       return res
         .status(200)

@@ -40,6 +40,8 @@ module.exports = (app) => {
     check('password')
       .optional()
       .isLength({ min: 6 }),
+    check('type')
+      .optional(),
     validateBody(),
   ]);
 
@@ -74,13 +76,14 @@ module.exports = (app) => {
         );
       }
 
-      const { firstname, lastname, username, password } = req.body;
+      const { firstname, lastname, username, password, type } = req.body;
       const userUpdated = {
         id: req.params.id,
         username,
         firstname,
         lastname,
         password,
+        type,
       };
 
       await req.user.update(userUpdated);

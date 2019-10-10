@@ -55,6 +55,7 @@ module.exports = (app) => {
       await team.addUser(req.user);
       await team.setCaptain(req.user);
       req.user.askingTeamId = null;
+      req.user.type = 'player';
       await req.user.save();
       const outputUser = {
         id: req.user.id,
