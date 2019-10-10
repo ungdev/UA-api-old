@@ -1,8 +1,0 @@
-<mj-head>
-  <mj-attributes>
-    <mj-all font-family="Roboto"/>
-    <mj-text align="center"/>
-    <mj-button border-radius="0px" background-color="#e20007" font-size="20px"/>
-    <mj-social-element background-color="transparent"/>
-  </mj-attributes>
-</mj-head>

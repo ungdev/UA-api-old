@@ -6,7 +6,7 @@ const etupay = require('@ung/node-etupay')({
 });
 const generatePdf = require('../utils/sendPDF');
 const errorHandler = require('../utils/errorHandler');
-const sendPaymentMail = require('../mail/payment');
+const mail = require('../mail');
 const log = require('../utils/log')(module);
 
 module.exports = (app) => {
@@ -122,7 +122,7 @@ module.exports = (app) => {
       }), []);
 
 
-      await sendPaymentMail(cart.user.email, {
+      await mail.sendMail(mail.payment, cart.user.email, {
         username: cart.user.username,
         users,
         link: process.env.ARENA_PURCHASES,
