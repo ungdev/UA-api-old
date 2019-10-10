@@ -26,10 +26,13 @@ module.exports = (app) => {
 
   app.put('/users/:id', [
     check('username')
+      .trim()
       .isLength({ min: 3, max: 100 }),
     check('lastname')
+      .trim()
       .isLength({ min: 2, max: 100 }),
     check('firstname')
+      .trim()
       .isLength({ min: 2, max: 100 }),
     check('oldpassword')
       .optional()

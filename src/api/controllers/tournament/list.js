@@ -4,11 +4,16 @@ const isTeamPaid = require('../../utils/isTeamPaid');
 
 
 /**
- * GET /spotlights
+ * GET /tournaments
+ *
+ * Params: {
+ *  paidOnly: bool. Return paid teams only
+ *  notFull: bool. Don't return full teams
+ * }
  *
  * Response:
  * [
- *   [Spotlight]
+ *   [Tournament]
  * ]
  */
 module.exports = (app) => {
@@ -22,7 +27,7 @@ module.exports = (app) => {
           model: Team,
           include: {
             model: User,
-            attribute: ['id'],
+            attributes: ['username'],
           },
         }],
       });
@@ -30,13 +35,14 @@ module.exports = (app) => {
       tournaments = await Promise.all(tournaments.map(async (tournament) => {
         let teams = await Promise.all(tournament.teams.map(async (team) => {
           let isPaid = true;
+          let notFull = true;
           if (req.query.paidOnly === 'true') {
             isPaid = await isTeamPaid(req, team, null, tournament.playersPerTeam);
           }
-          return (isPaid ? {
-            ...team.toJSON(),
-            users: undefined,
-          } : 'empty');
+          if (req.query.notFull === 'true') {
+            notFull = team.users.length < tournament.playersPerTeam;
+          }
+          return (isPaid && notFull ? team.toJSON() : 'empty');
         }));
         teams = teams.filter((team) => team !== 'empty');
         return {
