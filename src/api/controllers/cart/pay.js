@@ -6,7 +6,10 @@ const etupay = require('@ung/node-etupay')({
 
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
+const { isTournamentFull } = require('../../utils/isFull');
 
+const ITEM_PLAYER_ID = 1;
+const ITEM_VISITOR_ID = 2;
 const euro = 100;
 const { Basket } = etupay;
 
@@ -15,7 +18,7 @@ module.exports = (app) => {
 
 
   app.post('/users/:userId/carts/:id/pay', async (req, res) => {
-    const { Cart, CartItem, Item, Attribute } = req.app.locals.models;
+    const { Cart, CartItem, Item, Attribute, Team, User, Tournament } = req.app.locals.models;
 
     try {
       const cart = await Cart.findOne({
@@ -30,7 +33,7 @@ module.exports = (app) => {
           attributes: ['id', 'quantity', 'forUserId'],
           include: [{
             model: Item,
-            attributes: ['name', 'key', 'price', 'stock', 'infos'],
+            attributes: ['name', 'key', 'price', 'stock', 'infos', 'id'],
           }, {
             model: Attribute,
             attributes: ['label', 'value'],
@@ -43,6 +46,63 @@ module.exports = (app) => {
           .status(404)
           .json({ error: 'NOT_FOUND' })
           .end();
+      }
+
+      if (cart.cartItems.some((cartItem) => cartItem.item.id === ITEM_VISITOR_ID)) {
+        const visitorItem = await Item.findByPk(ITEM_VISITOR_ID);
+
+        const maxVisitors = visitorItem.stock;
+
+        const actualVisitors = await CartItem.sum('quantity', {
+          where: {
+            itemId: ITEM_VISITOR_ID,
+          },
+          include: [{
+            model: Cart,
+            attributes: [],
+            where: {
+              transactionState: 'paid',
+            },
+          }],
+        });
+
+        const visitorsOrdered = cart.cartItems.reduce((previousValue, cartItem) => {
+          if (cartItem.item.id !== ITEM_VISITOR_ID) {
+            return previousValue;
+          }
+          return previousValue + cartItem.quantity;
+        }, 0);
+
+        if (maxVisitors - actualVisitors - visitorsOrdered < 0) {
+          return res
+            .status(400)
+            .json({ error: 'VISITOR_FULL' })
+            .end();
+        }
+      }
+      if (cart.cartItems.some((cartItem) => cartItem.item.id === ITEM_PLAYER_ID)) {
+        await Promise.all(cart.cartItems.map(async (cartItem) => {
+          if (cartItem.item.id === ITEM_PLAYER_ID) {
+            const tournament = await Tournament.findOne({
+              include: [{
+                model: Team,
+                include: [{
+                  model: User,
+                  where: {
+                    id: cartItem.forUserId,
+                  },
+                }],
+              }],
+            });
+            if (isTournamentFull(tournament, req)) {
+              return res
+                .status(400)
+                .json({ error: 'TOURNAMENT_FULL' })
+                .end();
+            }
+          }
+          return null;
+        }));
       }
 
       const data = JSON.stringify({ cartId: cart.id });

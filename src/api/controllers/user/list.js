@@ -83,19 +83,19 @@ module.exports = (app) => {
         const isNone = users[0].type === 'none';
         if (isPaid) {
           return res
-            .status(404)
+            .status(400)
             .json({ error: 'ALREADY_PAID' })
             .end();
         }
         if (isNone) {
           return res
-            .status(404)
+            .status(400)
             .json({ error: 'NO_TYPE' })
             .end();
         }
         if (noTeam) {
           return res
-            .status(404)
+            .status(400)
             .json({ error: 'NO_TEAM' })
             .end();
         }
