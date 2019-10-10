@@ -56,6 +56,7 @@ module.exports = (app) => {
       }
       if (user.team.captainId === req.user.id || req.params.userId === req.user.id) {
         user.teamId = null;
+        user.type = 'none';
         await user.save();
         return res
           .status(200)

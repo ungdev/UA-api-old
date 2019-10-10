@@ -52,6 +52,7 @@ module.exports = (app) => {
       if (user) {
         user.teamId = team.id;
         user.askingTeamId = null;
+        user.type = 'player';
         await user.save();
 
         log.info(`user ${req.user.username} accepted user ${user.username}`);

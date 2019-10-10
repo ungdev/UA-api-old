@@ -11,4 +11,5 @@ module.exports = (sequelize, DataTypes) => sequelize.define('user', {
   permissions: { type: DataTypes.STRING },
   registerToken: { type: DataTypes.STRING },
   resetToken: { type: DataTypes.STRING },
+  type: { type: DataTypes.ENUM('visitor', 'player', 'none'), allowNull: false, defaultValue: 'none' },
 });
