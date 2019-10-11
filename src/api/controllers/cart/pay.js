@@ -94,7 +94,8 @@ module.exports = (app) => {
                 }],
               }],
             });
-            if (isTournamentFull(tournament, req)) {
+            const isFull = await isTournamentFull(tournament, req);
+            if (isFull) {
               return res
                 .status(400)
                 .json({ error: 'TOURNAMENT_FULL' })
