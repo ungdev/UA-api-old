@@ -27,7 +27,7 @@ module.exports = (app) => {
           model: Team,
           include: {
             model: User,
-            attributes: ['username'],
+            attributes: ['username', 'id'],
           },
         }],
       });
@@ -42,7 +42,8 @@ module.exports = (app) => {
           if (req.query.notFull === 'true') {
             notFull = team.users.length < tournament.playersPerTeam;
           }
-          return (isPaid && notFull ? team.toJSON() : 'empty');
+          const formatUsers = team.users.map(({ username }) => username);
+          return ((isPaid && notFull) ? { ...team.toJSON(), users: formatUsers } : 'empty');
         }));
         teams = teams.filter((team) => team !== 'empty');
         return {
