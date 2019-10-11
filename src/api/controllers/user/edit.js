@@ -84,6 +84,7 @@ module.exports = (app) => {
         lastname,
         password,
         type,
+        email: req.user.email,
       };
 
       await req.user.update(userUpdated);
