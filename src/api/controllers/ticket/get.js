@@ -55,7 +55,8 @@ module.exports = (app) => {
           .end();
       }
 
-      const doc = await generateTicket(user, place.item.name);
+      // Generate base64 encoded ticket
+      const doc = await generateTicket(user, place.item.name, true);
 
       res.set('Content-Type', 'application/pdf');
       return res.send(doc);

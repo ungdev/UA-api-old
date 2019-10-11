@@ -91,7 +91,12 @@ module.exports = (app) => {
         return null;
       }));
 
-      pdfTickets = pdfTickets.filter((ticket) => ticket !== null);
+      pdfTickets = pdfTickets
+        .filter((ticket) => ticket !== null)
+        .map((ticket, index) => ({
+          filename: `Ticket_UA_${index + 1}.pdf`,
+          content: ticket,
+        }));
 
       const users = cart.cartItems.reduce(((previousValue, cartItem) => {
         const indexUser = previousValue
@@ -125,10 +130,10 @@ module.exports = (app) => {
       await mail.sendMail(mail.payment, cart.user.email, {
         username: cart.user.username,
         users,
-        link: process.env.ARENA_PURCHASES,
+        link: `${process.env.ARENA_WEBSITE}/dashboard/purchases`,
       }, pdfTickets);
       log.debug(`Mail sent to ${cart.user.email}`);
-      return null;
+      return res.end();
     }
     catch (err) {
       return errorHandler(err, res);

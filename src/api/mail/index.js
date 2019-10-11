@@ -37,12 +37,12 @@ const payment = {
   data: mustache.render(template, {
     title: 'PAIEMENT',
     subtitle: 'Félicitations, {{ username }}, votre commande est confirmée !',
-    content: 'Récapitulatif de votre commande:<br/>{{#users}}<strong>{{username}}:</strong><br/><ul>{{#items}}<li>{{quantity}} x {{name}} {{attribute}}: {{price}}€</li>{{/items}}</ul><br/>{{/users}}<br/>',
+    content: 'Vous pouvez accéder à votre commande en cliquant sur le bouton ci-dessous.',
     button_title: 'CONSULTER MA COMMANDE',
   }),
 };
 
-const sendMail = (type, to, data) => {
+const sendMail = (type, to, data, attachments = []) => {
   const transporter = nodemailer.createTransport(process.env.ARENA_MAIL_SMTP);
 
   return transporter.sendMail({
@@ -50,6 +50,7 @@ const sendMail = (type, to, data) => {
     to,
     subject: type.title,
     html: mustache.render(type.data, data),
+    attachments,
   });
 };
 
