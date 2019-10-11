@@ -12,9 +12,9 @@ const log = require('../../utils/log')(module);
 /**
  * POST /users
  * {
- *   username: String
- *   lastname: String
  *   firstname: String
+ *   lastname: String
+ *   username: String
  *   password: String
  *   email: String
  * }
@@ -35,11 +35,16 @@ module.exports = (app) => {
     check('firstname')
       .trim()
       .isLength({ min: 2, max: 100 }),
-    check('password')
-      .optional()
-      .isLength({ min: 6 }),
+    check('lastname')
+      .trim()
+      .isLength({ min: 2, max: 100 }),
+    check('username')
+      .trim()
+      .isLength({ min: 3, max: 100 }),
     check('email')
       .isEmail(),
+    check('password')
+      .isLength({ min: 6 }),
     validateBody(),
   ]);
 

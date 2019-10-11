@@ -9,9 +9,9 @@ const log = require('../../utils/log')(module);
 /**
  * PUT /users/:id
  * {
- *   username: String
- *   lastname: String
  *   firstname: String
+ *   lastname: String
+ *   username: String
  *   (password): String,
  *   (oldPassword): String
  * }
@@ -25,21 +25,23 @@ module.exports = (app) => {
   app.put('/users/:id', [isAuth()]);
 
   app.put('/users/:id', [
-    check('username')
-      .trim()
-      .isLength({ min: 3, max: 100 }),
-    check('lastname')
-      .trim()
-      .isLength({ min: 2, max: 100 }),
     check('firstname')
       .trim()
       .isLength({ min: 2, max: 100 }),
+    check('lastname')
+      .trim()
+      .isLength({ min: 2, max: 100 }),
+    check('username')
+      .trim()
+      .isLength({ min: 3, max: 100 }),
     check('oldpassword')
       .optional()
       .isLength({ min: 6 }),
     check('password')
       .optional()
       .isLength({ min: 6 }),
+    check('type')
+      .optional(),
     validateBody(),
   ]);
 
@@ -74,13 +76,14 @@ module.exports = (app) => {
         );
       }
 
-      const { firstname, lastname, username, password } = req.body;
+      const { firstname, lastname, username, password, type } = req.body;
       const userUpdated = {
         id: req.params.id,
         username,
         firstname,
         lastname,
         password,
+        type,
       };
 
       await req.user.update(userUpdated);

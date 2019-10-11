@@ -43,7 +43,7 @@ module.exports = (app) => {
 
         return res
           .status(400)
-          .json({ error: 'INVALID_EMAIL' })
+          .json({ error: 'EMAIL_NOT_FOUND' })
           .end();
       }
 

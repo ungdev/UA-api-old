@@ -5,7 +5,7 @@ const log = require('./api/utils/log')(module);
 const credentials = require('../config');
 
 module.exports = async function database() {
-  log.info(`Trying to connect to database : ${process.env.ARENA_DB_TYPE}://******:******@${process.env.ARENA_DB_HOST}:${process.env.ARENA_DB_PORT}/${process.env.ARENA_DB_NAME}`);
+  log.info(`Trying to connect to database : ${process.env.ARENA_DB_TYPE}://${process.env.ARENA_DB_USER}:******@${process.env.ARENA_DB_HOST}:${process.env.ARENA_DB_PORT}/${process.env.ARENA_DB_NAME}`);
   const sequelize = new Sequelize(process.env.ARENA_DB_NAME, process.env.ARENA_DB_USER, process.env.ARENA_DB_PASSWORD, {
     ...credentials.production,
     operatorsAliases: Sequelize.Op,
@@ -22,16 +22,9 @@ module.exports = async function database() {
     }
   });
 
-  try {
-    const models = modelsFactory(sequelize);
+  const models = modelsFactory(sequelize);
+  await sequelize.sync();
+  log.info('connected to database');
 
-    await sequelize.sync();
-
-    log.info('connected to database');
-
-    return { sequelize, models };
-  }
-  catch (err) {
-    throw err;
-  }
+  return { sequelize, models };
 };

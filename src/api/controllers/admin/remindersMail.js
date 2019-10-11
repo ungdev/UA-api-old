@@ -2,7 +2,6 @@ const isAdmin = require('../../middlewares/isAdmin');
 const isAuth = require('../../middlewares/isAuth');
 const { sendReminderToUnpaidUsers, sendReminderToNotInTeamUsers, sendReminderToNotFullTeamUsers } = require('../../utils/sendReminder');
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
 
 /**
  * GET /admin/remindersMail

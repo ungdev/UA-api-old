@@ -69,6 +69,8 @@ module.exports = (app) => {
               lastname: user.lastname,
               email: user.email,
               team: user.team,
+              type: user.type,
+              isPaid: false,
             },
             token,
           },

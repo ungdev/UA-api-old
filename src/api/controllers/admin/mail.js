@@ -1,6 +1,6 @@
 const isAdmin = require('../../middlewares/isAdmin');
 const isAuth = require('../../middlewares/isAuth');
-const sendPDF = require('../../utils/sendPDF');
+const generateTicket = require('../../utils/generateTicket');
 const errorHandler = require('../../utils/errorHandler');
 
 /**
@@ -17,7 +17,7 @@ module.exports = (app) => {
 
     try {
       const user = await User.findOne({ where: { name: req.params.name }, include: [Order] });
-      await sendPDF(user);
+      await generateTicket(user);
 
       return res
         .status(200)

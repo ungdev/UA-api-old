@@ -11,6 +11,7 @@ module.exports = {
         lastname: 'keke',
         email: 'kevin@msn.fr',
         password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
+        type: 'none',
       }, {
         id: '48fe6584-a118-4f85-8b6a-a2f26a1538b2',
         username: 'admin',
@@ -19,6 +20,7 @@ module.exports = {
         email: 'admin@local.dev',
         password: '$2y$10$WWfywWNGZHfDw2N2Bxqy..P0lj.p39tsLR6IKFckW7kU1cCXN00Oa', // password: admin
         permissions: 'admin',
+        type: 'none',
       },
 
       // Users for a team
@@ -30,6 +32,7 @@ module.exports = {
         email: 'user1@local.dev',
         password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
+        type: 'player',
       }, {
         id: '48fe6584-a118-4f85-8b6a-f2f26a153802',
         username: 'user2',
@@ -38,6 +41,7 @@ module.exports = {
         email: 'user2@local.dev',
         password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
+        type: 'player',
       }, {
         id: '48fe6584-a118-4f85-8b6a-f2f26a153803',
         username: 'user3',
@@ -46,6 +50,7 @@ module.exports = {
         email: 'user3@local.dev',
         password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
+        type: 'player',
       }, {
         id: '48fe6584-a118-4f85-8b6a-f2f26a153804',
         username: 'user4',
@@ -54,6 +59,7 @@ module.exports = {
         email: 'user4@local.dev',
         password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
+        type: 'player',
       }, {
         id: '48fe6584-a118-4f85-8b6a-f2f26a153805',
         username: 'user5',
@@ -62,6 +68,7 @@ module.exports = {
         email: 'user5@local.dev',
         password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
+        type: 'player',
       },
     ];
 
