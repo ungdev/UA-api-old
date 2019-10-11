@@ -24,7 +24,7 @@ const generateBarcode = (user) => new Promise((resolve, reject) => {
   });
 });
 
-module.exports = (user, placeName) => new Promise(async (resolve) => {
+module.exports = (user, placeName, encodeBase64 = false) => new Promise(async (resolve) => {
   const doc = new PDFDocument({ size: [841.89, 595.28] });
   const barcode = await generateBarcode(user);
   const buffers = [];
@@ -41,6 +41,14 @@ module.exports = (user, placeName) => new Promise(async (resolve) => {
 
   // Return result
   doc.on('data', buffers.push.bind(buffers));
-  doc.on('end', () => resolve(Buffer.from(Buffer.concat(buffers)).toString('base64')));
+  doc.on('end', () => {
+    if (encodeBase64) {
+      resolve(Buffer.from(Buffer.concat(buffers)).toString('base64'));
+    }
+    else {
+      resolve(Buffer.concat(buffers));
+    }
+  });
+
   doc.end();
 });

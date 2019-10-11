@@ -1,5 +1,0 @@
-<mj-section background-url="https://arena.utt.fr/static/background.webp" background-size="cover">
-  <mj-column>
-    <mj-image width="200px" src="https://arena.utt.fr/static/logo-notext.png"/>
-  </mj-column>
-</mj-section>
