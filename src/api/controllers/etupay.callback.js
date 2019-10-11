@@ -4,7 +4,7 @@ const etupay = require('@ung/node-etupay')({
   url: process.env.ARENA_ETUPAY_URL,
   key: process.env.ARENA_ETUPAY_KEY,
 });
-const generatePdf = require('../utils/sendPDF');
+const generateTicket = require('../utils/generateTicket');
 const errorHandler = require('../utils/errorHandler');
 const sendPaymentMail = require('../mail/payment');
 const log = require('../utils/log')(module);
@@ -84,9 +84,9 @@ module.exports = (app) => {
 
       let pdfTickets = await Promise.all(cart.cartItems.map(async (cartItem) => {
         if (cartItem.item.key === 'player' || cartItem.item.key === 'visitor') {
-          // todo: moche à cause de seuquelize, peut etre moyen de raccourcir en une requête
+          // todo: moche à cause de sequelize, peut etre moyen de raccourcir en une requête
 
-          return generatePdf(cartItem.forUser, cartItem.item.name);
+          return generateTicket(cartItem.forUser, cartItem.item.name);
         }
         return null;
       }));

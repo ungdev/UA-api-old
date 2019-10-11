@@ -1,4 +1,5 @@
 const socketIo = require('socket.io');
+const live = require('./api/live');
 
 module.exports = (http, sequelize, models) => {
   const io = socketIo(http);
@@ -11,7 +12,7 @@ module.exports = (http, sequelize, models) => {
   io.on('connection', (socket) => {
     socket.app = io;
 
-    require('./api/live')(socket);
+    live(socket);
   });
 
   return io;

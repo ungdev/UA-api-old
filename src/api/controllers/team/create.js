@@ -9,7 +9,7 @@ const log = require('../../utils/log')(module);
 /**
  * POST /team
  * {
- *    name: String
+ *    teamName: String
  * }
  *
  * Response:
@@ -21,7 +21,7 @@ module.exports = (app) => {
   app.post('/teams', [isAuth(), isNotInTeam()]);
 
   app.post('/teams', [
-    check('name')
+    check('teamName')
       .isLength({ min: 3, max: 40 }),
     check('tournament')
       .isInt(),
@@ -49,7 +49,7 @@ module.exports = (app) => {
       }
 
       const team = await Team.create({
-        name: req.body.name,
+        name: req.body.teamName,
         tournamentId: req.body.tournament,
       });
       await team.addUser(req.user);
@@ -65,7 +65,7 @@ module.exports = (app) => {
         email: req.user.email,
       };
 
-      log.info(`user ${req.user.username} created team ${req.body.name}`);
+      log.info(`user ${req.user.username} created team ${req.body.teamName}`);
 
       return res
         .status(200)

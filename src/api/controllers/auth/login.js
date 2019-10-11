@@ -27,9 +27,10 @@ const ITEM_VISITOR_ID = 2;
 module.exports = (app) => {
   app.post('/auth/login', [
     check('username')
-      .exists(),
+      .trim()
+      .isLength({ min: 3, max: 100 }),
     check('password')
-      .exists(),
+      .isLength({ min: 6 }),
     validateBody(),
   ]);
 
@@ -55,7 +56,7 @@ module.exports = (app) => {
 
         return res
           .status(400)
-          .json({ error: 'INVALID_USERNAME' })
+          .json({ error: 'USERNAME_NOT_FOUND' })
           .end();
       }
 

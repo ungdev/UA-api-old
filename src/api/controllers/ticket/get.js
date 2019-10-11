@@ -1,7 +1,6 @@
-const stream = require('stream');
 const { Op } = require('sequelize');
 
-const generatePdf = require('../../utils/sendPDF');
+const generateTicket = require('../../utils/generateTicket');
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 
@@ -28,7 +27,6 @@ module.exports = (app) => {
           .json({ error: 'UNAUTHORIZED' })
           .end();
       }
-
 
       const place = await CartItem.findOne({
         where: {
@@ -57,15 +55,10 @@ module.exports = (app) => {
           .end();
       }
 
-      const pdf = await generatePdf(user, place.item.name);
+      const doc = await generateTicket(user, place.item.name);
 
-      const readStream = new stream.PassThrough();
-      readStream.end(pdf);
-
-      res.setHeader('Content-disposition', 'inline; filename="ticket.pdf"');
-      res.setHeader('Content-type', 'application/pdf');
-
-      return readStream.pipe(res);
+      res.set('Content-Type', 'application/pdf');
+      return res.send(doc);
     }
     catch (err) {
       return errorHandler(err, res);
