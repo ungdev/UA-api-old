@@ -11,9 +11,9 @@ const errorHandler = require('../../utils/errorHandler');
  * }
  */
 module.exports = (app) => {
-  app.get('/users/:userId/carts/current', isAuth());
+  app.delete('/users/:userId/carts/current', isAuth());
 
-  app.get('/users/:userId/carts/current', async (req, res) => {
+  app.delete('/users/:userId/carts/current', async (req, res) => {
     const { Cart } = req.app.locals.models;
 
     try {
