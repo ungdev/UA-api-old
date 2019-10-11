@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const random = require('../utils/random');
+const randomBarcode = require('../utils/randomBarcode');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -74,7 +74,7 @@ module.exports = {
 
     users = users.map((user) => ({
       ...user,
-      barcode: random(process.env.ARENA_API_BARCODE_LENGTH),
+      barcode: randomBarcode(),
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
