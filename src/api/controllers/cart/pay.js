@@ -7,6 +7,7 @@ const etupay = require('@ung/node-etupay')({
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const { isTournamentFull } = require('../../utils/isFull');
+const removeAccent = require('../../utils/removeAccents');
 
 const ITEM_PLAYER_ID = 1;
 const ITEM_VISITOR_ID = 2;
@@ -111,8 +112,8 @@ module.exports = (app) => {
 
       const basket = new Basket(
         'Inscription UTT Arena',
-        req.user.firstname,
-        req.user.lastname,
+        removeAccent(req.user.firstname),
+        removeAccent(req.user.lastname),
         req.user.email,
         'checkout',
         encoded,
@@ -126,7 +127,7 @@ module.exports = (app) => {
           cartItem.item.price = 15;
         }
 
-        const name = cartItem.attribute ? `${cartItem.item.name} (${cartItem.attribute.label})` : cartItem.item.name;
+        const name = cartItem.attribute ? `${cartItem.item.name} ${cartItem.attribute.label}` : cartItem.item.name;
         basket.addItem(name, cartItem.item.price * euro, cartItem.quantity);
       });
 
