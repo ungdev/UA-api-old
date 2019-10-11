@@ -41,7 +41,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./start.js",
-    "start": "pm2 start ./start.js --wait-ready --name UA-api",
+    "start": "pm2-runtime start ./start.js --name UA-api -i 4",
     "lint": "eslint src/ --ext .js",
     "lint-fix": "eslint --fix src/ --ext .js",
     "seed": "sequelize db:drop; sequelize db:create --charset=utf8; sequelize db:seed:all",
