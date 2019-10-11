@@ -1,17 +1,15 @@
-const pick = require('lodash.pick')
+const pick = require('lodash.pick');
 
-module.exports.outputFields = user =>
-  pick(user, [
-    'id',
-    'name',
-    'firstname',
-    'lastname',
-    'gender',
-    'email',
-    'paid',
-    'plusone',
-    'teamId',
-    'scanned'
-  ])
+module.exports.outputFields = (user) => pick(user, [
+  'id',
+  'username',
+  'firstname',
+  'lastname',
+  'email',
+  'teamId',
+  'scanned',
+  'permissions',
+  'place',
+]);
 
-module.exports.inputFields = user => pick(user, ['name', 'lastname', 'firstname', 'gender', 'email', 'password'])
+module.exports.inputFields = (user) => pick(user, ['name', 'lastname', 'firstname', 'gender', 'email', 'password']);

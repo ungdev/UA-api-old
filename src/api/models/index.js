@@ -1,52 +1,61 @@
-module.exports = function(sequelize) {
-  const User = sequelize.import(`${__dirname}/user`)
-  const Info = sequelize.import(`${__dirname}/info`)
-  const Team = sequelize.import(`${__dirname}/team`)
-  const Permission = sequelize.import(`${__dirname}/permission`)
-  const Spotlight = sequelize.import(`${__dirname}/spotlight`)
-  const AskingUser = sequelize.import(`${__dirname}/askingUser`)
-  const Order = sequelize.import(`${__dirname}/order`)
-  const Message = sequelize.import(`${__dirname}/message`)
-  const Conversation = sequelize.import(`${__dirname}/conversation`)
-  const Network = sequelize.import(`${__dirname}/network`)
-  const Deck = sequelize.import(`${__dirname}/deck`)
-  const State = sequelize.import(`${__dirname}/state`)
+module.exports = (sequelize) => {
+  const Attribute = sequelize.import(`${__dirname}/attribute`);
+  const Cart = sequelize.import(`${__dirname}/cart`);
+  const CartItem = sequelize.import(`${__dirname}/cartItem`);
+  const Info = sequelize.import(`${__dirname}/info`);
+  const Item = sequelize.import(`${__dirname}/item`);
+  const Message = sequelize.import(`${__dirname}/message`);
+  const Network = sequelize.import(`${__dirname}/network`);
+  const State = sequelize.import(`${__dirname}/state`);
+  const Team = sequelize.import(`${__dirname}/team`);
+  const Tournament = sequelize.import(`${__dirname}/tournament`);
+  const User = sequelize.import(`${__dirname}/user`);
 
-  User.belongsTo(Team)
-  Team.hasMany(User)
+  // Relations
 
-  Order.belongsTo(User)
-  User.hasMany(Order)
+  Team.hasMany(User);
+  User.belongsTo(Team);
 
-  Network.belongsTo(User)
-  User.hasMany(Network)
-  
-  Deck.belongsTo(Team) //we attach decks to the user team
-  Team.hasMany(Deck)
+  Tournament.hasMany(Team, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Team.belongsTo(Tournament, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  Team.belongsTo(Spotlight)
-  Spotlight.hasMany(Team)
+  Tournament.hasMany(State, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  State.belongsTo(Tournament, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  Permission.belongsTo(User)
-  User.hasOne(Permission)
-  
-  State.belongsTo(Spotlight)
-  Spotlight.hasMany(State)
+  Tournament.hasMany(Info, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Info.belongsTo(Tournament, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  User.belongsToMany(Team, { through: AskingUser, as: 'RequestedTeam' })
-  Team.belongsToMany(User, { through: AskingUser, as: 'AskingUser' })
+  User.hasMany(Message, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Message.belongsTo(User, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  Message.belongsTo(User, {as: 'From', foreignKey: 'senderId'})
-  Message.belongsTo(User, {as: 'To', foreignKey: 'receiverId'})
+  User.hasMany(Cart, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  Cart.belongsTo(User, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  User.hasMany(Message, {as: 'From', foreignKey: 'senderId'})
-  User.hasMany(Message, {as: 'To', foreignKey: 'receiverId'})
+  Cart.hasMany(CartItem, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  CartItem.belongsTo(Cart, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  Message.belongsTo(Conversation)
-  Conversation.hasMany(Message)
+  Item.hasMany(CartItem, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
+  CartItem.belongsTo(Item, { foreignKey: { allowNull: false }, onDelete: 'cascade' });
 
-  Conversation.belongsTo(User, {as: 'User1', foreignKey: 'user1'})
-  Conversation.belongsTo(User, {as: 'User2', foreignKey: 'user2'})
+  User.hasOne(Network);
 
-  return { User, Team, Spotlight, AskingUser, Info, Order, Permission, Message, Conversation, Network, Deck, State }
-}
+  CartItem.belongsTo(Attribute);
+  Attribute.hasMany(CartItem);
+
+  Attribute.belongsToMany(Item, { through: 'itemshasattributes' });
+  Item.belongsToMany(Attribute, { through: 'itemshasattributes' });
+
+
+  // Associations
+  Team.hasMany(User, { as: 'askingTeam', contraints: false });
+  User.belongsTo(Team, { as: 'askingTeam', constraints: false });
+
+  User.hasOne(Team, { as: 'captain', constraints: false });
+  Team.belongsTo(User, { as: 'captain', constraints: false });
+
+  CartItem.belongsTo(User, { as: 'forUser', constraints: false });
+  User.hasMany(CartItem, { as: 'forUser', constraints: false });
+  Tournament.belongsTo(State, { as: 'index', constraints: false });
+
+  return { Attribute, Cart, CartItem, Info, Item, Message, Network, State, Team, Tournament, User };
+};

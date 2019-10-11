@@ -3,7 +3,7 @@ API web à destination des services de l'UTT Arena
 
 ## Requirements
 
-* [Node.js](https://nodejs.org/)
+* [Node.js](https://nodejs.org/) (*LTS Version prefered*)
 * [yarn](https://yarnpkg.com/)
 
 ## Installation
@@ -14,23 +14,26 @@ git clone git@github.com:ungdev/UA-api.git
 git clone https://github.com/ungdev/UA-api.git
 
 cd UA-api
+
+# To install all the depedencies
 yarn
-```
 
-## Database
+# To create the database and add some fake datas
 
-```
-# create the databse 'arena', should be in utf8 not utf8mb4, otherwise it wont work
-CREATE DATABASE arena CHARACTER SET utf8;
+# if you're running on windows and use powershell.exe or Bash for Windows (WSL) or Linux or Max
+yarn seed
+
+# if you're running on windows and use cmd.exe or git bash execute
+yarn seed-win
 ```
 
 ## Configuration
 
 ```
 # copy env file for all environments
-cp .env .env.local
-# makes your changes in .env.local, which will not be pushed
-nano .env.local
+cp .env.example .env
+# makes your changes in .env, which will not be pushed
+nano .env
 # you should change ARENA_DB for your database and ARENA_API_DISABLE_LOGIN to enable login
 ```
 
