@@ -8,7 +8,7 @@ const template = fs.readFileSync(path.join(__dirname, 'mail.html')).toString();
 /**
  * Pour remplacer la génération le HTML
  *
- * Bien mettre dans le texte les tags {{ title}} {{ subtitle }} {{ content  }} {{ button_title }} sur MailChimp
+ * Bien mettre dans le texte les tags {{ title}} {{ subtitle }} {{{ content  }}} {{ button_title }} sur MailChimp
  * Après l'exportation du HTML, rempalacer manuellement le lien du bouton par {{=<% %>=}}{{ button_link }}<%={{ }}=%>
  * Cela permet d'ignorer les tags lors du premier render de mustache pour être render au deuxième
  */
@@ -18,7 +18,7 @@ const register = {
   data: mustache.render(template, {
     title: 'INSCRIPTION',
     subtitle: "Bienvenue à l'UTT Arena, {{ username }} !",
-    content: 'Merci de vérifier votre e-mail en cliquant sur le bouton ci-dessous',
+    content: 'Merci de vérifier votre e-mail en cliquant sur le bouton ci-dessous ou en cliquant sur <a href="{{ button_link }}">ce lien</a>',
     button_title: 'CONFIRMER l\'INSCRIPTION' }),
 };
 
