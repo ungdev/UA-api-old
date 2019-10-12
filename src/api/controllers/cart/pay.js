@@ -122,7 +122,7 @@ module.exports = (app) => {
       const isPartnerSchool = process.env.ARENA_PRICES_PARTNER_MAILS.split(',').some((school) => req.user.email.toLowerCase().endsWith(school));
 
       cart.cartItems.forEach((cartItem) => {
-        if (cartItem.item.key === 'player' && isPartnerSchool) {
+        if (cartItem.item.key === 'player' && isPartnerSchool && cartItem.forUserId === req.user.id) {
           // todo: HARDECODE !!!!!
           cartItem.item.price = 15;
         }
