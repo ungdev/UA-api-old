@@ -1,8 +1,9 @@
-module.exports = () => (req, res, next) => {
+module.exports = () => async (req, res, next) => {
   const { Team } = req.app.locals.models;
-  const team = Team.findByPk(req.user.teamId, {
+  const team = await Team.count({
     where: {
       captainId: req.user.id,
+      id: req.params.id,
     },
   });
   if (!team) {
@@ -11,6 +12,6 @@ module.exports = () => (req, res, next) => {
       .json({ error: 'NO_CAPTAIN' })
       .end();
   }
-
+  req.team = team;
   return next();
 };
