@@ -7,9 +7,9 @@ const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
 /**
- * POST /teams/:teamId/users
+ * POST /teams/:id/users
  * {
- *   userId: UUID
+ *   user: UUID
  * }
  *
  * Response:
@@ -18,22 +18,22 @@ const log = require('../../utils/log')(module);
  * }
  */
 module.exports = (app) => {
-  app.post('/teams/:teamId/users', [
+  app.post('/teams/:id/users', [
     isAuth(),
     isCaptain(),
     isType('player'),
   ]);
 
-  app.post('/teams/:teamId/users', [
-    check('userId')
+  app.post('/teams/:id/users', [
+    check('user')
       .isUUID(),
     validateBody(),
   ]);
 
-  app.post('/teams/:teamId/users', async (req, res) => {
+  app.post('/teams/:id/users', async (req, res) => {
     try {
       const { User, Team, Tournament } = req.app.locals.models;
-      const team = await Team.findByPk(req.params.teamId, {
+      const team = await Team.findByPk(req.params.id, {
         include: [{
           model: User,
           attributes: ['id'],
@@ -42,7 +42,7 @@ module.exports = (app) => {
           attributes: ['playersPerTeam'],
         }],
       });
-      const user = await User.findByPk(req.body.userId, {
+      const user = await User.findByPk(req.body.user, {
         where: {
           askingTeamId: team.id,
         },
@@ -51,20 +51,19 @@ module.exports = (app) => {
       if (team && team.users.length === team.tournament.playersPerTeam) {
         return res.status(400).json({ error: 'TEAM_FULL' }).end();
       }
-      if (!user) {
-        return res.status(404).json({ error: 'NOT_ASKING_USER' }).end();
+      if (user) {
+        user.teamId = team.id;
+        user.askingTeamId = null;
+        user.type = 'player';
+        await user.save();
+
+        log.info(`user ${req.user.username} accepted user ${user.username}`);
+
+        return res
+          .status(200)
+          .end();
       }
-
-      user.teamId = team.id;
-      user.askingTeamId = null;
-      user.type = 'player';
-      await user.save();
-
-      log.info(`user ${req.user.username} accepted user ${user.username}`);
-
-      return res
-        .status(201)
-        .end();
+      return res.status(404).json({ error: 'NOT_ASKING_USER' }).end();
     }
     catch (err) {
       return errorHandler(err, res);
