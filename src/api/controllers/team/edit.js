@@ -2,6 +2,7 @@ const { check } = require('express-validator');
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const validateBody = require('../../middlewares/validateBody');
+const isType = require('../../middlewares/isType');
 
 /**
  * PUT /teams/:id
@@ -14,7 +15,7 @@ const validateBody = require('../../middlewares/validateBody');
  *  {}
  */
 module.exports = (app) => {
-  app.put('/teams/:id', [isAuth()]);
+  app.put('/teams/:id', [isAuth(), isType('player')]);
 
   app.put('/teams/:id', [
     check('captainId')

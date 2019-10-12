@@ -119,6 +119,7 @@ module.exports = (app) => {
         password,
         type,
         email: req.user.email,
+        askingTeamId: req.body.type === 'visitor' && req.user.askingTeamId ? null : req.user.askingTeamId,
       };
 
       await req.user.update(userUpdated);
