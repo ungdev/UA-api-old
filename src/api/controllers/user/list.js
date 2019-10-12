@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 
 const isAuth = require('../../middlewares/isAuth');
+const isAdmin = require('../../middlewares/isAdmin');
 const errorHandler = require('../../utils/errorHandler');
 
 const ITEM_PLAYER_ID = 1;
@@ -21,7 +22,7 @@ const ITEM_VISITOR_ID = 2;
  * }
  */
 module.exports = (app) => {
-  app.get('/users', [isAuth()]);
+  app.get('/users', [isAuth(), isAdmin()]);
 
   app.get('/users', async (req, res) => {
     const { User, Team, Tournament, Cart, CartItem } = req.app.locals.models;
