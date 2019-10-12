@@ -6,6 +6,9 @@ const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
+const ITEM_PLAYER_ID = 1;
+const ITEM_VISITOR_ID = 2;
+
 /**
  * PUT /users/:id
  * {
@@ -47,6 +50,8 @@ module.exports = (app) => {
 
   app.put('/users/:id', async (req, res) => {
     try {
+      const { Cart, CartItem } = req.app.locals.models;
+
       // todo: refaire pour admins
       if (req.params.id !== req.user.id) {
         return res
@@ -76,7 +81,36 @@ module.exports = (app) => {
         );
       }
 
-      const { firstname, lastname, username, password, type } = req.body;
+      const { firstname, lastname, username, password } = req.body;
+
+      let { type } = req.user;
+
+      if (req.body.type) {
+        const hasCartPaid = await Cart.count({
+          where: {
+            transactionState: 'paid',
+          },
+          include: [{
+            model: CartItem,
+            where: {
+              itemId: req.user.type === 'visitor' ? ITEM_VISITOR_ID : ITEM_PLAYER_ID,
+              forUserId: req.user.id,
+            },
+          }],
+        });
+        const isPaid = !!hasCartPaid;
+
+        if (!isPaid) { // Allow to change type only if user has not paid
+          type = req.body.type;
+        }
+        else {
+          return res
+            .status(400)
+            .json({ error: 'CANNOT_CHANGE' })
+            .end();
+        }
+      }
+
       const userUpdated = {
         id: req.params.id,
         username,
