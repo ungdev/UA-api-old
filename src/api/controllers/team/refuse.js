@@ -1,11 +1,12 @@
 const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 const isAuth = require('../../middlewares/isAuth');
+const isCaptain = require('../../middlewares/isCaptain');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
 /**
- * DELETE /teams/:id/request
+ * DELETE /teams/:teamId/request
  * {
  *    user: UUID
  * }
@@ -14,19 +15,22 @@ const log = require('../../utils/log')(module);
  * {}
  */
 module.exports = (app) => {
-  app.delete('/teams/:id/request', [isAuth()]);
+  app.delete('/teams/:teamId/request', [
+    isAuth(),
+    isCaptain(),
+  ]);
 
-  app.delete('/teams/:id/request', [
+  app.delete('/teams/:teamId/request', [
     check('user')
       .isUUID(),
     validateBody(),
   ]);
 
-  app.delete('/teams/:id/request', async (req, res) => {
+  app.delete('/teams/:teamId/request', async (req, res) => {
     const { User } = req.app.locals.models;
 
     try {
-      if (req.user.askingTeamId === req.params.id && req.body.user === req.user.id) {
+      if (req.user.askingTeamId === req.params.teamId && req.body.user === req.user.teamId) {
         req.user.askingTeamId = null;
         await req.user.save();
 
@@ -35,12 +39,6 @@ module.exports = (app) => {
         return res
           .status(200)
           .end();
-      }
-
-      if (req.user.id !== req.user.team.captainId) {
-        return res
-          .status(400)
-          .json({ error: 'NO_CAPTAIN' });
       }
 
       const user = await User.findOne({
