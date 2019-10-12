@@ -1,29 +1,30 @@
-const Sequelize = require('sequelize');
-
-const ticketId = 1;
+const ITEM_PLAYER_ID = 1;
 
 module.exports = async function isTeamPaid(req, team, tournaments, playersPerTeam) {
   const { Cart, CartItem } = req.app.locals.models;
-  const cartItemTickets = await CartItem.findAll({
-    where: {
-      itemId: ticketId,
-      forUserId: {
-        [Sequelize.Op.in]: team.users.map((user) => user.id),
-      },
-    },
-  });
-  const cartsUnpayed = await Cart.findAll({
-    where: {
-      id: {
-        [Sequelize.Op.in]: cartItemTickets.map((cartItem) => cartItem.cartId),
-      },
-      transactionState: {
-        [Sequelize.Op.notIn]: ['paid'],
-      },
-    },
-  });
   const sizeTeam = playersPerTeam || tournaments[team.tournamentId - 1].playersPerTeam;
-  if (cartItemTickets.length === sizeTeam && cartsUnpayed.length === 0) {
+  const totalUsers = team.users;
+  if (sizeTeam > totalUsers.length) {
+    return false;
+  }
+  const teamPaid = await Promise.all(totalUsers.map(async (user) => {
+    const hasCartPaid = await Cart.count({
+      where: {
+        transactionState: 'paid',
+      },
+      include: [{
+        model: CartItem,
+        where: {
+          itemId: ITEM_PLAYER_ID,
+          forUserId: user.id,
+        },
+      }],
+    });
+    const isPaid = !!hasCartPaid;
+    return isPaid;
+  }));
+  const totalPaid = teamPaid.filter((paid) => paid === true);
+  if (totalPaid.length === sizeTeam) {
     return true;
   }
   return false;
