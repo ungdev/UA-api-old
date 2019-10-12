@@ -130,7 +130,7 @@ module.exports = (app) => {
       await mail.sendMail(mail.payment, cart.user.email, {
         username: cart.user.username,
         users,
-        link: `${process.env.ARENA_WEBSITE}/dashboard/purchases`,
+        button_link: `${process.env.ARENA_WEBSITE}/dashboard/purchases`,
       }, pdfTickets);
       log.debug(`Mail sent to ${cart.user.email}`);
       return res.end();

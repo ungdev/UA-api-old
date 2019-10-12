@@ -1,9 +1,4 @@
-const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
-
-jwt.verify = promisify(jwt.verify);
-
-module.exports = (route) => async (req, res, next) => {
+module.exports = (route) => (req, res, next) => {
   let authorized = false;
 
   if (req.user && req.user.permission) {
@@ -15,7 +10,9 @@ module.exports = (route) => async (req, res, next) => {
     }
   }
 
-  if (authorized) return next();
+  if (authorized) {
+    return next();
+  }
 
   return res
     .status(401)

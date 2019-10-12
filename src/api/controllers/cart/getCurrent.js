@@ -52,7 +52,7 @@ module.exports = (app) => {
       if (resCart && resCart.cartItems) {
         await Promise.all(resCart.cartItems.map(async (item, i) => {
           const forUser = await User.findByPk(item.forUserId);
-          resCart.cartItems[i].forUsername = forUser.username;
+          resCart.cartItems[i].forEmail = forUser.email;
         }));
       }
 
