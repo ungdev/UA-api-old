@@ -7,9 +7,9 @@ const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
 /**
- * POST /teams/:id/users
+ * POST /teams/:teamId/users
  * {
- *   user: UUID
+ *   userId: UUID
  * }
  *
  * Response:
@@ -18,22 +18,22 @@ const log = require('../../utils/log')(module);
  * }
  */
 module.exports = (app) => {
-  app.post('/teams/:id/users', [
+  app.post('/teams/:teamId/users', [
     isAuth(),
     isCaptain(),
     isType('player'),
   ]);
 
-  app.post('/teams/:id/users', [
-    check('user')
+  app.post('/teams/:teamId/users', [
+    check('userId')
       .isUUID(),
     validateBody(),
   ]);
 
-  app.post('/teams/:id/users', async (req, res) => {
+  app.post('/teams/:teamId/users', async (req, res) => {
     try {
       const { User, Team, Tournament } = req.app.locals.models;
-      const team = await Team.findByPk(req.params.id, {
+      const team = await Team.findByPk(req.params.teamId, {
         include: [{
           model: User,
           attributes: ['id'],
@@ -42,7 +42,7 @@ module.exports = (app) => {
           attributes: ['playersPerTeam'],
         }],
       });
-      const user = await User.findByPk(req.body.user, {
+      const user = await User.findByPk(req.body.userId, {
         where: {
           askingTeamId: team.id,
         },
@@ -51,19 +51,20 @@ module.exports = (app) => {
       if (team && team.users.length === team.tournament.playersPerTeam) {
         return res.status(400).json({ error: 'TEAM_FULL' }).end();
       }
-      if (user) {
-        user.teamId = team.id;
-        user.askingTeamId = null;
-        user.type = 'player';
-        await user.save();
-
-        log.info(`user ${req.user.username} accepted user ${user.username}`);
-
-        return res
-          .status(200)
-          .end();
+      if (!user) {
+        return res.status(404).json({ error: 'NOT_ASKING_USER' }).end();
       }
-      return res.status(404).json({ error: 'NOT_ASKING_USER' }).end();
+
+      user.teamId = team.id;
+      user.askingTeamId = null;
+      user.type = 'player';
+      await user.save();
+
+      log.info(`user ${req.user.username} accepted user ${user.username}`);
+
+      return res
+        .status(201)
+        .end();
     }
     catch (err) {
       return errorHandler(err, res);
