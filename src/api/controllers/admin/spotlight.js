@@ -1,5 +1,5 @@
 const moment = require('moment');
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
 const { isTeamFull } = require('../../utils/isFull');
@@ -14,7 +14,7 @@ const { outputFields } = require('../../utils/publicFields');
  * ]
  */
 module.exports = (app) => {
-  app.get('/admin/spotlight/:id', [isAuth(), isAdmin()]);
+  app.get('/admin/spotlight/:id', [isAuth(), hasPermission('admin')]);
 
   app.get('/admin/spotlight/:id', async (req, res) => {
     const { Spotlight, Team, User, Order } = req.app.locals.models;

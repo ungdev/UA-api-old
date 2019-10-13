@@ -1,4 +1,4 @@
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const isAuth = require('../../middlewares/isAuth');
 const generateTicket = require('../../utils/generateTicket');
 const errorHandler = require('../../utils/errorHandler');
@@ -10,7 +10,7 @@ const errorHandler = require('../../utils/errorHandler');
  *
  */
 module.exports = (app) => {
-  app.get('/admin/mail/:name', [isAuth(), isAdmin()]);
+  app.get('/admin/mail/:name', [isAuth(), hasPermission('admin')]);
 
   app.get('/admin/mail/:name', async (req, res) => {
     const { User, Order } = req.app.locals.models;

@@ -1,4 +1,4 @@
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const isAuth = require('../../middlewares/isAuth');
 const { sendReminderToUnpaidUsers, sendReminderToNotInTeamUsers, sendReminderToNotFullTeamUsers } = require('../../utils/sendReminder');
 const errorHandler = require('../../utils/errorHandler');
@@ -11,7 +11,7 @@ const errorHandler = require('../../utils/errorHandler');
  */
 
 module.exports = (app) => {
-  app.get('/admin/remindersMail', [isAuth(), isAdmin()]);
+  app.get('/admin/remindersMail', [isAuth(), hasPermission('admin')]);
 
   app.get('/admin/remindersMail', async (req, res) => {
     const { User, Team, Spotlight } = req.app.locals.models;

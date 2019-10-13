@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const isAuth = require('../../middlewares/isAuth');
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const errorHandler = require('../../utils/errorHandler');
 const validateBody = require('../../middlewares/validateBody');
 
@@ -16,7 +16,7 @@ const validateBody = require('../../middlewares/validateBody');
  *
  */
 module.exports = (app) => {
-  app.put('/admin/renameUser/:id', [isAuth(), isAdmin()]);
+  app.put('/admin/renameUser/:id', [isAuth(), hasPermission('admin')]);
 
   app.put('/admin/renameUser/:id', [
     check('name')

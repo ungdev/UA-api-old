@@ -1,4 +1,4 @@
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 
@@ -9,7 +9,7 @@ const errorHandler = require('../../utils/errorHandler');
  *
  */
 module.exports = (app) => {
-  app.put('/admin/setAdmin/:id', [isAuth(), isAdmin()]);
+  app.put('/admin/setAdmin/:id', [isAuth(), hasPermission('admin')]);
 
   app.put('/admin/setAdmin/:id', async (req, res) => {
     const { Permission } = req.app.locals.models;
