@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const moment = require('moment');
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const errorHandler = require('../../utils/errorHandler');
 const validateBody = require('../../middlewares/validateBody');
 const isAuth = require('../../middlewares/isAuth');
@@ -14,7 +14,7 @@ const isAuth = require('../../middlewares/isAuth');
  * ]
  */
 module.exports = (app) => {
-  app.post('/admin/chart', [isAuth(), isAdmin()]);
+  app.post('/admin/chart', [isAuth(), hasPermission('admin')]);
   app.post('/admin/chart', [
     check('start')
       .exists(),

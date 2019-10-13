@@ -1,17 +1,14 @@
-const fs = require('fs');
-const path = require('path');
 const mustache = require('mustache');
 const moment = require('moment');
 const nodemailer = require('nodemailer');
-
 
 const log = require('./log')(module);
 
 const transporter = nodemailer.createTransport(process.env.ARENA_MAIL_SMTP);
 
-const noTeamHTML = fs.readFileSync(path.join(__dirname, 'remind-no-team-template.html')).toString();
-const unpaidHTML = fs.readFileSync(path.join(__dirname, 'remind-unpaid-template.html')).toString();
-const noFullTeamHTML = fs.readFileSync(path.join(__dirname, 'remind-no-full-team-template.html')).toString();
+const noTeamHTML = '';
+const unpaidHTML = '';
+const noFullTeamHTML = '';
 
 
 module.exports = {
