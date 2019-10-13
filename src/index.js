@@ -1,4 +1,5 @@
 const http = require('http');
+
 const database = require('./database');
 const socket = require('./socket');
 const arena = require('./arena');
