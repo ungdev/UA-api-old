@@ -15,7 +15,7 @@ module.exports = (app) => {
     try {
       req.user.type = 'none';
       await req.user.save();
-      await req.team.destroy();
+      await req.user.team.destroy();
       return res
         .status(204)
         .end();
