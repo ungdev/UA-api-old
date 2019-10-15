@@ -18,11 +18,15 @@ module.exports = (app) => {
 
     try {
       const unpaidUsers = await User.findAll({ where: { paid: 0, registerToken: null } });
+      // eslint-disable-next-line no-restricted-syntax
       for (const user of unpaidUsers) {
+        // eslint-disable-next-line no-await-in-loop
         await sendReminderToUnpaidUsers(user);
       }
       const notInTeamPaidUsers = await User.findAll({ where: { paid: 1, teamId: null, registerToken: null } });
+      // eslint-disable-next-line no-restricted-syntax
       for (const user of notInTeamPaidUsers) {
+        // eslint-disable-next-line no-await-in-loop
         await sendReminderToNotInTeamUsers(user);
       }
       let inNotFullTeamUsers = await User.findAll({
@@ -37,7 +41,9 @@ module.exports = (app) => {
         if (!user.team) return false;
         return user.team.spotlight.perTeam !== user.team.users.length;
       });
+      // eslint-disable-next-line no-restricted-syntax
       for (const user of inNotFullTeamUsers) {
+        // eslint-disable-next-line no-await-in-loop
         await sendReminderToNotFullTeamUsers(user);
       }
 

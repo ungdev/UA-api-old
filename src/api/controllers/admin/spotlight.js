@@ -35,10 +35,10 @@ module.exports = (app) => {
 
         team.users = team.users.map((user) => {
           const place = user.orders.find((order) => order.paid && order.place);
-          const paid_at = place ? place.paid_at : '';
+          const paidAt = place ? place.paid_at : '';
 
-          if (moment(teamCompletedAt).isBefore(paid_at)) {
-            teamCompletedAt = paid_at;
+          if (moment(teamCompletedAt).isBefore(paidAt)) {
+            teamCompletedAt = paidAt;
           }
 
           if (moment(teamCompletedAt).isBefore(user.joined_at)) {

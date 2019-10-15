@@ -19,7 +19,9 @@ module.exports = (app) => {
     try {
       const allPaidUsers = await User.findAll({ attributes: ['email', 'name', 'id'], where: { paid: 1, registerToken: null }, include: [{ model: Team, include: [Spotlight] }] });
 
+      // eslint-disable-next-line no-restricted-syntax
       for (const user of allPaidUsers) {
+        // eslint-disable-next-line no-await-in-loop
         await sendInfosMail(user);
       }
       return res

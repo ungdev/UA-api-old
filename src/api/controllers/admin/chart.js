@@ -70,6 +70,7 @@ module.exports = (app) => {
 
       do {
         i++;
+        // eslint-disable-next-line no-loop-func
         totalPaidOrders.forEach((order) => {
           if (moment(order.paid_at).format(format) === current.format(format)) {
             count++;
