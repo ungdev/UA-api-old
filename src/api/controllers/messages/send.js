@@ -1,6 +1,5 @@
 
 const axios = require('axios');
-const _ = require('lodash');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
 
@@ -22,7 +21,7 @@ module.exports = (app) => {
       const user = await User.findByPk(req.user.id, {
         include: [Permission],
       });
-      const userTo = _.isUndefined(req.body.to)
+      const userTo = req.body.to === undefined
         ? null
         : await User.findByPk(req.body.to);
 
@@ -74,7 +73,7 @@ module.exports = (app) => {
 
       await message.setConversation(conversation.id);
 
-      if (!_.isUndefined(req.body.spotlight) && userTo === null) {
+      if (req.body.spotlight !== undefined && userTo === null) {
         let channel = '';
         switch (req.body.spotlight) {
           case 1:

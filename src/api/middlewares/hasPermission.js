@@ -1,21 +1,26 @@
-module.exports = (route) => (req, res, next) => {
+module.exports = (permission) => (req, res, next) => {
+  const { user } = req;
   let authorized = false;
 
-  if (req.user && req.user.permission) {
-    if (req.user.permission.admin) {
+  if (user && user.permissions) {
+    const userPermissions = user.permissions.split(',');
+
+    if (userPermissions.include('admin')) {
+      // Admin has all permissions
       authorized = true;
     }
-    else if (req.user.permission.permission && req.user.permission.permission.includes(route)) {
+
+    if (userPermissions.includes(permission)) {
       authorized = true;
     }
   }
 
-  if (authorized) {
-    return next();
+  if (!authorized) {
+    return res
+      .status(401)
+      .json({ error: 'UNAUTHORIZED' })
+      .end();
   }
 
-  return res
-    .status(401)
-    .json({ error: 'UNAUTHORIZED' })
-    .end();
+  return next();
 };

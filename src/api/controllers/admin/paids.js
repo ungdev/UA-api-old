@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
 const { isTeamFull } = require('../../utils/isFull');
@@ -12,7 +12,7 @@ const { isTeamFull } = require('../../utils/isFull');
  *  { totalUsers, totalPaidPlayers, totalPaidVisitors, totalUnpaid, totalTeams, totalPaidTeams, totalFullTeams, totalFreePlayers }
  */
 module.exports = (app) => {
-  app.get('/admin/paids', [isAuth(), isAdmin()]);
+  app.get('/admin/paids', [isAuth(), hasPermission('admin')]);
 
   app.get('/admin/paids', async (req, res) => {
     const { User, Team, Spotlight, Order } = req.app.locals.models;

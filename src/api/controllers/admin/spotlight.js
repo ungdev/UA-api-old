@@ -1,5 +1,5 @@
 const moment = require('moment');
-const isAdmin = require('../../middlewares/isAdmin');
+const hasPermission = require('../../middlewares/hasPermission');
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
 const { isTeamFull } = require('../../utils/isFull');
@@ -14,7 +14,7 @@ const { outputFields } = require('../../utils/publicFields');
  * ]
  */
 module.exports = (app) => {
-  app.get('/admin/spotlight/:id', [isAuth(), isAdmin()]);
+  app.get('/admin/spotlight/:id', [isAuth(), hasPermission('admin')]);
 
   app.get('/admin/spotlight/:id', async (req, res) => {
     const { Spotlight, Team, User, Order } = req.app.locals.models;
@@ -35,10 +35,10 @@ module.exports = (app) => {
 
         team.users = team.users.map((user) => {
           const place = user.orders.find((order) => order.paid && order.place);
-          const paid_at = place ? place.paid_at : '';
+          const paidAt = place ? place.paid_at : '';
 
-          if (moment(teamCompletedAt).isBefore(paid_at)) {
-            teamCompletedAt = paid_at;
+          if (moment(teamCompletedAt).isBefore(paidAt)) {
+            teamCompletedAt = paidAt;
           }
 
           if (moment(teamCompletedAt).isBefore(user.joined_at)) {

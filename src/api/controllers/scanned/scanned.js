@@ -37,10 +37,18 @@ module.exports = (app) => {
           else if (req.user.permission.respo && req.user.permission.respo.includes(spotlight.id)) {
             authorized = true;
           }
+
+          return res
+            .status(403)
+            .json({ error: 'UNAUTHORIZED' })
+            .end();
         }
 
         if (!authorized) {
-          return null;
+          return res
+            .status(403)
+            .json({ error: 'UNAUTHORIZED' })
+            .end();
         }
 
         let teams = spotlight.teams.filter((team) => isTeamFull(team, spotlight.perTeam, true));
@@ -66,6 +74,8 @@ module.exports = (app) => {
           spotlightName: spotlight.name,
           teams,
         });
+
+        return null;
       });
 
       return res
