@@ -24,10 +24,10 @@ const isTournamentFull = async (tournament, req) => {
   let teams = await Promise.all(tournament.teams.map(async (team) => {
     let isPaid = true;
     isPaid = await isTeamPaid(req, team, null, tournament.playersPerTeam);
-    return (isPaid ? team : 'empty');
+    return (isPaid ? 'paid' : 'empty');
   }));
-  teams = teams.filter((team) => team !== 'empty').length;
-  return teams >= maxTeams;
+  teams = teams.filter((team) => team !== 'empty');
+  return teams.length >= maxTeams;
 };
 
 const remainingPlaces = (spotlight) => {
