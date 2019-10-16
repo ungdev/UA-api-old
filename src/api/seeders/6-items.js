@@ -18,19 +18,19 @@ module.exports = {
       name: 'Câble ethernet (5m)',
       key: 'ethernet5',
       price: 7,
-      infos: 'Un câble (5m) est requis pour se brancher aux switchs des tables',
+      infos: 'Un câble ethernet de 5m est requis pour se brancher aux switchs des tables',
     }, {
       id: 4,
       name: 'Câble ethernet (7m)',
       key: 'ethernet7',
       price: 10,
-      infos: 'Un câble (7m) plus long pour les joueurs situés en bout de table',
+      infos: 'Un câble ethernet de 7m plus long pour les joueurs situés en bout de table',
     }, {
       id: 5,
       name: 'Multiprise 3 trous',
       key: 'multiSocket',
       price: 5,
-      infos: 'Une mutltiprise 3 trous pour brancher tout le setup',
+      infos: 'Une multiprise 3 trous pour brancher tout ton setup',
     }, {
       id: 6,
       name: 'T-shirt UA 2019 (Homme)',
@@ -48,7 +48,7 @@ module.exports = {
       name: 'Ticket tombola',
       key: 'tombola',
       price: 1,
-      infos: 'Un ticket de tombola à 1€ l\'unité',
+      infos: 'Pour participer à la tombola qui aura lieu pendant le weekend',
     }, {
       id: 9,
       name: 'Pin\'s',
