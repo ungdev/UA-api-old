@@ -51,24 +51,13 @@ module.exports = (app) => {
         },
       });
 
-      if (!user) {
-        log.warn(`user ${username} couldn't be found`);
+      const validCredentials = user && await bcrypt.compare(password, user.password);
+      if (!validCredentials) {
+        log.warn(`invalid credentials for user ${username}`);
 
         return res
           .status(400)
-          .json({ error: 'USERNAME_NOT_FOUND' })
-          .end();
-      }
-
-      // Check for password
-      const passwordMatches = await bcrypt.compare(password, user.password);
-
-      if (!passwordMatches) {
-        log.warn(`user ${username} password didn't match`);
-
-        return res
-          .status(400)
-          .json({ error: 'INVALID_PASSWORD' })
+          .json({ error: 'INVALID_CREDENTIALS' })
           .end();
       }
 
