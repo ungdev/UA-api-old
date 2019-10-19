@@ -1,9 +1,4 @@
-const etupay = require('@ung/node-etupay')({
-  id: process.env.ARENA_ETUPAY_ID,
-  url: process.env.ARENA_ETUPAY_URL,
-  key: process.env.ARENA_ETUPAY_KEY,
-});
-
+const etupay = require('../../utils/etupay');
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const { isTournamentFull } = require('../../utils/isFull');
@@ -16,7 +11,6 @@ const { Basket } = etupay;
 
 module.exports = (app) => {
   app.post('/users/:userId/carts/:id/pay', [isAuth()]);
-
 
   app.post('/users/:userId/carts/:id/pay', async (req, res) => {
     const { Cart, CartItem, Item, Attribute, Team, User, Tournament } = req.app.locals.models;
@@ -84,18 +78,17 @@ module.exports = (app) => {
       if (cart.cartItems.some((cartItem) => cartItem.item.id === ITEM_PLAYER_ID)) {
         await Promise.all(cart.cartItems.map(async (cartItem) => {
           if (cartItem.item.id === ITEM_PLAYER_ID) {
-            const tournament = await Tournament.findOne({
-              include: [{
-                model: Team,
-                include: [{
-                  model: User,
-                  where: {
-                    id: cartItem.forUserId,
-                  },
-                }],
-              }],
+            const team = await Team.findByPk(req.user.teamId, {
+              include: [
+                { model: Tournament,
+                  include: [
+                    { model: Team,
+                      include: [User],
+                    }],
+                },
+              ],
             });
-            const isFull = await isTournamentFull(tournament, req);
+            const isFull = await isTournamentFull(team.tournament, req);
             if (isFull) {
               return res
                 .status(400)

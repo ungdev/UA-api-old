@@ -6,12 +6,13 @@ module.exports = () => async (req, res, next) => {
       id: req.params.id,
     },
   });
+
   if (!team) {
     return res
       .status(401)
       .json({ error: 'NO_CAPTAIN' })
       .end();
   }
-  req.team = team;
+
   return next();
 };
