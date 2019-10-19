@@ -37,12 +37,14 @@ module.exports = {
       key: 'maleTshirt',
       price: 13,
       infos: 'Un t-shirt souvenir de cette LAN de folie',
+      image: 'tshirt.png',
     }, {
       id: 7,
       name: 'T-shirt UA 2019 (Femme)',
       key: 'femaleTshirt',
       price: 13,
       infos: 'Un t-shirt souvenir de cette LAN de folie',
+      image: 'tshirt.png',
     }, {
       id: 8,
       name: 'Ticket tombola',
@@ -55,6 +57,7 @@ module.exports = {
       key: 'pins',
       price: 1,
       infos: 'Un pin\'s souvenir de cette LAN de folie',
+      image: 'pins.png',
     }];
 
     items = items.map((item) => ({
