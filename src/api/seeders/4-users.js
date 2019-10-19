@@ -10,7 +10,7 @@ module.exports = {
         firstname: 'kevin',
         lastname: 'keke',
         email: 'kevin@msn.fr',
-        password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
+        teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e38',
         type: 'none',
       }, {
         id: '48fe6584-a118-4f85-8b6a-a2f26a1538b2',
@@ -18,7 +18,6 @@ module.exports = {
         firstname: 'Admi',
         lastname: 'Nistrateur',
         email: 'admin@local.dev',
-        password: '$2y$10$WWfywWNGZHfDw2N2Bxqy..P0lj.p39tsLR6IKFckW7kU1cCXN00Oa', // password: admin
         permissions: 'admin',
         type: 'none',
       },
@@ -30,7 +29,6 @@ module.exports = {
         firstname: 'David',
         lastname: 'Guetta',
         email: 'user1@local.dev',
-        password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
         type: 'player',
       }, {
@@ -39,7 +37,6 @@ module.exports = {
         firstname: 'Pierre',
         lastname: 'Bonjour',
         email: 'user2@local.dev',
-        password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
         type: 'player',
       }, {
@@ -48,7 +45,6 @@ module.exports = {
         firstname: 'John',
         lastname: 'Doe',
         email: 'user3@local.dev',
-        password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
         type: 'player',
       }, {
@@ -57,7 +53,6 @@ module.exports = {
         firstname: 'Foo',
         lastname: 'Bar',
         email: 'user4@local.dev',
-        password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
         type: 'player',
       }, {
@@ -66,14 +61,37 @@ module.exports = {
         firstname: 'Blabla',
         lastname: 'Au revoir',
         email: 'user5@local.dev',
-        password: '$2y$10$zxL.B7cSpGVa6mfdLp0Y0OxfU/lQaFlD9pK8CoDnlPBjGzbd25qJK', // password: user
         teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e37',
+        type: 'player',
+      }, {
+        id: '48fe6584-a118-4f85-8b6a-f2f26a153806',
+        username: 'visitor',
+        firstname: 'Michel',
+        lastname: 'Visitor',
+        email: 'visitor@local.dev',
+        type: 'visitor',
+      }, {
+        id: '48fe6584-a118-4f85-8b6a-f2f26a153807',
+        username: 'user6',
+        firstname: 'Blipblop',
+        lastname: 'Boop',
+        email: 'user6@utt.fr',
+        teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e38',
+        type: 'player',
+      }, {
+        id: '48fe6584-a118-4f85-8b6a-f2f26a153808',
+        username: 'user7',
+        firstname: 'Jacques',
+        lastname: 'Cheminade',
+        email: 'user7@local.dev',
+        teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e38',
         type: 'player',
       },
     ];
 
     users = users.map((user) => ({
       ...user,
+      password: '$2y$10$ksHr/EzBi6cG2khzcqoxdeJ49tviChmZGDPH0DNQViexokGDpuIU6', // password: uttarena
       barcode: randomBarcode(),
       createdAt: new Date(),
       updatedAt: new Date(),
