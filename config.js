@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const credentials = {
   dialect: process.env.ARENA_DB_TYPE,
   host: process.env.ARENA_DB_HOST,
@@ -10,4 +12,7 @@ const credentials = {
   },
 };
 
-module.exports = { credentials };
+module.exports = {
+  development: credentials,
+  production: credentials,
+};

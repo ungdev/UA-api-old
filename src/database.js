@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const models = require('./api/models');
 
 const log = require('./api/utils/log')(module);
-const { credentials } = require('../config');
+const { production: credentials } = require('../config');
 
 module.exports = async function database() {
   const connectionURI = `${credentials.dialect}://${credentials.username}:${credentials.password}@${credentials.host}:${credentials.port}/${credentials.database}`;

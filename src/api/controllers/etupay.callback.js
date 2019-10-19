@@ -1,9 +1,5 @@
 const { fn } = require('sequelize');
-const etupay = require('@ung/node-etupay')({
-  id: process.env.ARENA_ETUPAY_ID,
-  url: process.env.ARENA_ETUPAY_URL,
-  key: process.env.ARENA_ETUPAY_KEY,
-});
+const etupay = require('../utils/etupay');
 const generateTicket = require('../utils/generateTicket');
 const errorHandler = require('../utils/errorHandler');
 const mail = require('../mail');
