@@ -18,7 +18,7 @@ module.exports = (app) => {
     const { Item, Attribute } = req.app.locals.models;
     try {
       const items = await Item.findAll({
-        attributes: ['id', 'name', 'key', 'price', 'infos'],
+        attributes: ['id', 'name', 'key', 'price', 'infos', 'image'],
         include: {
           model: Attribute,
           attributes: ['label', 'value', 'id'],

@@ -56,7 +56,7 @@ module.exports = {
       name: 'Pin\'s',
       key: 'pins',
       price: 1,
-      infos: 'Un pin\'s souvenir de cette LAN de folie',
+      infos: 'Un pin\'s doré souvenir de cette LAN de folie',
       image: 'pins.png',
     }];
 
