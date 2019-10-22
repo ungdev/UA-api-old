@@ -1,11 +1,9 @@
 const etupay = require('../../utils/etupay');
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
-const { isTournamentFull } = require('../../utils/isFull');
 const removeAccent = require('../../utils/removeAccents');
+const deleteExpireCarts = require('../../utils/deleteExpireCarts');
 
-const ITEM_PLAYER_ID = 1;
-const ITEM_VISITOR_ID = 2;
 const euro = 100;
 const { Basket } = etupay;
 
@@ -13,7 +11,9 @@ module.exports = (app) => {
   app.post('/users/:userId/carts/:id/pay', [isAuth()]);
 
   app.post('/users/:userId/carts/:id/pay', async (req, res) => {
-    const { Cart, CartItem, Item, Attribute, Team, User, Tournament } = req.app.locals.models;
+    const { Cart, CartItem, Item, Attribute } = req.app.locals.models;
+
+    deleteExpireCarts(Cart);
 
     try {
       const cart = await Cart.findOne({
@@ -41,63 +41,6 @@ module.exports = (app) => {
           .status(404)
           .json({ error: 'NOT_FOUND' })
           .end();
-      }
-
-      if (cart.cartItems.some((cartItem) => cartItem.item.id === ITEM_VISITOR_ID)) {
-        const visitorItem = await Item.findByPk(ITEM_VISITOR_ID);
-
-        const maxVisitors = visitorItem.stock;
-
-        const actualVisitors = await CartItem.sum('quantity', {
-          where: {
-            itemId: ITEM_VISITOR_ID,
-          },
-          include: [{
-            model: Cart,
-            attributes: [],
-            where: {
-              transactionState: 'paid',
-            },
-          }],
-        });
-
-        const visitorsOrdered = cart.cartItems.reduce((previousValue, cartItem) => {
-          if (cartItem.item.id !== ITEM_VISITOR_ID) {
-            return previousValue;
-          }
-          return previousValue + cartItem.quantity;
-        }, 0);
-
-        if (maxVisitors - actualVisitors - visitorsOrdered < 0) {
-          return res
-            .status(400)
-            .json({ error: 'VISITOR_FULL' })
-            .end();
-        }
-      }
-      if (cart.cartItems.some((cartItem) => cartItem.item.id === ITEM_PLAYER_ID)) {
-        await Promise.all(cart.cartItems.map(async (cartItem) => {
-          if (cartItem.item.id === ITEM_PLAYER_ID) {
-            const team = await Team.findByPk(req.user.teamId, {
-              include: [
-                { model: Tournament,
-                  include: [
-                    { model: Team,
-                      include: [User],
-                    }],
-                },
-              ],
-            });
-            const isFull = await isTournamentFull(team.tournament, req);
-            if (isFull) {
-              return res
-                .status(400)
-                .json({ error: 'TOURNAMENT_FULL' })
-                .end();
-            }
-          }
-          return null;
-        }));
       }
 
       const data = JSON.stringify({ cartId: cart.id });

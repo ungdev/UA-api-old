@@ -1,6 +1,6 @@
 module.exports = () => async (req, res, next) => {
   const { Team } = req.app.locals.models;
-  const team = await Team.count({
+  const team = await Team.findOne({
     where: {
       captainId: req.user.id,
       id: req.params.id,
