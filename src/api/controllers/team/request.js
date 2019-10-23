@@ -1,4 +1,5 @@
 const isAuth = require('../../middlewares/isAuth');
+const { isTournamentFull } = require('../../utils/isFull');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
@@ -30,9 +31,21 @@ module.exports = (app) => {
           attributes: ['id'],
         }, {
           model: Tournament,
-          attributes: ['playersPerTeam'],
+          include: {
+            model: Team,
+            include: {
+              model: User,
+            },
+          },
         }],
       });
+
+      if (await isTournamentFull(team.tournament, req)) {
+        return res
+          .status(400)
+          .json({ error: 'TOURNAMENT_FULL' })
+          .end();
+      }
 
       if (team.tournament.playersPerTeam === team.users.length) {
         return res
