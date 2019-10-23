@@ -1,4 +1,5 @@
 const { check } = require('express-validator');
+const { isTournamentFull } = require('../../utils/isFull');
 const validateBody = require('../../middlewares/validateBody');
 const isAuth = require('../../middlewares/isAuth');
 const isCaptain = require('../../middlewares/isCaptain');
@@ -39,9 +40,22 @@ module.exports = (app) => {
           attributes: ['id'],
         }, {
           model: Tournament,
-          attributes: ['playersPerTeam'],
+          include: {
+            model: Team,
+            include: {
+              model: User,
+            },
+          },
         }],
       });
+
+      if (await isTournamentFull(team.tournament, req)) {
+        return res
+          .status(400)
+          .json({ error: 'TOURNAMENT_FULL' })
+          .end();
+      }
+
       const user = await User.findByPk(req.body.user, {
         where: {
           askingTeamId: team.id,
