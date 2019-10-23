@@ -22,7 +22,7 @@ const { isTournamentFull } = require('../../utils/isFull');
 const ITEM_PLAYER_ID = 1;
 const ITEM_VISITOR_ID = 2;
 
-module.exports = (app) => {
+module.exports = function createCartItem(app) {
   app.post('/carts/:cartId/cartItems', [isAuth()]);
 
   app.post('/carts/:cartId/cartItems', [
