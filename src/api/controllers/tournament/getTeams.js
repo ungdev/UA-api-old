@@ -1,6 +1,6 @@
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
-const isTeamPaid = require('../../utils/isTeamPaid');
+const hasTeamPaid = require('../../utils/hasTeamPaid');
 
 
 /**
@@ -44,7 +44,7 @@ module.exports = (app) => {
           tournament: undefined,
         };
         if (req.query.paidOnly === 'true') {
-          const isPaid = await isTeamPaid(req, team, null, team.tournament.playersPerTeam);
+          const isPaid = await hasTeamPaid(req, team, null, team.tournament.playersPerTeam);
           return (isPaid ? teamFormat : 'empty');
         }
         if (req.query.notFull === 'true') {

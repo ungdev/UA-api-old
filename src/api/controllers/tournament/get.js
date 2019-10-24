@@ -1,6 +1,6 @@
 const errorHandler = require('../../utils/errorHandler');
 const isAuth = require('../../middlewares/isAuth');
-const isTeamPaid = require('../../utils/isTeamPaid');
+const hasTeamPaid = require('../../utils/hasTeamPaid');
 
 /**
  * GET /tournaments/:id
@@ -33,7 +33,7 @@ module.exports = (app) => {
       let teams = await Promise.all(tournament.teams.map(async (team) => {
         let isPaid = true;
         if (req.query.paidOnly === 'true') {
-          isPaid = await isTeamPaid(req, team, null, tournament.playersPerTeam);
+          isPaid = await hasTeamPaid(req, team, null, tournament.playersPerTeam);
         }
         return (isPaid ? {
           ...team.toJSON(),

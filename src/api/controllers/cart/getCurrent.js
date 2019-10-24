@@ -1,5 +1,6 @@
 const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
+const deleteExpireCarts = require('../../utils/deleteExpireCarts');
 
 /**
  * GET /users/:userId/carts/current
@@ -16,6 +17,8 @@ module.exports = (app) => {
 
   app.get('/users/:userId/carts/current', async (req, res) => {
     const { Cart, Item, CartItem, Attribute, User } = req.app.locals.models;
+
+    deleteExpireCarts(Cart);
 
     try {
       if (req.params.userId !== req.user.id) {
