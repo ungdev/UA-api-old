@@ -12,22 +12,22 @@ const { SuccessfulPayment, EtupayAvailable } = require('./etupay.callback');
 const cartId = 'cartId';
 const itemId = 'itemId';
 
-const Cart = models => {
+const Cart = (models) => {
   const router = Express.Router();
   router.post('/', CreateCart(models.Cart));
   router.delete(
     `/:${cartId}/cartItems/:${itemId}`,
-    DeleteItemFromCart(cartId, itemId, models.CartItem)
+    DeleteItemFromCart(cartId, itemId, models.CartItem),
   );
   router.post(
     `/:${cartId}/add`,
     [CheckAddItem],
-    AddItemToCart(cartId, models.CartItem, models.User, models.Cart)
+    AddItemToCart(cartId, models.CartItem, models.User, models.Cart),
   );
   router.put(
     `/:${cartId}/cartItems/:${itemId}`,
     CheckEdit,
-    Edit(cartId, itemId, models.CartItem, models.User)
+    Edit(cartId, itemId, models.CartItem, models.User),
   );
 
   router.get(
@@ -37,8 +37,8 @@ const Cart = models => {
       itemId,
       models.CartItem,
       models.Item,
-      models.Attribute
-    )
+      models.Attribute,
+    ),
   );
   router.get('/return', etupay.middleware, SuccessfulPayment());
   router.post('/callback', EtupayAvailable());

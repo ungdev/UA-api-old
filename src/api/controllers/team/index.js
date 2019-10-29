@@ -27,58 +27,58 @@ const userId = 'userId';
  *
  * @param {*} models
  */
-const Team = models => {
-    const router = Express.Router();
-    router.post(
-        '/',
-        [isNotInTeam(), CheckCreate],
-        Create(models.Tournament, models.Team, models.User)
-    );
-    router.delete(
-        `/:${teamId}`,
-        [isCaptain(teamId), isType('player')],
-        Delete(teamId, models.Team)
-    );
-    router.post(
-        `/:${teamId}`,
-        [isCaptain(teamId), isType('player'), CheckAddUser],
-        AddUser(teamId, models.User, models.Team, models.Tournament)
-    );
-    router.delete(
-        `/:${teamId}/users/:${userId}`,
-        [isType('player')],
-        DeleteUserFromTeam(teamId, userId, models.User, models.Team)
-    );
+const Team = (models) => {
+  const router = Express.Router();
+  router.post(
+    '/',
+    [isNotInTeam(), CheckCreate],
+    Create(models.Tournament, models.Team, models.User),
+  );
+  router.delete(
+    `/:${teamId}`,
+    [isCaptain(teamId), isType('player')],
+    Delete(teamId, models.Team),
+  );
+  router.post(
+    `/:${teamId}`,
+    [isCaptain(teamId), isType('player'), CheckAddUser],
+    AddUser(teamId, models.User, models.Team, models.Tournament),
+  );
+  router.delete(
+    `/:${teamId}/users/:${userId}`,
+    [isType('player')],
+    DeleteUserFromTeam(teamId, userId, models.User, models.Team),
+  );
 
-    router.put(
-        `/:${teamId}`,
-        [isType('player'), CheckEdit],
-        Edit(teamId, models.Team)
-    );
+  router.put(
+    `/:${teamId}`,
+    [isType('player'), CheckEdit],
+    Edit(teamId, models.Team),
+  );
 
-    router.get(
-        `/:${teamId}`,
-        [isSelfTeam(teamId)],
-        Get(
-            teamId,
-            models.Team,
-            models.User,
-            models.Tournament,
-            models.Cart,
-            models.CartItem
-        )
-    );
+  router.get(
+    `/:${teamId}`,
+    [isSelfTeam(teamId)],
+    Get(
+      teamId,
+      models.Team,
+      models.User,
+      models.Tournament,
+      models.Cart,
+      models.CartItem,
+    ),
+  );
 
-    router.get('/', List(models.Team, models.Tournament, models.User));
-    router.post(
-        `/:${teamId}/request`,
-        Request(teamId, models.Team, models.User, models.Tournament)
-    );
-    router.delete(
-        `/:${teamId}/request`,
-        [CheckRefuseRequest],
-        RefuseRequest(teamId, models.User)
-    );
-    return router;
+  router.get('/', List(models.Team, models.Tournament, models.User));
+  router.post(
+    `/:${teamId}/request`,
+    Request(teamId, models.Team, models.User, models.Tournament),
+  );
+  router.delete(
+    `/:${teamId}/request`,
+    [CheckRefuseRequest],
+    RefuseRequest(teamId, models.User),
+  );
+  return router;
 };
 module.exports = Team;

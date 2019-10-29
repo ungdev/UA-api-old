@@ -18,60 +18,59 @@ const CheckValidate = [check('slug').isUUID(), validateBody()];
  *    Token: String
  * }
  */
-const ValidateAccount = (userModel, teamModel) => {
-  return async (req, res) => {
-    const { slug } = req.body;
+const ValidateAccount = (userModel, teamModel) => async (req, res) => {
+  const { slug } = req.body;
 
-    try {
-      const user = await userModel.findOne({
-        where: { registerToken: slug },
-        include: {
-          model: teamModel,
-          attributes: ['id', 'name'],
-        },
-      });
+  try {
+    const user = await userModel.findOne({
+      where: { registerToken: slug },
+      include: {
+        model: teamModel,
+        attributes: ['id', 'name'],
+      },
+    });
 
-      if (!user) {
-        log.warn(`can not validate ${slug}, user not found`);
-
-        return res
-          .status(400)
-          .json({ error: 'INVALID_TOKEN' })
-          .end();
-      }
-
-      await user.update({
-        registerToken: null,
-      });
-
-      log.info(`user ${user.username} was validated`);
-
-      const token = jwt.sign({ id: user.id }, process.env.ARENA_API_SECRET, {
-        expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
-      });
-
-      log.info(`user ${user.username} logged`);
+    if (!user) {
+      log.warn(`can not validate ${slug}, user not found`);
 
       return res
-        .status(200)
-        .json({
-          user: {
-            id: user.id,
-            username: user.username,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            email: user.email,
-            team: user.team,
-            type: user.type,
-            isPaid: false,
-          },
-          token,
-        })
+        .status(400)
+        .json({ error: 'INVALID_TOKEN' })
         .end();
-    } catch (err) {
-      return errorHandler(err, res);
     }
-  };
+
+    await user.update({
+      registerToken: null,
+    });
+
+    log.info(`user ${user.username} was validated`);
+
+    const token = jwt.sign({ id: user.id }, process.env.ARENA_API_SECRET, {
+      expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
+    });
+
+    log.info(`user ${user.username} logged`);
+
+    return res
+      .status(200)
+      .json({
+        user: {
+          id: user.id,
+          username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          team: user.team,
+          type: user.type,
+          isPaid: false,
+        },
+        token,
+      })
+      .end();
+  }
+  catch (err) {
+    return errorHandler(err, res);
+  }
 };
 
 module.exports = { ValidateAccount, CheckValidate };

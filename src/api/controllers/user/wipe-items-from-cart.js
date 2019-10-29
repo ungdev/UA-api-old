@@ -17,44 +17,43 @@ const errorHandler = require('../../utils/errorHandler');
  * @param {object} cartModel the cartItem model to query
  * @param {object} cartItemModel the cartModel model to query
  */
-const WipeItemsFromCart = (userIdString, cartItemModel, cartModel) => {
-  return async (req, res) => {
-    const userId = req.params[userIdString];
-    try {
-      if (userId !== req.user.id) {
-        return res
-          .status(403)
-          .json({ error: 'UNAUTHORIZED' })
-          .end();
-      }
-
-      let cartItems = await cartItemModel.findAll({
-        attributes: ['id'],
-        include: {
-          model: cartModel,
-          attributes: [],
-          where: {
-            userId: userId,
-            transactionState: 'draft',
-          },
-        },
-      });
-
-      cartItems = cartItems.map(cartItem => cartItem.id);
-
-      await cartItemModel.destroy({
-        where: {
-          id: {
-            [Op.in]: cartItems,
-          },
-        },
-      });
-
-      return res.status(204).end();
-    } catch (error) {
-      return errorHandler(error, res);
+const WipeItemsFromCart = (userIdString, cartItemModel, cartModel) => async (req, res) => {
+  const userId = req.params[userIdString];
+  try {
+    if (userId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: 'UNAUTHORIZED' })
+        .end();
     }
-  };
+
+    let cartItems = await cartItemModel.findAll({
+      attributes: ['id'],
+      include: {
+        model: cartModel,
+        attributes: [],
+        where: {
+          userId,
+          transactionState: 'draft',
+        },
+      },
+    });
+
+    cartItems = cartItems.map((cartItem) => cartItem.id);
+
+    await cartItemModel.destroy({
+      where: {
+        id: {
+          [Op.in]: cartItems,
+        },
+      },
+    });
+
+    return res.status(204).end();
+  }
+  catch (error) {
+    return errorHandler(error, res);
+  }
 };
 
 module.exports = WipeItemsFromCart;

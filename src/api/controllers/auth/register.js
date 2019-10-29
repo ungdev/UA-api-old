@@ -10,24 +10,24 @@ const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
 const CheckRegister = [
-    check('username')
-        .trim()
-        .isLength({ min: 3, max: 100 }),
-    check('lastname')
-        .trim()
-        .isLength({ min: 2, max: 100 }),
-    check('firstname')
-        .trim()
-        .isLength({ min: 2, max: 100 }),
-    check('lastname')
-        .trim()
-        .isLength({ min: 2, max: 100 }),
-    check('username')
-        .trim()
-        .isLength({ min: 3, max: 100 }),
-    check('email').isEmail(),
-    check('password').isLength({ min: 6 }),
-    validateBody(),
+  check('username')
+    .trim()
+    .isLength({ min: 3, max: 100 }),
+  check('lastname')
+    .trim()
+    .isLength({ min: 2, max: 100 }),
+  check('firstname')
+    .trim()
+    .isLength({ min: 2, max: 100 }),
+  check('lastname')
+    .trim()
+    .isLength({ min: 2, max: 100 }),
+  check('username')
+    .trim()
+    .isLength({ min: 3, max: 100 }),
+  check('email').isEmail(),
+  check('password').isLength({ min: 6 }),
+  validateBody(),
 ];
 
 /**
@@ -45,30 +45,29 @@ const CheckRegister = [
  *
  * }
  */
-const Register = userModel => {
-    return async (req, res) => {
-        try {
-            req.body.barcode = randomBarcode();
-            req.body.password = await hash(
-                req.body.password,
-                parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10)
-            );
+const Register = (userModel) => async (req, res) => {
+  try {
+    req.body.barcode = randomBarcode();
+    req.body.password = await hash(
+      req.body.password,
+      parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
+    );
 
-            req.body.registerToken = uuid();
-            const user = await userModel.create(req.body);
+    req.body.registerToken = uuid();
+    const user = await userModel.create(req.body);
 
-            await mail.sendMail(mail.register, user.email, {
-                username: user.username,
-                button_link: `${process.env.ARENA_WEBSITE}/valid/${user.registerToken}`,
-            });
+    await mail.sendMail(mail.register, user.email, {
+      username: user.username,
+      button_link: `${process.env.ARENA_WEBSITE}/valid/${user.registerToken}`,
+    });
 
-            log.info(`user ${req.body.name} created`);
+    log.info(`user ${req.body.name} created`);
 
-            return res.status(204).end();
-        } catch (err) {
-            return errorHandler(err, res);
-        }
-    };
+    return res.status(204).end();
+  }
+  catch (err) {
+    return errorHandler(err, res);
+  }
 };
 
 module.exports = { Register, CheckRegister };

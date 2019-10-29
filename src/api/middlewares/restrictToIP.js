@@ -3,14 +3,15 @@
  * @param {string|array} arrayOrSingleIp either a string or an array of string containing the ip
  * @return {array} an array of string containing the ips
  */
-const getIpArray = arrayOrSingleIp => {
-    let arrayOfIp = [];
-    if (Array.isArray(arrayOrSingleIp)) {
-        arrayOfIp = arrayOrSingleIp;
-    } else {
-        arrayOfIp.push(arrayOrSingleIp);
-    }
-    return arrayOfIp;
+const getIpArray = (arrayOrSingleIp) => {
+  let arrayOfIp = [];
+  if (Array.isArray(arrayOrSingleIp)) {
+    arrayOfIp = arrayOrSingleIp;
+  }
+  else {
+    arrayOfIp.push(arrayOrSingleIp);
+  }
+  return arrayOfIp;
 };
 
 /**
@@ -20,8 +21,8 @@ const getIpArray = arrayOrSingleIp => {
  * @return bool
  */
 const isIpOkay = (ipToTest, listOfIp) => {
-    const recognizedIp = listOfIp.filter(ip => ip === ipToTest);
-    return recognizedIp.length > 0;
+  const recognizedIp = listOfIp.filter((ip) => ip === ipToTest);
+  return recognizedIp.length > 0;
 };
 
 /**
@@ -30,15 +31,14 @@ const isIpOkay = (ipToTest, listOfIp) => {
  *
  * @param {string|array} ipAddress ip or list of Ip to whitelist
  */
-const RestrictToIP = authorizedIpAddress => {
-    return async (request, response, next) => {
-        const ipArray = getIpArray(authorizedIpAddress);
-        if (isIpOkay(request.ip, ipArray)) {
-            next();
-        } else {
-            response.json({ message: 'FORBIDDEN_IP' });
-        }
-    };
+const RestrictToIP = (authorizedIpAddress) => async (request, response, next) => {
+  const ipArray = getIpArray(authorizedIpAddress);
+  if (isIpOkay(request.ip, ipArray)) {
+    next();
+  }
+  else {
+    response.json({ message: 'FORBIDDEN_IP' });
+  }
 };
 
 module.exports = RestrictToIP;

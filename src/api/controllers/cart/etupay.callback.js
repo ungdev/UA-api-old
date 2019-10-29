@@ -1,5 +1,4 @@
 const { fn } = require('sequelize');
-const etupay = require('../../utils/etupay');
 const generateTicket = require('../../utils/generateTicket');
 const errorHandler = require('../../utils/errorHandler');
 const mail = require('../../mail');
@@ -29,18 +28,18 @@ const SuccessfulPayment = (
   cartItemModel,
   itemModel,
   attributeModel,
-  userModel
+  userModel,
 ) => async (req, res) => {
   try {
     if (!req.query.payload) {
       return res.redirect(
-        `${process.env.ARENA_ETUPAY_ERRORURL}&error=NO_PAYLOAD`
+        `${process.env.ARENA_ETUPAY_ERRORURL}&error=NO_PAYLOAD`,
       );
     }
 
     // Récupère le cartId depuis le payload envoyé à /carts/:id/pay
     const { cartId } = JSON.parse(
-      Buffer.from(req.etupay.serviceData, 'base64').toString()
+      Buffer.from(req.etupay.serviceData, 'base64').toString(),
     );
 
     let cart = await cartModel.findOne({
@@ -73,7 +72,7 @@ const SuccessfulPayment = (
 
     if (!cart) {
       return res.redirect(
-        `${process.env.ARENA_ETUPAY_ERRORURL}&error=CART_NOT_FOUND`
+        `${process.env.ARENA_ETUPAY_ERRORURL}&error=CART_NOT_FOUND`,
       );
     }
 
@@ -83,7 +82,7 @@ const SuccessfulPayment = (
     if (cart.transactionState !== 'paid') {
       await cart.save();
       return res.redirect(
-        `${process.env.ARENA_ETUPAY_ERRORURL}&error=TRANSACTION_ERROR`
+        `${process.env.ARENA_ETUPAY_ERRORURL}&error=TRANSACTION_ERROR`,
       );
     }
 
@@ -96,7 +95,7 @@ const SuccessfulPayment = (
     cart = cart.toJSON();
 
     cart.cartItems = await Promise.all(
-      cart.cartItems.map(async cartItem => {
+      cart.cartItems.map(async (cartItem) => {
         const forUser = await userModel.findByPk(cartItem.forUserId, {
           attributes: [
             'id',
@@ -115,22 +114,22 @@ const SuccessfulPayment = (
 
         delete newCartItem.forUserId;
         return newCartItem;
-      })
+      }),
     );
 
     let pdfTickets = await Promise.all(
-      cart.cartItems.map(async cartItem => {
+      cart.cartItems.map(async (cartItem) => {
         if (cartItem.item.key === 'player' || cartItem.item.key === 'visitor') {
           // todo: moche à cause de sequelize, peut etre moyen de raccourcir en une requête
 
           return generateTicket(cartItem.forUser, cartItem.item.name);
         }
         return null;
-      })
+      }),
     );
 
     pdfTickets = pdfTickets
-      .filter(ticket => ticket !== null)
+      .filter((ticket) => ticket !== null)
       .map((ticket, index) => ({
         filename: `Ticket_UA_${index + 1}.pdf`,
         content: ticket,
@@ -138,7 +137,7 @@ const SuccessfulPayment = (
 
     const users = cart.cartItems.reduce((previousValue, cartItem) => {
       const indexUser = previousValue.findIndex(
-        user => user.username === cartItem.forUser.username
+        (user) => user.username === cartItem.forUser.username,
       );
 
       // Si il trouve
@@ -149,7 +148,8 @@ const SuccessfulPayment = (
           price: cartItem.item.price * cartItem.quantity,
           attribute: cartItem.attribute ? cartItem.attribute.label : '',
         });
-      } else {
+      }
+      else {
         previousValue.push({
           username: cartItem.forUser.username,
           items: [
@@ -173,11 +173,12 @@ const SuccessfulPayment = (
         users,
         button_link: `${process.env.ARENA_WEBSITE}/dashboard/purchases`,
       },
-      pdfTickets
+      pdfTickets,
     );
     log.debug(`Mail sent to ${cart.user.email}`);
     return res.end();
-  } catch (err) {
+  }
+  catch (err) {
     return errorHandler(err, res);
   }
 };

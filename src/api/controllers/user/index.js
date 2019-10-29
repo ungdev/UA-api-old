@@ -12,16 +12,16 @@ const WipeItemsFromCart = require('./wipe-items-from-cart.js');
 const userId = 'userId';
 const cartId = 'cartId';
 
-const User = models => {
+const User = (models) => {
   const router = Express.Router();
   router.put(
     `/:${userId}`,
     CheckEdit,
-    Edit(userId, models.Cart, models.CartItem)
+    Edit(userId, models.Cart, models.CartItem),
   );
   router.get(
     `/:${userId}`,
-    Get(userId, models.User, models.Team, models.Cart, models.CartItem)
+    Get(userId, models.User, models.Team, models.Cart, models.CartItem),
   );
   router.get(
     '/',
@@ -31,12 +31,12 @@ const User = models => {
       models.Team,
       models.Tournament,
       models.Cart,
-      models.CartItem
-    )
+      models.CartItem,
+    ),
   );
   router.get(
     '/:userId/ticket',
-    GetTicket(models.User, models.CartItem, models.Item, models.Cart)
+    GetTicket(models.User, models.CartItem, models.Item, models.Cart),
   );
   router.get(
     `/:${userId}/carts/current`,
@@ -46,8 +46,8 @@ const User = models => {
       models.Item,
       models.CartItem,
       models.Attribute,
-      models.User
-    )
+      models.User,
+    ),
   );
   router.get(
     `/:${userId}/carts`,
@@ -56,8 +56,8 @@ const User = models => {
       models.Cart,
       models.Item,
       models.CartItem,
-      models.Attribute
-    )
+      models.Attribute,
+    ),
   );
   router.post(
     `/:${userId}/carts/:${cartId}/pay`,
@@ -70,12 +70,12 @@ const User = models => {
       models.Item,
       models.Cart,
       models.CartItem,
-      models.Attribute
-    )
+      models.Attribute,
+    ),
   );
   router.delete(
     `/:${userId}/carts/current/items`,
-    WipeItemsFromCart(userId, models.CartItem, models.Cart)
+    WipeItemsFromCart(userId, models.CartItem, models.Cart),
   );
   return router;
 };

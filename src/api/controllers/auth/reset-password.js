@@ -1,18 +1,17 @@
 const uuid = require('uuid');
+const { check } = require('express-validator');
 
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 const { sendMail, reset } = require('../../mail');
-//const sendMail = require('../../mail/reset');
 
-const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 
 const CheckReset = [
-    check('email')
-        .isEmail()
-        .exists(),
-    validateBody(),
+  check('email')
+    .isEmail()
+    .exists(),
+  validateBody(),
 ];
 
 /**
@@ -35,36 +34,37 @@ const CheckReset = [
  * }
  * @param {object} userModel
  */
-const ResetPassword = userModel => async (req, res) => {
-    const { email } = req.body;
+const ResetPassword = (userModel) => async (req, res) => {
+  const { email } = req.body;
 
-    try {
-        const user = await userModel.findOne({ where: { email } });
+  try {
+    const user = await userModel.findOne({ where: { email } });
 
-        if (!user) {
-            log.warn(`can not reset ${email}, user not found`);
+    if (!user) {
+      log.warn(`can not reset ${email}, user not found`);
 
-            return res
-                .status(400)
-                .json({ error: 'INVALID_EMAIL' })
-                .end();
-        }
-
-        await user.update({
-            resetToken: uuid(),
-        });
-
-        await sendMail(reset, user.email, {
-            username: user.username,
-            link: `${process.env.ARENA_WEBSITE}}/password/change/${user.resetToken}`,
-        });
-
-        log.info(`user ${user.username} asked for mail reset`);
-
-        return res.status(204).end();
-    } catch (err) {
-        return errorHandler(err, res);
+      return res
+        .status(400)
+        .json({ error: 'INVALID_EMAIL' })
+        .end();
     }
+
+    await user.update({
+      resetToken: uuid(),
+    });
+
+    await sendMail(reset, user.email, {
+      username: user.username,
+      link: `${process.env.ARENA_WEBSITE}}/password/change/${user.resetToken}`,
+    });
+
+    log.info(`user ${user.username} asked for mail reset`);
+
+    return res.status(204).end();
+  }
+  catch (err) {
+    return errorHandler(err, res);
+  }
 };
 
 module.exports = { ResetPassword, CheckReset };

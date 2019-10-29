@@ -1,4 +1,3 @@
-const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 
 /**
@@ -16,33 +15,32 @@ const errorHandler = require('../../utils/errorHandler');
  * @param {object} cartItemModel the cart model to query
  */
 
-const DeleteItemFromCart = (cartIdString, itemIdString, cartItemModel) => {
-    return async (req, res) => {
-        const cartId = req.params[cartIdString];
-        const itemId = req.params[itemIdString];
-        try {
-            const cartItem = await cartItemModel.findOne({
-                where: {
-                    id: itemId,
-                    userId: req.user.id,
-                    cartId: cartId,
-                },
-            });
+const DeleteItemFromCart = (cartIdString, itemIdString, cartItemModel) => async (req, res) => {
+  const cartId = req.params[cartIdString];
+  const itemId = req.params[itemIdString];
+  try {
+    const cartItem = await cartItemModel.findOne({
+      where: {
+        id: itemId,
+        userId: req.user.id,
+        cartId,
+      },
+    });
 
-            if (!cartItem) {
-                return res
-                    .status(404)
-                    .json({ error: 'ITEM_NOT_FOUND' })
-                    .end();
-            }
+    if (!cartItem) {
+      return res
+        .status(404)
+        .json({ error: 'ITEM_NOT_FOUND' })
+        .end();
+    }
 
-            await cartItem.destroy();
+    await cartItem.destroy();
 
-            return res.status(204).end();
-        } catch (err) {
-            return errorHandler(err, res);
-        }
-    };
+    return res.status(204).end();
+  }
+  catch (err) {
+    return errorHandler(err, res);
+  }
 };
 
 module.exports = DeleteItemFromCart;

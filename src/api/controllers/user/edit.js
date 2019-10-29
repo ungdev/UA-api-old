@@ -40,103 +40,103 @@ const ITEM_VISITOR_ID = 2;
  * @param {object} cartModel
  * @param {object} cartItemModel
  */
-const Edit = (userIdString, cartModel, cartItemModel) => {
-  return async (req, res) => {
-    const userId = req.params[userIdString];
-    try {
-      // todo: refaire pour admins
-      if (userId !== req.user.id) {
+const Edit = (userIdString, cartModel, cartItemModel) => async (req, res) => {
+  const userId = req.params[userIdString];
+  try {
+    // todo: refaire pour admins
+    if (userId !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: 'UNAUTHORIZED' })
+        .end();
+    }
+
+    if (req.body.password && req.body.oldpassword) {
+      req.body.oldpassword = await bcrypt.hash(
+        req.body.oldpassword,
+        parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
+      );
+
+      const passwordMatches = bcrypt.compare(
+        req.body.oldpassword,
+        req.user.password,
+      );
+
+      if (!passwordMatches) {
         return res
-          .status(403)
-          .json({ error: 'UNAUTHORIZED' })
+          .status(400)
+          .json({ error: 'WRONG_PASSWORD' })
           .end();
       }
 
-      if (req.body.password && req.body.oldpassword) {
-        req.body.oldpassword = await bcrypt.hash(
-          req.body.oldpassword,
-          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10)
-        );
+      req.body.password = await bcrypt.hash(
+        req.body.password,
+        parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
+      );
+    }
 
-        const passwordMatches = bcrypt.compare(
-          req.body.oldpassword,
-          req.user.password
-        );
+    const { firstname, lastname, username, password } = req.body;
 
-        if (!passwordMatches) {
-          return res
-            .status(400)
-            .json({ error: 'WRONG_PASSWORD' })
-            .end();
-        }
+    let { type } = req.user;
 
-        req.body.password = await bcrypt.hash(
-          req.body.password,
-          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10)
-        );
-      }
-
-      const { firstname, lastname, username, password } = req.body;
-
-      let { type } = req.user;
-
-      if (req.body.type) {
-        const hasCartPaid = await cartModel.count({
-          where: {
-            transactionState: 'paid',
-          },
-          include: [
-            {
-              model: cartItemModel,
-              where: {
-                itemId:
+    if (req.body.type) {
+      const hasCartPaid = await cartModel.count({
+        where: {
+          transactionState: 'paid',
+        },
+        include: [
+          {
+            model: cartItemModel,
+            where: {
+              itemId:
                   req.user.type === 'visitor'
                     ? ITEM_VISITOR_ID
                     : ITEM_PLAYER_ID,
-                forUserId: req.user.id,
-              },
+              forUserId: req.user.id,
             },
-          ],
-        });
-        const isPaid = !!hasCartPaid;
+          },
+        ],
+      });
+      const isPaid = !!hasCartPaid;
 
-        if (!isPaid) {
-          // Allow to change type only if user has not paid
-          type = req.body.type;
-        } else {
-          return res
-            .status(400)
-            .json({ error: 'CANNOT_CHANGE' })
-            .end();
-        }
+      if (!isPaid) {
+        // Allow to change type only if user has not paid
+        type = req.body.type;
       }
+      else {
+        return res
+          .status(400)
+          .json({ error: 'CANNOT_CHANGE' })
+          .end();
+      }
+    }
 
-      const userUpdated = {
-        id: userId,
-        username,
-        firstname,
-        lastname,
-        password,
-        type,
-        email: req.user.email,
-        askingTeamId:
+    const userUpdated = {
+      id: userId,
+      username,
+      firstname,
+      lastname,
+      password,
+      type,
+      email: req.user.email,
+      askingTeamId:
           req.body.type === 'visitor' && req.user.askingTeamId
             ? null
             : req.user.askingTeamId,
-      };
+    };
 
-      await req.user.update(userUpdated);
+    await req.user.update(userUpdated);
 
-      log.info(`user ${req.body.name} updated`);
+    log.info(`user ${req.body.name} updated`);
 
-      return res
-        .status(200)
-        .json(userUpdated)
-        .end();
-    } catch (err) {
-      return errorHandler(err, res);
-    }
-  };
+    return res
+      .status(200)
+      .json(userUpdated)
+      .end();
+  }
+  catch (err) {
+    return errorHandler(err, res);
+  }
 };
 
 module.exports = { Edit, CheckEdit };
