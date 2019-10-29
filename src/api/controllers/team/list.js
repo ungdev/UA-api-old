@@ -1,8 +1,7 @@
-const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
-const hasTeamPaid = require('../../utils/hasTeamPaid');
 
 /**
+ * Get all the teams registered
  * GET /teams
  *
  * Params: {
@@ -11,50 +10,54 @@ const hasTeamPaid = require('../../utils/hasTeamPaid');
  *
  * Response:
  * [Team]
+ * @param {object} teamModel
+ * @param {object} tournamentModel
+ * @param {object} userModel
  */
-module.exports = (app) => {
-  app.get('/teams', [isAuth()]);
-
-  app.get('/teams', async (req, res) => {
-    const { Team, User, Tournament } = req.app.locals.models;
-
-    try {
-      let tournaments;
-      let teams = await Team.findAll({
-        include: [{
-          model: User,
-        }],
-        order: [
-          ['name', 'ASC'],
-        ],
-      });
-      if (req.query.paidOnly === 'true') {
-        tournaments = await Tournament.findAll({
-          attributes: ['playersPerTeam', 'id'],
-        });
-      }
-      teams = await Promise.all(teams.map(async (team) => {
-        let isPaid = true;
-        if (req.query.paidOnly === 'true') {
-          isPaid = await hasTeamPaid(req, team, tournaments);
+const List = (teamModel, tournamentModel, userModel) => {
+    return async (req, res) => {
+        try {
+            let tournaments;
+            let teams = await teamModel.findAll({
+                include: [
+                    {
+                        model: userModel,
+                    },
+                ],
+                order: [['name', 'ASC']],
+            });
+            if (req.query.paidOnly === 'true') {
+                tournaments = await tournamentModel.findAll({
+                    attributes: ['playersPerTeam', 'id'],
+                });
+            }
+            teams = await Promise.all(
+                teams.map(async team => {
+                    let isPaid = true;
+                    if (req.query.paidOnly === 'true') {
+                        isPaid = await isTeamPaid(req, team, tournaments);
+                    }
+                    return isPaid
+                        ? {
+                              ...team.toJSON(),
+                              users: team.users.map(user => ({
+                                  id: user.id,
+                                  name: user.username,
+                                  isCaptain: user.id === team.captainId,
+                              })),
+                          }
+                        : 'empty';
+                })
+            );
+            teams = teams.filter(team => team !== 'empty');
+            return res
+                .status(200)
+                .json(teams)
+                .end();
+        } catch (err) {
+            return errorHandler(err, res);
         }
-        return (isPaid ? {
-          ...team.toJSON(),
-          users: team.users.map((user) => ({
-            id: user.id,
-            name: user.username,
-            isCaptain: user.id === team.captainId,
-          })),
-        } : 'empty');
-      }));
-      teams = teams.filter((team) => team !== 'empty');
-      return res
-        .status(200)
-        .json(teams)
-        .end();
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+    };
 };
+
+module.exports = List;

@@ -1,15 +1,28 @@
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
-const isAuth = require('../../middlewares/isAuth');
 
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
+const CheckEdit = [
+  check('username').isLength({ min: 3, max: 100 }),
+  check('lastname').isLength({ min: 2, max: 100 }),
+  check('firstname').isLength({ min: 2, max: 100 }),
+  check('oldpassword')
+    .optional()
+    .isLength({ min: 6 }),
+  check('password')
+    .optional()
+    .isLength({ min: 6 }),
+  validateBody(),
+];
 const ITEM_PLAYER_ID = 1;
 const ITEM_VISITOR_ID = 2;
 
 /**
+ * Edit the user's info
+ *
  * PUT /users/:id
  * {
  *   firstname: String
@@ -18,42 +31,21 @@ const ITEM_VISITOR_ID = 2;
  *   (password): String,
  *   (oldPassword): String
  * }
- *
  * Response
  * {
  *
  * }
+ *
+ * @param {string} userIdString the name of the user id in the route parameter
+ * @param {object} cartModel
+ * @param {object} cartItemModel
  */
-module.exports = (app) => {
-  app.put('/users/:id', [isAuth()]);
-
-  app.put('/users/:id', [
-    check('firstname')
-      .trim()
-      .isLength({ min: 2, max: 100 }),
-    check('lastname')
-      .trim()
-      .isLength({ min: 2, max: 100 }),
-    check('username')
-      .trim()
-      .isLength({ min: 3, max: 100 }),
-    check('oldpassword')
-      .optional()
-      .isLength({ min: 6 }),
-    check('password')
-      .optional()
-      .isLength({ min: 6 }),
-    check('type')
-      .optional(),
-    validateBody(),
-  ]);
-
-  app.put('/users/:id', async (req, res) => {
+const Edit = (userIdString, cartModel, cartItemModel) => {
+  return async (req, res) => {
+    const userId = req.params[userIdString];
     try {
-      const { Cart, CartItem } = req.app.locals.models;
-
       // todo: refaire pour admins
-      if (req.params.id !== req.user.id) {
+      if (userId !== req.user.id) {
         return res
           .status(403)
           .json({ error: 'UNAUTHORIZED' })
@@ -63,10 +55,13 @@ module.exports = (app) => {
       if (req.body.password && req.body.oldpassword) {
         req.body.oldpassword = await bcrypt.hash(
           req.body.oldpassword,
-          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
+          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10)
         );
 
-        const passwordMatches = bcrypt.compare(req.body.oldpassword, req.user.password);
+        const passwordMatches = bcrypt.compare(
+          req.body.oldpassword,
+          req.user.password
+        );
 
         if (!passwordMatches) {
           return res
@@ -77,7 +72,7 @@ module.exports = (app) => {
 
         req.body.password = await bcrypt.hash(
           req.body.password,
-          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
+          parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10)
         );
       }
 
@@ -86,24 +81,29 @@ module.exports = (app) => {
       let { type } = req.user;
 
       if (req.body.type) {
-        const hasCartPaid = await Cart.count({
+        const hasCartPaid = await cartModel.count({
           where: {
             transactionState: 'paid',
           },
-          include: [{
-            model: CartItem,
-            where: {
-              itemId: req.user.type === 'visitor' ? ITEM_VISITOR_ID : ITEM_PLAYER_ID,
-              forUserId: req.user.id,
+          include: [
+            {
+              model: cartItemModel,
+              where: {
+                itemId:
+                  req.user.type === 'visitor'
+                    ? ITEM_VISITOR_ID
+                    : ITEM_PLAYER_ID,
+                forUserId: req.user.id,
+              },
             },
-          }],
+          ],
         });
         const isPaid = !!hasCartPaid;
 
-        if (!isPaid) { // Allow to change type only if user has not paid
+        if (!isPaid) {
+          // Allow to change type only if user has not paid
           type = req.body.type;
-        }
-        else {
+        } else {
           return res
             .status(400)
             .json({ error: 'CANNOT_CHANGE' })
@@ -112,14 +112,17 @@ module.exports = (app) => {
       }
 
       const userUpdated = {
-        id: req.params.id,
+        id: userId,
         username,
         firstname,
         lastname,
         password,
         type,
         email: req.user.email,
-        askingTeamId: req.body.type === 'visitor' && req.user.askingTeamId ? null : req.user.askingTeamId,
+        askingTeamId:
+          req.body.type === 'visitor' && req.user.askingTeamId
+            ? null
+            : req.user.askingTeamId,
       };
 
       await req.user.update(userUpdated);
@@ -130,9 +133,10 @@ module.exports = (app) => {
         .status(200)
         .json(userUpdated)
         .end();
-    }
-    catch (err) {
+    } catch (err) {
       return errorHandler(err, res);
     }
-  });
+  };
 };
+
+module.exports = { Edit, CheckEdit };

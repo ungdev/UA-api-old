@@ -1,10 +1,14 @@
 const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
-const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
 
+const CheckRefuseRequest = [check('userId').isUUID(), validateBody()];
+
 /**
+ * Refuse the join request to a team from a user.
+ * This can also be used by a user to cancel his own request
+ *
  * DELETE /teams/:id/request
  * {
  *    user: UUID
@@ -12,51 +16,46 @@ const log = require('../../utils/log')(module);
  *
  * Response:
  * {}
+ *
+ * @param {string} teamIdString the name of the team id
+ * @param {object} userModel the user model to query
  */
-module.exports = (app) => {
-  app.delete('/teams/:id/request', [isAuth()]);
+const RefuseRequest = (teamIdString, userModel) => {
+    return async (req, res) => {
+        const teamId = req.params[teamIdString];
 
-  app.delete('/teams/:id/request', [
-    check('user')
-      .isUUID(),
-    validateBody(),
-  ]);
+        try {
+            if (
+                req.user.askingTeamId === teamId &&
+                req.body.userId === req.user.id
+            ) {
+                req.user.askingTeamId = null;
+                await req.user.save();
 
-  app.delete('/teams/:id/request', async (req, res) => {
-    const { User } = req.app.locals.models;
+                log.info(
+                    `user ${req.user.username} cancel request to team ${teamId}`
+                );
 
-    try {
-      if (req.user.askingTeamId === req.params.id && req.body.user === req.user.id) {
-        req.user.askingTeamId = null;
-        await req.user.save();
+                return res.status(200).end();
+            }
 
-        log.info(`user ${req.user.username} cancel request to team ${req.params.id}`);
+            if (req.user.id !== req.user.team.captainId) {
+                return res.status(400).json({ error: 'NO_CAPTAIN' });
+            }
 
-        return res
-          .status(200)
-          .end();
-      }
-
-      if (req.user.id !== req.user.team.captainId) {
-        return res
-          .status(400)
-          .json({ error: 'NO_CAPTAIN' });
-      }
-
-      const user = await User.findOne({
-        where: {
-          askingTeamId: req.params.id,
-          id: req.body.user,
-        },
-      });
-      user.askingTeamId = null;
-      await user.save();
-      return res
-        .status(200)
-        .end();
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+            const user = await userModel.findOne({
+                where: {
+                    askingTeamId: teamId,
+                    id: req.body.userId,
+                },
+            });
+            user.askingTeamId = null;
+            await user.save();
+            return res.status(200).end();
+        } catch (err) {
+            return errorHandler(err, res);
+        }
+    };
 };
+
+module.exports = { RefuseRequest, CheckRefuseRequest };

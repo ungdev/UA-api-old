@@ -1,9 +1,14 @@
-const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 const log = require('../../utils/log')(module);
-const isType = require('../../middlewares/isType');
 
 /**
+ * Deletes a user from a team.
+ *
+ * @param {string} teamIdString name of the route parameter for teamId (*ex:* `/:<teamId>/`)
+ * @param {string} userIdString name of the route parameter for userId (*ex:* `/:<userId>/`)
+ * @param {object} userModel the user model to execute query
+ * @param {object} teamModel the team model to execute query
+ *
  * DELETE /teams/:id/users/:userId
  * {
  *
@@ -14,61 +19,66 @@ const isType = require('../../middlewares/isType');
  *
  * }
  */
-module.exports = (app) => {
-  app.delete('/teams/:id/users/:userId', [isAuth(), isType('player')]);
+const DeleteUserFromTeam = (
+    teamIdString,
+    userIdString,
+    userModel,
+    teamModel
+) => {
+    return async (req, res) => {
+        const userId = req.params[userIdString];
+        const teamId = req.params[teamIdString];
 
-  app.delete('/teams/:id/users/:userId', async (req, res) => {
-    const { User, Team } = req.app.locals.models;
+        // is captain or self-kick (= leave), else deny
+        if (req.user.team.captainId !== req.user.id && req.user.id !== userId) {
+            log.warn(
+                `user ${req.user.name} tried to kick without being captain`
+            );
 
-    // is captain or self-kick (= leave), else deny
-    if (req.user.team.captainId !== req.user.id && req.user.id !== req.params.userId) {
-      log.warn(`user ${req.user.name} tried to kick without being captain`);
+            return res
+                .status(403)
+                .json({ error: 'NO_CAPTAIN' })
+                .end();
+        }
 
-      return res
-        .status(403)
-        .json({ error: 'NO_CAPTAIN' })
-        .end();
-    }
+        try {
+            const user = await userModel.findOne({
+                where: {
+                    id: userId,
+                    teamId: teamId,
+                },
+                include: [teamModel],
+            });
 
-    try {
-      const user = await User.findOne({
-        where: {
-          id: req.params.userId,
-          teamId: req.params.id,
-        },
-        include: [Team],
-      });
+            if (!user) {
+                log.warn(
+                    `user ${req.user.username} tried to kick someone but he was not in the team`
+                );
 
-      if (!user) {
-        log.warn(`user ${req.user.username} tried to kick someone but he was not in the team`);
+                return res
+                    .status(404)
+                    .json({ error: 'NOT_FOUND' })
+                    .end();
+            }
 
-        return res
-          .status(404)
-          .json({ error: 'NOT_FOUND' })
-          .end();
-      }
-
-      if (user.team.captainId === req.params.userId) {
-        log.info('Impossible to delete captain user');
-        return res
-          .status(403)
-          .json({ error: 'CAPTAIN' })
-          .end();
-      }
-      if (user.team.captainId === req.user.id || req.params.userId === req.user.id) {
-        user.teamId = null;
-        user.type = 'none';
-        await user.save();
-        return res
-          .status(200)
-          .end();
-      }
-      return res
-        .status(401)
-        .end();
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+            if (user.team.captainId === userId) {
+                log.info("Can't delete captain user");
+                return res
+                    .status(403)
+                    .json({ error: 'CAPTAIN' })
+                    .end();
+            }
+            if (user.team.captainId === req.user.id || userId === req.user.id) {
+                user.teamId = null;
+                user.type = 'none';
+                await user.save();
+                return res.status(200).end();
+            }
+            return res.status(401).end();
+        } catch (err) {
+            return errorHandler(err, res);
+        }
+    };
 };
+
+module.exports = DeleteUserFromTeam;

@@ -1,7 +1,7 @@
-const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 
 /**
+ * Create a empty cart for one user. It is mandatory prior for the user to add items.
  * POST /users/:userID/carts
  * {
  *
@@ -10,45 +10,33 @@ const errorHandler = require('../../utils/errorHandler');
  * {
  *
  * }
+ * @param {object} cartModel
  */
-module.exports = (app) => {
-  app.post('/users/:userId/carts', isAuth());
-
-  app.post('/users/:userId/carts', async (req, res) => {
-    const { Cart } = req.app.locals.models;
-
+const CreateCart = cartModel => async (req, res) => {
     try {
-      if (req.params.userId !== req.user.id) {
+        const draftCount = await cartModel.count({
+            where: {
+                userId: req.user.id,
+                transactionState: 'draft',
+            },
+        });
+
+        if (draftCount !== 0) {
+            return res
+                .status(400)
+                .json({ error: 'DUPLICATE_ENTRY' })
+                .end();
+        }
+
+        const cart = await cartModel.create({ userId: req.user.id });
+
         return res
-          .status(403)
-          .json({ error: 'UNAUTHORIZED' })
-          .end();
-      }
-
-      const draftCount = await Cart.count({
-        where: {
-          userId: req.params.userId,
-          transactionState: 'draft',
-        },
-      });
-
-      if (draftCount !== 0) {
-        return res
-          .status(400)
-          .json({ error: 'DUPLICATE_ENTRY' })
-          .end();
-      }
-
-      const newCart = await Cart.create({ userId: req.params.userId });
-
-      return res
-        .status(200)
-        .json(newCart)
-        .end();
+            .status(200)
+            .json(cart)
+            .end();
+    } catch (error) {
+        return errorHandler(error, res);
     }
-
-    catch (error) {
-      return errorHandler(error, res);
-    }
-  });
 };
+
+module.exports = CreateCart;

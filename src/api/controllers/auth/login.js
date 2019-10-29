@@ -1,17 +1,22 @@
-const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
-
-
 const log = require('../../utils/log')(module);
 const errorHandler = require('../../utils/errorHandler');
+const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 
 const ITEM_PLAYER_ID = 1;
 const ITEM_VISITOR_ID = 2;
 
+const CheckLogin = [
+    check('username').exists(),
+    check('password').exists(),
+    validateBody(),
+];
+
 /**
+ * Authenticate a user based on his email/username and password
  * PUT /user/login
  * {
  *    username: String
@@ -23,96 +28,111 @@ const ITEM_VISITOR_ID = 2;
  *    user: User,
  *    token: String
  * }
+ * @param {object} userModel
+ * @param {object} teamModel
+ * @param {object} cartModel
+ * @param {object} cartItemModel
  */
-module.exports = (app) => {
-  app.post('/auth/login', [
-    check('username')
-      .trim()
-      .isLength({ min: 3, max: 100 }),
-    check('password')
-      .isLength({ min: 6 }),
-    validateBody(),
-  ]);
+const Login = (userModel, teamModel, cartModel, cartItemModel) => {
+    return async (req, res) => {
+        try {
+            const { username, password } = req.body;
 
-  app.post('/auth/login', async (req, res) => {
-    const { User, Team, Cart, CartItem } = req.app.locals.models;
+            // Get user
+            const user = await userModel.findOne({
+                where: {
+                    [Op.or]: [{ username }, { email: username }],
+                },
+                include: {
+                    model: teamModel,
+                    attributes: ['id', 'name'],
+                },
+            });
 
-    try {
-      const { username, password } = req.body;
+            if (!user) {
+                log.warn(`user ${username} couldn't be found`);
 
-      // Get user
-      const user = await User.findOne({
-        where: {
-          [Op.or]: [{ username }, { email: username }],
-        },
-        include: {
-          model: Team,
-          attributes: ['id', 'name'],
-        },
-      });
+                return res
+                    .status(400)
+                    .json({ error: 'USERNAME_NOT_FOUND' })
+                    .end();
+            }
 
-      const validCredentials = user && await bcrypt.compare(password, user.password);
-      if (!validCredentials) {
-        log.warn(`invalid credentials for user ${username}`);
+            // Check for password
+            const passwordMatches = await bcrypt.compare(
+                password,
+                user.password
+            );
 
-        return res
-          .status(400)
-          .json({ error: 'INVALID_CREDENTIALS' })
-          .end();
-      }
+            if (!passwordMatches) {
+                log.warn(`user ${username} password didn't match`);
 
-      // Check if account is activated
-      if (user.registerToken) {
-        log.warn(`user ${username} tried to login before activating`);
+                return res
+                    .status(400)
+                    .json({ error: 'INVALID_PASSWORD' })
+                    .end();
+            }
 
-        return res
-          .status(400)
-          .json({ error: 'USER_NOT_ACTIVATED' })
-          .end();
-      }
+            // Check if account is activated
+            if (user.registerToken) {
+                log.warn(`user ${username} tried to login before activating`);
 
-      // Generate new token
-      const token = jwt.sign({ id: user.id }, process.env.ARENA_API_SECRET, {
-        expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
-      });
+                return res
+                    .status(400)
+                    .json({ error: 'USER_NOT_ACTIVATED' })
+                    .end();
+            }
 
-      const hasCartPaid = await Cart.count({
-        where: {
-          transactionState: 'paid',
-        },
-        include: [{
-          model: CartItem,
-          where: {
-            itemId: user.type === 'visitor' ? ITEM_VISITOR_ID : ITEM_PLAYER_ID,
-            forUserId: user.id,
-          },
-        }],
-      });
-      const isPaid = !!hasCartPaid;
+            // Generate new token
+            const token = jwt.sign(
+                { id: user.id },
+                process.env.ARENA_API_SECRET,
+                {
+                    expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
+                }
+            );
 
-      log.info(`user ${user.username} logged`);
+            const hasCartPaid = await cartModel.count({
+                where: {
+                    transactionState: 'paid',
+                },
+                include: [
+                    {
+                        model: cartItemModel,
+                        where: {
+                            itemId:
+                                user.type === 'visitor'
+                                    ? ITEM_VISITOR_ID
+                                    : ITEM_PLAYER_ID,
+                            forUserId: user.id,
+                        },
+                    },
+                ],
+            });
+            const isPaid = !!hasCartPaid;
 
-      return res
-        .status(200)
-        .json(
-          {
-            user: {
-              id: user.id,
-              username: user.username,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              email: user.email,
-              team: user.team,
-              type: user.type,
-              isPaid,
-            },
-            token,
-          },
-        )
-        .end();
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+            log.info(`user ${user.username} logged`);
+
+            return res
+                .status(200)
+                .json({
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        email: user.email,
+                        team: user.team,
+                        type: user.type,
+                        isPaid,
+                    },
+                    token,
+                })
+                .end();
+        } catch (err) {
+            return errorHandler(err, res);
+        }
+    };
 };
+
+module.exports = { Login, CheckLogin };

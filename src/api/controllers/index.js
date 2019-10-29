@@ -1,31 +1,31 @@
 /* eslint-disable global-require, import/no-dynamic-require */
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const log = require('../utils/log')(module);
 
-module.exports = (app) => {
-  const router = new express.Router();
+const Express = require('express');
+const isAuth = require('../middlewares/isAuth.js');
+const resttrictToIp = require('../middlewares/restrictToIP.js');
 
-  router.locals = app.locals;
+const Auth = require('./auth');
+const Cart = require('./cart');
+const User = require('./user');
+const Tournament = require('./tournament');
+const Team = require('./team');
+const Item = require('./items');
+const Network = require('./network');
 
-  const traverseDir = (dir) => {
-    fs.readdirSync(dir)
-      .forEach((file) => {
-        const fullPath = path.join(dir, file);
-        if (fs.lstatSync(fullPath)
-          .isDirectory()) {
-          traverseDir(fullPath);
-        }
-        else if (!fullPath.endsWith('index.js') && fullPath.slice(-3) === '.js') {
-          const controller = require(fullPath.slice(0, -3));
-          controller(router);
-        }
-      });
-  };
-
-  traverseDir(__dirname);
-  log.info('Controllers imported');
-
-  return router;
+const MainRoutes = models => {
+    const mainRouter = Express.Router();
+    mainRouter.use('/auth', Auth(models));
+    mainRouter.use('/users', [isAuth()], User(models));
+    mainRouter.use('/tournaments', [isAuth()], Tournament(models));
+    mainRouter.use('/carts', [isAuth()], Cart(models));
+    mainRouter.use('/teams', [isAuth()], Team(models));
+    mainRouter.use('/items', [isAuth()], Item(models));
+    mainRouter.use(
+        '/network',
+        resttrictToIp(['::1', 'awdawdawd']),
+        Network(models)
+    );
+    return mainRouter;
 };
+
+module.exports = MainRoutes;

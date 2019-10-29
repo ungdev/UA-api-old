@@ -5,58 +5,52 @@ const errorHandler = require('../../utils/errorHandler');
  *
  * Response:
  *
+ * @param {string} macStringName name of the parameter in the route
+ * @param {object} networkModel
+ * @param {object} userModel
+ * @param {object} teamModel
+ *
  */
-module.exports = (app) => {
-  app.get('/networks/:mac', async (req, res) => {
-    const { Network, User, Team, Spotlight } = req.app.locals.models;
-    const { mac } = req.params;
-    try {
-      const nw = await Network.findOne({ where: { mac },
-        include: [
-          {
-            model: User,
-            attributes: ['id', 'name', 'firstname', 'lastname'],
-            include: [
-              {
-                model: Team,
-                attributes: ['id'],
+const GetByMac = (macStringName, networkModel, userModel, teamModel) => {
+    return async (req, res) => {
+        const mac = req.params[macStringName];
+        try {
+            const nw = await networkModel.findOne({
+                where: {
+                    mac,
+                },
                 include: [
-                  {
-                    model: Spotlight,
-                    attributes: ['id', 'shortName'],
-                  },
+                    {
+                        model: userModel,
+                        attributes: ['id', 'firstname', 'lastname'],
+                    },
                 ],
-              },
-            ],
-          },
-        ],
-      });
-      if (!nw) return res.status(404).end();
-      if (!nw.user) return res.status(407).end();
-      const { user } = nw;
-      let spotlight = 'libre';
-      if (user.team && user.team.spotlight) spotlight = user.team.spotlight.shortName;
-      if (!spotlight) spotlight = 'libre';
-      if (spotlight === 'SSBU') spotlight = 'libre';
-      return res
-        .status(200)
-        .json({
-          name: user.name,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          place: user.tableLetter && user.placeNumber ? `${user.tableLetter}${user.placeNumber}` : 'null',
-          spotlight,
-          ip: nw.ip,
-          mac: nw.mac,
-          switchId: nw.switchId,
-          switchPort: nw.switchPort,
-          isCaster: nw.isCaster,
-          isBanned: nw.isBanned,
-        })
-        .end(); // everything's fine
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+            });
+            console.log(nw);
+            if (!nw) return res.status(404).end();
+            if (!nw.user) return res.status(407).end();
+            const { user } = nw;
+            return res
+                .status(200)
+                .json({
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    place:
+                        user.tableLetter && user.placeNumber
+                            ? `${user.tableLetter}${user.placeNumber}`
+                            : 'null',
+                    ip: nw.ip,
+                    mac: nw.mac,
+                    switchId: nw.switchId,
+                    switchPort: nw.switchPort,
+                    isCaster: nw.isCaster,
+                    isBanned: nw.isBanned,
+                })
+                .end(); // everything's fine
+        } catch (err) {
+            return errorHandler(err, res);
+        }
+    };
 };
+
+module.exports = GetByMac;

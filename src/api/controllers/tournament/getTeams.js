@@ -1,9 +1,8 @@
 const errorHandler = require('../../utils/errorHandler');
-const isAuth = require('../../middlewares/isAuth');
-const hasTeamPaid = require('../../utils/hasTeamPaid');
-
 
 /**
+ * Get all the teams that have join the current tournament
+ *
  * GET /tournaments/:id/teams
  *
  * Params: {
@@ -15,52 +14,67 @@ const hasTeamPaid = require('../../utils/hasTeamPaid');
  * [
  *  [Team]
  * ]
+ * @param {object} teamModel
+ * @param {object} userModel
+ * @param {object} tournamentModel
  */
 
-module.exports = (app) => {
-  app.get('/tournaments/:id/teams', [isAuth()]);
-  app.get('/tournaments/:id/teams', async (req, res) => {
-    const { Team, User, Tournament } = req.app.locals.models;
-
-    try {
-      let teams = await Team.findAll({
-        where: {
-          tournamentId: req.params.id,
-        },
-        include: [{
-          model: User,
-          attributes: ['id', 'username', 'firstname', 'lastname'],
-        }, {
-          model: Tournament,
-          attributes: ['playersPerTeam'],
-        }],
-      });
-      teams = await Promise.all(teams.map(async (team) => {
-        const teamFormat = {
-          ...team.toJSON(),
-          users: team.users.map(({ username, firstname, lastname }) => (
-            { username, firstname, lastname }
-          )),
-          tournament: undefined,
-        };
-        if (req.query.paidOnly === 'true') {
-          const isPaid = await hasTeamPaid(req, team, null, team.tournament.playersPerTeam);
-          return (isPaid ? teamFormat : 'empty');
+const GetTeamsFromTournaments = (teamModel, userModel, tournamentModel) => {
+    return async (req, res) => {
+        try {
+            let teams = await teamModel.findAll({
+                where: {
+                    tournamentId: req.params.tournamentId,
+                },
+                include: [
+                    {
+                        model: userModel,
+                        attributes: ['id', 'username', 'firstname', 'lastname'],
+                    },
+                    {
+                        model: tournamentModel,
+                        attributes: ['playersPerTeam'],
+                    },
+                ],
+            });
+            teams = await Promise.all(
+                teams.map(async team => {
+                    const teamFormat = {
+                        ...team.toJSON(),
+                        users: team.users.map(
+                            ({ username, firstname, lastname }) => ({
+                                username,
+                                firstname,
+                                lastname,
+                            })
+                        ),
+                        tournament: undefined,
+                    };
+                    if (req.query.paidOnly === 'true') {
+                        const isPaid = await isTeamPaid(
+                            req,
+                            team,
+                            null,
+                            team.tournament.playersPerTeam
+                        );
+                        return isPaid ? teamFormat : 'empty';
+                    }
+                    if (req.query.notFull === 'true') {
+                        const notFull =
+                            team.users.length < team.tournament.playersPerTeam;
+                        return notFull ? teamFormat : 'empty';
+                    }
+                    return teamFormat;
+                })
+            );
+            teams = teams.filter(team => team !== 'empty');
+            return res
+                .status(200)
+                .json(teams)
+                .end();
+        } catch (err) {
+            return errorHandler(err, res);
         }
-        if (req.query.notFull === 'true') {
-          const notFull = team.users.length < team.tournament.playersPerTeam;
-          return (notFull ? teamFormat : 'empty');
-        }
-        return (teamFormat);
-      }));
-      teams = teams.filter((team) => team !== 'empty');
-      return res
-        .status(200)
-        .json(teams)
-        .end();
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+    };
 };
+module.exports = GetTeamsFromTournaments;
