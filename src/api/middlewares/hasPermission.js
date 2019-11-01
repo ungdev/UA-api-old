@@ -4,8 +4,7 @@ module.exports = (permission) => (req, res, next) => {
 
   if (user && user.permissions) {
     const userPermissions = user.permissions.split(',');
-
-    if (userPermissions.include('admin')) {
+    if (userPermissions.includes('admin')) {
       // Admin has all permissions
       authorized = true;
     }

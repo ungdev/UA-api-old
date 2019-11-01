@@ -1,7 +1,5 @@
 const errorHandler = require('../../utils/errorHandler');
-
-const ITEM_PLAYER_ID = 1;
-const ITEM_VISITOR_ID = 2;
+const hasCartPaid = require('../../utils/hasCartPaid');
 
 /**
  * Get a user based on its id
@@ -34,6 +32,7 @@ const Get = (userIdString, userModel, teamModel, cartModel, cartItemModel) => as
         'email',
         'askingTeamId',
         'type',
+        'permissions',
       ],
       include: {
         model: teamModel,
@@ -47,23 +46,7 @@ const Get = (userIdString, userModel, teamModel, cartModel, cartItemModel) => as
         .json({ error: 'NOT_FOUND' })
         .end();
     }
-
-    const hasCartPaid = await cartModel.count({
-      where: {
-        transactionState: 'paid',
-      },
-      include: [
-        {
-          model: cartItemModel,
-          where: {
-            itemId:
-                user.type === 'visitor' ? ITEM_VISITOR_ID : ITEM_PLAYER_ID,
-            forUserId: user.id,
-          },
-        },
-      ],
-    });
-    const isPaid = !!hasCartPaid;
+    const isPaid = await hasCartPaid(user, cartModel, cartItemModel);
 
     return res
       .status(200)

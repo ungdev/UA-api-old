@@ -4,10 +4,8 @@ const { Op } = require('sequelize');
 const { check } = require('express-validator');
 const log = require('../../utils/log')(module);
 const errorHandler = require('../../utils/errorHandler');
+const hasCartPaid = require('../../utils/hasCartPaid');
 const validateBody = require('../../middlewares/validateBody');
-
-const ITEM_PLAYER_ID = 1;
-const ITEM_VISITOR_ID = 2;
 
 const CheckLogin = [
   check('username').exists(),
@@ -90,25 +88,7 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
         expiresIn: process.env.ARENA_API_SECRET_EXPIRES,
       },
     );
-
-    const hasCartPaid = await cartModel.count({
-      where: {
-        transactionState: 'paid',
-      },
-      include: [
-        {
-          model: cartItemModel,
-          where: {
-            itemId:
-                                user.type === 'visitor'
-                                  ? ITEM_VISITOR_ID
-                                  : ITEM_PLAYER_ID,
-            forUserId: user.id,
-          },
-        },
-      ],
-    });
-    const isPaid = !!hasCartPaid;
+    const isPaid = await hasCartPaid(user, cartModel, cartItemModel);
 
     log.info(`user ${user.username} logged`);
 
@@ -123,6 +103,7 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
           email: user.email,
           team: user.team,
           type: user.type,
+          permissions: user.permissions,
           isPaid,
         },
         token,

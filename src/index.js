@@ -12,6 +12,9 @@ module.exports = async () => {
   const { models } = await database();
 
   const api = Express();
+
+  api.locals.models = models;
+
   api.use(
     morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined', {
       stream: log.stream,
