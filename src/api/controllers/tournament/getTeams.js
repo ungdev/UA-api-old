@@ -23,41 +23,41 @@ const hasTeamPaid = require('../../utils/hasTeamPaid.js');
 const GetTeamsFromTournaments = (
   teamModel,
   userModel,
-  tournamentModel
+  tournamentModel,
 ) => async (req, res) => {
   try {
     let teams = await teamModel.findAll({
       where: {
-        tournamentId: req.params.tournamentId
+        tournamentId: req.params.tournamentId,
       },
       include: [
         {
           model: userModel,
-          attributes: ['id', 'username', 'firstname', 'lastname']
+          attributes: ['id', 'username', 'firstname', 'lastname'],
         },
         {
           model: tournamentModel,
-          attributes: ['playersPerTeam']
-        }
-      ]
+          attributes: ['playersPerTeam'],
+        },
+      ],
     });
     teams = await Promise.all(
-      teams.map(async team => {
+      teams.map(async (team) => {
         const teamFormat = {
           ...team.toJSON(),
           users: team.users.map(({ username, firstname, lastname }) => ({
             username,
             firstname,
-            lastname
+            lastname,
           })),
-          tournament: undefined
+          tournament: undefined,
         };
         if (req.query.paidOnly === 'true') {
           const isPaid = await hasTeamPaid(
             req,
             team,
             null,
-            team.tournament.playersPerTeam
+            team.tournament.playersPerTeam,
           );
           return isPaid ? teamFormat : 'empty';
         }
@@ -66,15 +66,15 @@ const GetTeamsFromTournaments = (
           return notFull ? teamFormat : 'empty';
         }
         return teamFormat;
-      })
+      }),
     );
-    teams = teams.filter(team => team !== 'empty');
+    teams = teams.filter((team) => team !== 'empty');
     return res
       .status(200)
       .json(teams)
       .end();
   }
- catch (err) {
+  catch (err) {
     return errorHandler(err, res);
   }
 };

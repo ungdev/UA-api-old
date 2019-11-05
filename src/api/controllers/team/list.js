@@ -21,41 +21,41 @@ const List = (teamModel, tournamentModel, userModel) => async (req, res) => {
     let teams = await teamModel.findAll({
       include: [
         {
-          model: userModel
-        }
+          model: userModel,
+        },
       ],
-      order: [['name', 'ASC']]
+      order: [['name', 'ASC']],
     });
     if (req.query.paidOnly === 'true') {
       tournaments = await tournamentModel.findAll({
-        attributes: ['playersPerTeam', 'id']
+        attributes: ['playersPerTeam', 'id'],
       });
     }
     teams = await Promise.all(
-      teams.map(async team => {
+      teams.map(async (team) => {
         let isPaid = true;
         if (req.query.paidOnly === 'true') {
           isPaid = await hasTeamPaid(req, team, tournaments);
         }
         return isPaid
           ? {
-              ...team.toJSON(),
-              users: team.users.map(user => ({
-                id: user.id,
-                name: user.username,
-                isCaptain: user.id === team.captainId
-              }))
-            }
+            ...team.toJSON(),
+            users: team.users.map((user) => ({
+              id: user.id,
+              name: user.username,
+              isCaptain: user.id === team.captainId,
+            })),
+          }
           : 'empty';
-      })
+      }),
     );
-    teams = teams.filter(team => team !== 'empty');
+    teams = teams.filter((team) => team !== 'empty');
     return res
       .status(200)
       .json(teams)
       .end();
   }
- catch (err) {
+  catch (err) {
     return errorHandler(err, res);
   }
 };

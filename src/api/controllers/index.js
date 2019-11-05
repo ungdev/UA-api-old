@@ -13,8 +13,9 @@ const Team = require('./team');
 const Item = require('./items');
 const Entry = require('./entry');
 const Network = require('./network');
+const File = require('./files');
 
-const MainRoutes = (models) => {
+const MainRoutes = models => {
   const mainRouter = Express.Router();
   mainRouter.use('/auth', Auth(models));
   mainRouter.use('/users', [isAuth()], User(models));
@@ -23,10 +24,11 @@ const MainRoutes = (models) => {
   mainRouter.use('/teams', [isAuth()], Team(models));
   mainRouter.use('/items', [isAuth()], Item(models));
   mainRouter.use('/entry', [isAuth(), hasPermission('entry')], Entry(models));
+  mainRouter.use('/files', File());
   mainRouter.use(
     '/network',
     resttrictToIp(['::1', 'awdawdawd']),
-    Network(models),
+    Network(models)
   );
   return mainRouter;
 };
