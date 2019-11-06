@@ -1,14 +1,10 @@
 #!/usr/bin/env node
-
-// this will be overrided by .env
-process.env.NODE_ENV = 'production';
-
 require('dotenv').config();
 const express = require('express');
-const debug = require('debug')('arena.utt.fr-api:bin');
+const log = require('./src/api/utils/log')(module);
 
 const app = express();
 
 require('./src')(app);
 
-app.listen(process.env.ARENA_API_PORT, () => debug(`server started on port ${process.env.ARENA_API_PORT} [${process.env.NODE_ENV}]`));
+app.listen(process.env.ARENA_API_PORT, () => log.debug(`server started on port ${process.env.ARENA_API_PORT} [${process.env.NODE_ENV}]`));
