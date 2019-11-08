@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const models = require('./api/models');
+const modelFactory = require('./api/models');
 
 const log = require('./api/utils/log')(module);
 const { production: credentials } = require('../config');
@@ -20,8 +20,9 @@ module.exports = async function database() {
     }
   });
 
+  const models = modelFactory(sequelize);
   await sequelize.sync();
   log.info('connected to database');
 
-  return { sequelize, models: models(sequelize) };
+  return { sequelize, models };
 };

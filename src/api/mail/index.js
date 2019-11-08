@@ -55,7 +55,8 @@ const payment = (data) => ({
  */
 const sendMail = (emailType, to, data, attachments = []) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.ARENA_MAIL_SMTP,
+    host: process.env.ARENA_MAIL_HOST,
+    port: process.env.ARENA_MAIL_PORT,
     auth: {
       user: process.env.ARENA_MAIL_USER || undefined,
       pass: process.env.ARENA_MAIL_PASSWORD || undefined,

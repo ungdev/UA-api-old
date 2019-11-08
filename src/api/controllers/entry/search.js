@@ -33,7 +33,7 @@ const Search = (userModel, teamModel, tournamentModel) => async (request, respon
       },
     });
 
-    if (users.length > 1) {
+    if (users.length !== 1) {
       return response
         .status(404)
         .json({ error: 'NOT_FOUND' })

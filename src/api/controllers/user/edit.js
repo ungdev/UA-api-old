@@ -10,6 +10,8 @@ const CheckEdit = [
   check('username').isLength({ min: 3, max: 100 }),
   check('lastname').isLength({ min: 2, max: 100 }),
   check('firstname').isLength({ min: 2, max: 100 }),
+  check('type')
+    .optional(),
   check('oldpassword')
     .optional()
     .isLength({ min: 6 }),

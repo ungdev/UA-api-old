@@ -1,5 +1,3 @@
-/* eslint-disable global-require, import/no-dynamic-require */
-
 const Express = require('express');
 const isAuth = require('../middlewares/isAuth.js');
 const resttrictToIp = require('../middlewares/restrictToIP.js');
@@ -12,6 +10,7 @@ const Tournament = require('./tournament');
 const Team = require('./team');
 const Item = require('./items');
 const Entry = require('./entry');
+const Info = require('./info');
 const Network = require('./network');
 const File = require('./files');
 
@@ -24,6 +23,7 @@ const MainRoutes = models => {
   mainRouter.use('/teams', [isAuth()], Team(models));
   mainRouter.use('/items', [isAuth()], Item(models));
   mainRouter.use('/entry', [isAuth(), hasPermission('entry')], Entry(models));
+  mainRouter.use('/infos', [isAuth()], Info(models));
   mainRouter.use('/files', File());
   mainRouter.use(
     '/network',
