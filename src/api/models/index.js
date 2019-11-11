@@ -35,13 +35,16 @@ module.exports = (sequelize) => {
   });
 
   Tournament.hasMany(Info, {
-    foreignKey: { allowNull: false },
+    foreignKey: { allowNull: true },
     onDelete: 'cascade',
   });
   Info.belongsTo(Tournament, {
-    foreignKey: { allowNull: false },
+    foreignKey: { allowNull: true },
     onDelete: 'cascade',
   });
+
+  User.hasMany(Info);
+  Info.belongsTo(User);
 
   User.hasMany(Message, {
     foreignKey: { allowNull: false },
