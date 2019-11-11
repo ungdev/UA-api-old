@@ -1,4 +1,7 @@
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+const moment = require('moment');
+
+const { combine, label, colorize, printf } = format;
 
 module.exports = (loggedModule) => {
   const path = loggedModule.filename
@@ -7,17 +10,13 @@ module.exports = (loggedModule) => {
     .join('/')
     .split('.js')[0];
 
-  const consoleTransport = new winston.transports.Console({
-    timestamp: () => new Date().toISOString(),
-    level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
-    name: 'console',
-    prettyPrint: true,
-    colorize: true,
-    label: path,
-  });
+  const customFormat = printf(
+    ({ level, message, label }) => `${moment().format('H:mm:ss')} ${level}: [${label}] ${message}`,
+  );
 
-  const logger = new winston.Logger({
-    transports: [consoleTransport],
+  const logger = createLogger({
+    transports: [new transports.Console()],
+    format: combine(colorize(), label({ label: path }), customFormat),
   });
 
   logger.stream = {
