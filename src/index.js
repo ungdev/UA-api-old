@@ -26,6 +26,7 @@ module.exports = async () => {
   api.use(bodyParser.json());
 
   api.use('/api/v1', MainRoutes(models));
+  api.use('/api/v1/uploads', Express.static(process.env.ARENA_FILES_TO_SERVE));
 
   api.use(error.converter);
   api.use(error.notFound);
