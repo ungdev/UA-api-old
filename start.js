@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-
-// this will be overrided by .env
-process.env.NODE_ENV = 'production';
-
 require('dotenv').config();
 const debug = require('debug')('arena.utt.fr-api:bin');
 

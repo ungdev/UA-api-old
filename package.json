@@ -9,7 +9,6 @@
     "body-parser": "^1.19.0",
     "bwip-js": "^1.7.3",
     "cors": "^2.8.5",
-    "cross-env": "^6.0.0",
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
@@ -28,7 +27,7 @@
     "sequelize": "^5.19.0",
     "socket.io": "^2.3.0",
     "uuid": "^3.3.3",
-    "winston": "2.4.2"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "^6.4.0",
@@ -38,7 +37,7 @@
     "sequelize-cli": "^5.5.1"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development DEBUG=arena.utt.fr-api:* nodemon ./start.js",
+    "dev": "nodemon ./start.js",
     "start": "pm2-runtime start ./start.js --name UA-api -i 4",
     "lint": "eslint src/ --ext .js",
     "lint-fix": "eslint --fix src/ --ext .js",
