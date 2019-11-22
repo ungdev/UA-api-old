@@ -98,8 +98,10 @@ module.exports = (sequelize) => {
   User.hasOne(Team, { as: 'captain', constraints: false });
   Team.belongsTo(User, { as: 'captain', constraints: false });
 
-  CartItem.belongsTo(User, { as: 'forUser', constraints: false });
-  User.hasMany(CartItem, { as: 'forUser', constraints: false });
+  CartItem.belongsTo(User, { foreignKey: 'forUserId', as: 'forUser' });
+  User.hasMany(CartItem, { foreignKey: 'forUserId', as: 'forUser' });
+  User.hasMany(CartItem, { foreignKey: 'userId', as: 'userCart' });
+  CartItem.belongsTo(User, { foreignKey: 'userId', as: 'userCart' });
   Tournament.belongsTo(State, { as: 'index', constraints: false });
 
   return {

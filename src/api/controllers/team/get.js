@@ -31,7 +31,7 @@ const Get = (
       include: [
         {
           model: userModel,
-          attributes: ['username', 'email', 'id'],
+          attributes: ['id', 'username', 'email'],
         },
         {
           model: tournamentModel,
@@ -44,7 +44,7 @@ const Get = (
     });
     if (team) {
       const users = await Promise.all(
-        team.users.map(async ({ username, id }) => {
+        team.users.map(async ({ id, username, email }) => {
           const isCartPaid = await cartModel.count({
             where: {
               transactionState: 'paid',
@@ -59,7 +59,7 @@ const Get = (
               },
             ],
           });
-          return { username, id, isPaid: !!isCartPaid };
+          return { id, username, email, isPaid: !!isCartPaid };
         }),
       );
       askingUsers = askingUsers.map(({ username, email, id }) => ({

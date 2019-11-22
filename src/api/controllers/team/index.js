@@ -40,7 +40,7 @@ const Team = (models) => {
     Delete(teamId, models.Team),
   );
   router.post(
-    `/:${teamId}`,
+    `/:${teamId}/users`,
     [isCaptain(teamId), isType('player'), CheckAddUser],
     AddUser(teamId, models.User, models.Team, models.Tournament),
   );

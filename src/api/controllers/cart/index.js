@@ -1,12 +1,15 @@
 const Express = require('express');
 
-const etupay = require('../../utils/etupay.js');
+const etupay = require('../../utils/etupay');
+const isAuth = require('../../middlewares/isAuth');
+const hasPermission = require('../../middlewares/hasPermission');
 
-const CreateCart = require('./create.js');
-const DeleteItemFromCart = require('./delete.js');
-const { AddItemToCart, CheckAddItem } = require('./add-item.js');
-const { Edit, CheckEdit } = require('./edit.js');
-const GetItemFromCart = require('./get-item-from-cart.js');
+const CreateCart = require('./create');
+const DeleteItemFromCart = require('./delete');
+const { AddItemToCart, CheckAddItem } = require('./add-item');
+const { Edit, CheckEdit } = require('./edit');
+const GetItemFromCart = require('./get-item-from-cart');
+const Refund = require('./refund');
 const { SuccessfulPayment, EtupayAvailable } = require('./etupay.callback');
 
 const cartId = 'cartId';
@@ -14,24 +17,34 @@ const itemId = 'itemId';
 
 const Cart = (models) => {
   const router = Express.Router();
-  router.post('/', CreateCart(models.Cart));
+  router.post('/', isAuth(), CreateCart(models.Cart));
+  router.put(
+    `/:${cartId}`,
+    isAuth(),
+    hasPermission('admin'),
+    Refund(cartId, models.Cart),
+  );
   router.delete(
     `/:${cartId}/cartItems/:${itemId}`,
+    isAuth(),
     DeleteItemFromCart(cartId, itemId, models.CartItem),
   );
   router.post(
     `/:${cartId}/add`,
-    [CheckAddItem],
+    isAuth(),
+    CheckAddItem,
     AddItemToCart(cartId, models.CartItem, models.User, models.Cart),
   );
   router.put(
     `/:${cartId}/cartItems/:${itemId}`,
+    isAuth(),
     CheckEdit,
     Edit(cartId, itemId, models.CartItem, models.User),
   );
 
   router.get(
     `/:${cartId}/cartItems/:${itemId}`,
+    isAuth(),
     GetItemFromCart(
       cartId,
       itemId,
