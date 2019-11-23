@@ -5,12 +5,19 @@ const log = require('./api/utils/log.js')(module);
 const { production: credentials } = require('../config.js');
 
 module.exports = async function database() {
-  const connectionURI = `${credentials.dialect}://${credentials.username}:${credentials.password}@${credentials.host}:${credentials.port}/${credentials.database}`;
   log.info(
     `Trying to connect to database : ${credentials.dialect}://${credentials.username}:******@${credentials.host}:${credentials.port}/${credentials.database}`,
   );
 
-  const sequelize = new Sequelize(connectionURI, { logging: (sql) => log.info(sql) });
+  const sequelize = new Sequelize({
+    dialect: credentials.dialect,
+    username: credentials.username,
+    password: credentials.password,
+    host: credentials.host,
+    port: credentials.port,
+    database: `${credentials.database}${process.env.NODE_ENV === 'test' ? '_test' : ''}`,
+    logging: (sql) => process.env.NODE_ENV !== 'test' ? log.info(sql) : ''
+  });
 
   process.on('SIGINT', async () => {
     try {
@@ -23,7 +30,7 @@ module.exports = async function database() {
   });
 
   const models = modelFactory(sequelize);
-  await sequelize.sync();
+  await sequelize.sync({ force: process.env.NODE_ENV === 'test' });
   log.info('connected to database');
 
   return { sequelize, models };

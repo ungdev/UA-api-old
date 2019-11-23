@@ -30,11 +30,14 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.23",
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-import": "^2.18.2",
-    "sequelize-cli": "^5.5.1"
+    "jest": "^24.9.0",
+    "sequelize-cli": "^5.5.1",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "dev": "nodemon ./start.js",
@@ -42,6 +45,7 @@
     "lint": "eslint src/ --ext .js",
     "lint-fix": "eslint --fix src/ --ext .js",
     "seed": "sequelize db:drop; sequelize db:create --charset=utf8; sequelize db:seed:all",
-    "seed-win": "sequelize db:drop & sequelize db:create --charset=utf8 & sequelize db:seed:all"
+    "seed-win": "sequelize db:drop & sequelize db:create --charset=utf8 & sequelize db:seed:all",
+    "test": "jest"
   }
 }

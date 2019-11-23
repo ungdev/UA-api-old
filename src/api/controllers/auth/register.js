@@ -56,10 +56,12 @@ const Register = (userModel) => async (req, res) => {
     req.body.registerToken = uuid();
     const user = await userModel.create(req.body);
 
-    await mail.sendMail(mail.register, user.email, {
-      username: user.username,
-      button_link: `${process.env.ARENA_WEBSITE}/valid/${user.registerToken}`,
-    });
+    if (process.env.NODE_ENV !== 'test') {
+      await mail.sendMail(mail.register, user.email, {
+        username: user.username,
+        button_link: `${process.env.ARENA_WEBSITE}/valid/${user.registerToken}`,
+      });
+    }
 
     log.info(`user ${req.body.username} created`);
 

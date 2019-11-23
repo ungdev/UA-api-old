@@ -15,7 +15,7 @@ const CheckLogin = [
 
 /**
  * Authenticate a user based on his email/username and password
- * PUT /user/login
+ * POST /user/login
  * {
  *    username: String
  *    password: String

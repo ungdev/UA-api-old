@@ -24,7 +24,6 @@ const MainRoutes = models => {
   mainRouter.use('/entry', isAuth(), hasPermission('entry'), Entry(models));
   mainRouter.use('/infos', isAuth(), Info(models));
   mainRouter.use('/items', isAuth(), Item(models));
-  // mainRouter.use('/network', restrictToIp(['::1', 'awdawdawd']), Network(models));
   mainRouter.use('/teams', isAuth(), Team(models));
   mainRouter.use('/tournaments', isAuth(), Tournament(models));
   mainRouter.use('/users', isAuth(), User(models));

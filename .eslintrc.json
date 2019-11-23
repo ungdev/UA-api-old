@@ -1,18 +1,28 @@
 {
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
-  "extends": ["airbnb-base", "prettier"],
+  "extends": [
+    "airbnb-base",
+    "prettier"
+  ],
   "parserOptions": {
     "ecmaVersion": 2018
   },
   "rules": {
     "eol-last": "off",
-    "linebreak-style": ["warn", "windows"],
+    "linebreak-style": [
+      "warn",
+      "windows"
+    ],
     "object-curly-newline": "off",
     "no-param-reassign": "off",
-    "brace-style": ["warn", "stroustrup"],
+    "brace-style": [
+      "warn",
+      "stroustrup"
+    ],
     "no-plusplus": "off",
     "max-len": "off",
     "radix": "off"
