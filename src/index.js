@@ -31,7 +31,7 @@ module.exports = async () => {
   api.use(
     morgan(':remote-addr - :username - :team - :tournament - [:date[clf]] :method :status :url - :response-time ms', {
       stream: fs.createWriteStream(`${process.env.ARENA_LOGS_PATH}/access.log`, { flags: 'a' }),
-      skip: (req) => req.method === 'OPTIONS' || process.env.NODE_ENV === 'development',
+      skip: (req) => req.method === 'OPTIONS' || req.method === 'GET' || process.env.NODE_ENV === 'development',
     }),
   );
 
