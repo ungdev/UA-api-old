@@ -15,10 +15,10 @@ const errorHandler = require('../../utils/errorHandler');
 const List = (itemModel, attributeModel) => async (req, res) => {
   try {
     const items = await itemModel.findAll({
-      attributes: ['name', 'key', 'price', 'infos', 'id'],
+      attributes: ['id', 'name', 'key', 'price', 'infos', 'image'],
       include: {
         model: attributeModel,
-        attributes: ['label', 'value', 'id'],
+        attributes: ['id', 'label', 'value'],
         through: {
           attributes: [],
         },

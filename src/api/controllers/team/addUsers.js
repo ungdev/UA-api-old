@@ -1,7 +1,7 @@
 const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 const CheckAddUser = [check('user').isUUID(), validateBody()];
 /**

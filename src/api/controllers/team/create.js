@@ -2,7 +2,7 @@ const { check } = require('express-validator');
 const validateBody = require('../../middlewares/validateBody');
 const errorHandler = require('../../utils/errorHandler');
 const { isTournamentFull } = require('../../utils/isFull');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 const CheckCreate = [
   check('teamName').isLength({ min: 3, max: 40 }),

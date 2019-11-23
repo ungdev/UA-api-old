@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const validateBody = require('../../middlewares/validateBody');
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 const CheckValidate = [check('slug').isUUID(), validateBody()];
 

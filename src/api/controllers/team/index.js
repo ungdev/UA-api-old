@@ -8,7 +8,7 @@ const isSelfTeam = require('../../middlewares/isSelfTeam.js');
 const { Create, CheckCreate } = require('./create.js');
 const Delete = require('./delete.js');
 const { AddUser, CheckAddUser } = require('./addUsers.js');
-const DeleteUserFromTeam = require('./deleteUser.js');
+const KickUser = require('./kickUser.js');
 const Get = require('./get.js');
 const { Edit, CheckEdit } = require('./edit.js');
 const List = require('./list.js');
@@ -47,7 +47,7 @@ const Team = (models) => {
   router.delete(
     `/:${teamId}/users/:${userId}`,
     [isType('player')],
-    DeleteUserFromTeam(teamId, userId, models.User, models.Team),
+    KickUser(teamId, userId, models.User, models.Team),
   );
 
   router.put(

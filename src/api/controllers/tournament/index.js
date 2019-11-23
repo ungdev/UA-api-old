@@ -1,7 +1,7 @@
 const Express = require('express');
 
 const List = require('./list.js');
-const GetTeamsFromTournaments = require('./getTeams');
+const GetTeams = require('./getTeams.js');
 const Get = require('./get.js');
 
 const Tournament = (models) => {
@@ -9,7 +9,7 @@ const Tournament = (models) => {
   router.get('/', List(models.Tournament, models.Team, models.User));
   router.get(
     '/:tournamentId/teams',
-    GetTeamsFromTournaments(models.Team, models.User, models.Tournament),
+    GetTeams(models.Team, models.User, models.Tournament),
   );
   router.get(
     '/:tournamentId',

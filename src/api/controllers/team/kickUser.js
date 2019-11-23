@@ -1,5 +1,5 @@
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 /**
  * Deletes a user from a team.

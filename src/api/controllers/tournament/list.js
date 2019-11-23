@@ -32,6 +32,7 @@ const List = (tournamentModel, teamModel, userModel) => async (req, res) => {
           },
         },
       ],
+      order: [['id', 'ASC']],
     });
 
     tournaments = await Promise.all(

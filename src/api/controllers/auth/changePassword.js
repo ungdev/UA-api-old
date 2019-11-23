@@ -1,7 +1,8 @@
 const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
+
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 const validateBody = require('../../middlewares/validateBody');
 
 const CheckChangePassword = [

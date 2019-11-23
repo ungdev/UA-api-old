@@ -2,7 +2,7 @@ const uuid = require('uuid');
 const { check } = require('express-validator');
 
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 const { sendMail, reset } = require('../../mail');
 
 const validateBody = require('../../middlewares/validateBody');
@@ -55,7 +55,7 @@ const ResetPassword = (userModel) => async (req, res) => {
 
     await sendMail(reset, user.email, {
       username: user.username,
-      link: `${process.env.ARENA_WEBSITE}}/password/change/${user.resetToken}`,
+      button_link: `${process.env.ARENA_WEBSITE}/reset/${user.resetToken}`,
     });
 
     log.info(`user ${user.username} asked for mail reset`);

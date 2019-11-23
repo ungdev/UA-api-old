@@ -1,15 +1,15 @@
 module.exports = (sequelize) => {
-  const Attribute = sequelize.import(`${__dirname}/attribute`);
-  const Cart = sequelize.import(`${__dirname}/cart`);
-  const CartItem = sequelize.import(`${__dirname}/cartItem`);
-  const Info = sequelize.import(`${__dirname}/info`);
-  const Item = sequelize.import(`${__dirname}/item`);
-  const Message = sequelize.import(`${__dirname}/message`);
-  const Network = sequelize.import(`${__dirname}/network`);
-  const State = sequelize.import(`${__dirname}/state`);
-  const Team = sequelize.import(`${__dirname}/team`);
-  const Tournament = sequelize.import(`${__dirname}/tournament`);
-  const User = sequelize.import(`${__dirname}/user`);
+  const Attribute = sequelize.import(`${__dirname}/attribute.js`);
+  const Cart = sequelize.import(`${__dirname}/cart.js`);
+  const CartItem = sequelize.import(`${__dirname}/cartItem.js`);
+  const Info = sequelize.import(`${__dirname}/info.js`);
+  const Item = sequelize.import(`${__dirname}/item.js`);
+  const Message = sequelize.import(`${__dirname}/message.js`);
+  const Network = sequelize.import(`${__dirname}/network.js`);
+  const State = sequelize.import(`${__dirname}/state.js`);
+  const Team = sequelize.import(`${__dirname}/team.js`);
+  const Tournament = sequelize.import(`${__dirname}/tournament.js`);
+  const User = sequelize.import(`${__dirname}/user.js`);
 
   // Relations
 

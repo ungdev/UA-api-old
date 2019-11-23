@@ -2,12 +2,12 @@ const Express = require('express');
 
 const { Edit, CheckEdit } = require('./edit.js');
 const { List, CheckList } = require('./list.js');
-const Get = require('./get.js');
+const GetUser = require('./getUser.js');
 const GetTicket = require('./getTicket.js');
 const GetUserCart = require('./getUserCart.js');
-const ListCartsFromUser = require('./list-carts.js');
-const PayCart = require('./pay-cart.js');
-const WipeItemsFromCart = require('./wipe-items-from-cart.js');
+const ListCartsFromUser = require('./listCarts.js');
+const PayCart = require('./payCart.js');
+const WipeItemsFromCart = require('./wipeItemsFromCart.js');
 
 const userId = 'userId';
 const cartId = 'cartId';
@@ -21,7 +21,7 @@ const User = (models) => {
   );
   router.get(
     `/:${userId}`,
-    Get(userId, models.User, models.Team, models.Cart, models.CartItem),
+    GetUser(userId, models.User, models.Team, models.Cart, models.CartItem),
   );
   router.get(
     '/',

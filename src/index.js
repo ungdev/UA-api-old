@@ -3,6 +3,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const fs = require('fs');
+
 const database = require('./database');
 const MainRoutes = require('./api/controllers');
 const error = require('./api/middlewares/error.js');
@@ -12,12 +14,24 @@ module.exports = async () => {
   const { models } = await database();
 
   const api = Express();
-
   api.locals.models = models;
 
+  // Console logs
   api.use(
     morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined', {
       stream: log.stream,
+    }),
+  );
+
+  // File logs
+  morgan.token('username', (req) => (req.user ? req.user.username : 'anonymous'));
+  morgan.token('team', (req) => (req.user && req.user.team ? req.user.team.name : 'no-team'));
+  morgan.token('tournament', (req) => (req.user && req.user.team ? req.user.team.tournamentId : 'no-tournament'));
+
+  api.use(
+    morgan(':remote-addr - :username - :team - :tournament - [:date[clf]] :method :status :url - :response-time ms', {
+      stream: fs.createWriteStream(`${process.env.ARENA_LOGS_PATH}/access.log`, { flags: 'a' }),
+      skip: (req) => req.method === 'OPTIONS' || process.env.NODE_ENV === 'development',
     }),
   );
 

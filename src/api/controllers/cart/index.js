@@ -1,23 +1,27 @@
 const Express = require('express');
 
-const etupay = require('../../utils/etupay');
-const isAuth = require('../../middlewares/isAuth');
-const hasPermission = require('../../middlewares/hasPermission');
+const etupay = require('../../utils/etupay.js');
+const isAuth = require('../../middlewares/isAuth.js');
+const hasPermission = require('../../middlewares/hasPermission.js');
 
-const CreateCart = require('./create');
-const DeleteItemFromCart = require('./delete');
-const { AddItemToCart, CheckAddItem } = require('./add-item');
-const { Edit, CheckEdit } = require('./edit');
-const GetItemFromCart = require('./get-item-from-cart');
-const Refund = require('./refund');
-const { SuccessfulPayment, EtupayAvailable } = require('./etupay.callback');
+const CreateCart = require('./create.js');
+const DeleteItemFromCart = require('./delete.js');
+const { AddItemToCart, CheckAddItem } = require('./addItem.js');
+const { Edit, CheckEdit } = require('./edit.js');
+const GetItemFromCart = require('./getItemFromCart.js');
+const Refund = require('./refund.js');
+const { SuccessfulPayment, EtupayAvailable } = require('./etupayCallback.js');
 
 const cartId = 'cartId';
 const itemId = 'itemId';
 
 const Cart = (models) => {
   const router = Express.Router();
-  router.post('/', isAuth(), CreateCart(models.Cart));
+  router.post(
+    '/',
+    isAuth(),
+    CreateCart(models.Cart),
+  );
   router.put(
     `/:${cartId}`,
     isAuth(),
@@ -41,7 +45,6 @@ const Cart = (models) => {
     CheckEdit,
     Edit(cartId, itemId, models.CartItem, models.User),
   );
-
   router.get(
     `/:${cartId}/cartItems/:${itemId}`,
     isAuth(),
@@ -63,7 +66,10 @@ const Cart = (models) => {
       models.User,
     ),
   );
-  router.post('/callback', EtupayAvailable());
+  router.post(
+    '/callback',
+    EtupayAvailable(),
+  );
   return router;
 };
 

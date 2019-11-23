@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const modelFactory = require('./api/models');
 
-const log = require('./api/utils/log')(module);
-const { production: credentials } = require('../config');
+const modelFactory = require('./api/models');
+const log = require('./api/utils/log.js')(module);
+const { production: credentials } = require('../config.js');
 
 module.exports = async function database() {
   const connectionURI = `${credentials.dialect}://${credentials.username}:${credentials.password}@${credentials.host}:${credentials.port}/${credentials.database}`;
@@ -16,7 +16,8 @@ module.exports = async function database() {
     try {
       await sequelize.close();
       process.exit(0);
-    } catch (err) {
+    }
+    catch (err) {
       process.exit(1);
     }
   });

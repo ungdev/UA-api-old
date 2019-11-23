@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
-const log = require('../utils/log')(module);
+const log = require('../utils/log.js')(module);
 
 jwt.verify = promisify(jwt.verify);
 

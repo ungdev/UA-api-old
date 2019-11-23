@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const { check } = require('express-validator');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 const errorHandler = require('../../utils/errorHandler');
 const hasCartPaid = require('../../utils/hasCartPaid');
 const validateBody = require('../../middlewares/validateBody');
@@ -46,27 +46,17 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
       },
     });
 
-    if (!user) {
-      log.warn(`user ${username} couldn't be found`);
-
-      return res
-        .status(400)
-        .json({ error: 'USERNAME_NOT_FOUND' })
-        .end();
-    }
-
-    // Check for password
-    const passwordMatches = await bcrypt.compare(
+    const validCredentials = user && await bcrypt.compare(
       password,
       user.password,
     );
 
-    if (!passwordMatches) {
-      log.warn(`user ${username} password didn't match`);
+    if (!validCredentials) {
+      log.warn(`invalid credentials for ${username}`);
 
       return res
         .status(400)
-        .json({ error: 'INVALID_PASSWORD' })
+        .json({ error: 'INVALID_CREDENTIALS' })
         .end();
     }
 

@@ -2,12 +2,12 @@ const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const hash = require('util').promisify(bcrypt.hash);
+
 const validateBody = require('../../middlewares/validateBody');
 const mail = require('../../mail');
-
 const randomBarcode = require('../../utils/randomBarcode');
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 const CheckRegister = [
   check('username')
@@ -61,7 +61,7 @@ const Register = (userModel) => async (req, res) => {
       button_link: `${process.env.ARENA_WEBSITE}/valid/${user.registerToken}`,
     });
 
-    log.info(`user ${req.body.name} created`);
+    log.info(`user ${req.body.username} created`);
 
     return res.status(204).end();
   }

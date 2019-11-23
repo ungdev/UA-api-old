@@ -1,5 +1,6 @@
 const { validationResult, matchedData } = require('express-validator');
-const log = require('../utils/log')(module);
+
+const log = require('../utils/log.js')(module);
 
 module.exports = () => (req, res, next) => {
   const errors = validationResult(req);

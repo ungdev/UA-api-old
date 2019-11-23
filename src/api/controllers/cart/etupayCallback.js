@@ -2,7 +2,7 @@ const { fn } = require('sequelize');
 const generateTicket = require('../../utils/generateTicket');
 const errorHandler = require('../../utils/errorHandler');
 const mail = require('../../mail');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 // todo: SLACK HOOKS !!!!! si differents + enregistrer !!!!!!!!!
 /**

@@ -1,7 +1,6 @@
 const axios = require('axios');
 const qs = require('querystring');
 
-
 class Toornament {
   constructor() {
     this.resetAccessToken();
