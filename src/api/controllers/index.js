@@ -1,7 +1,6 @@
 const Express = require('express');
 
 const isAuth = require('../middlewares/isAuth.js');
-// const restrictToIp = require('../middlewares/restrictToIP.js');
 const hasPermission = require('../middlewares/hasPermission.js');
 
 const Admin = require('./admin');
@@ -10,7 +9,6 @@ const Cart = require('./cart');
 const Entry = require('./entry');
 const Info = require('./info');
 const Item = require('./items');
-// const Network = require('./network');
 const Team = require('./team');
 const Tournament = require('./tournament');
 const User = require('./user');
