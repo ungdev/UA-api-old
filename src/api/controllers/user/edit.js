@@ -44,7 +44,6 @@ const CheckEdit = [
 const Edit = (userIdString, cartModel, cartItemModel) => async (req, res) => {
   const userId = req.params[userIdString];
   try {
-    // todo: refaire pour admins
     if (userId !== req.user.id) {
       return res
         .status(403)
@@ -52,13 +51,10 @@ const Edit = (userIdString, cartModel, cartItemModel) => async (req, res) => {
         .end();
     }
 
+    // Check if user want to change its password
+    let password = null;
     if (req.body.password && req.body.oldpassword) {
-      req.body.oldpassword = await bcrypt.hash(
-        req.body.oldpassword,
-        parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
-      );
-
-      const passwordMatches = bcrypt.compare(
+      const passwordMatches = await bcrypt.compare(
         req.body.oldpassword,
         req.user.password,
       );
@@ -70,13 +66,13 @@ const Edit = (userIdString, cartModel, cartItemModel) => async (req, res) => {
           .end();
       }
 
-      req.body.password = await bcrypt.hash(
+      password = await bcrypt.hash(
         req.body.password,
         parseInt(process.env.ARENA_API_BCRYPT_LEVEL, 10),
       );
     }
 
-    const { firstname, lastname, username, password } = req.body;
+    const { firstname, lastname, username } = req.body;
 
     let { type } = req.user;
 
@@ -100,7 +96,6 @@ const Edit = (userIdString, cartModel, cartItemModel) => async (req, res) => {
       username,
       firstname,
       lastname,
-      password,
       type,
       email: req.user.email,
       askingTeamId:
@@ -109,9 +104,13 @@ const Edit = (userIdString, cartModel, cartItemModel) => async (req, res) => {
             : req.user.askingTeamId,
     };
 
+    if(password !== null) {
+      userUpdated.password = password;
+    }
+
     await req.user.update(userUpdated);
 
-    log.info(`user ${req.body.name} updated`);
+    log.info(`user ${req.user.username} updated`);
 
     return res
       .status(200)
