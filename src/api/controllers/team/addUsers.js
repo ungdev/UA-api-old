@@ -58,7 +58,7 @@ const AddUser = (teamIdString, userModel, teamModel, tournamentModel) => async (
         `user ${req.user.username} accepted user ${user.username}`,
       );
 
-      return res.status(200).end();
+      return res.status(204).end();
     }
     return res
       .status(404)

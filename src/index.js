@@ -1,9 +1,10 @@
+require('dotenv').config();
 const Express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const fs = require('fs');
+const fs = require('fs')
 
 const database = require('./database');
 const MainRoutes = require('./api/controllers');
@@ -11,10 +12,11 @@ const error = require('./api/middlewares/error.js');
 const log = require('./api/utils/log.js');
 
 module.exports = async () => {
-  const { sequelize, models } = await database();
+  const { models, sequelize } = await database();
 
   const api = Express();
   api.locals.models = models;
+  api.locals.sequelize = sequelize;
 
   // Console logs
   api.use(
@@ -50,5 +52,5 @@ module.exports = async () => {
     process.send('ready');
   }
 
-  return { api, sequelize };
+  return api;
 };

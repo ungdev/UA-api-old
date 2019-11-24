@@ -1,8 +1,7 @@
 const supertest = require('supertest');
 const src = require('../src');
-const users = require('../src/api/seeders/4-users');
 
-describe('routes', () => {
+describe('Users', () => {
   const fakeUser = {
     firstname: 'Kevin',
     lastname: 'Beauf',
@@ -16,13 +15,14 @@ describe('routes', () => {
   let request;
 
   beforeAll(async () => {
-    const api = await src();
+    app = await src();
     request = supertest(app);
-
-    app = api.api;
-
-    await users.up(api.sequelize.queryInterface, api.sequelize);
   })
+
+  afterAll(async () => {
+    await app.locals.sequelize.close()
+  })
+
 
   it('should create a user', async () => {
     const response = await request.post('/auth/register').send(fakeUser);

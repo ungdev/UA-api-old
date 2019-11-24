@@ -3,6 +3,19 @@ const moment = require('moment');
 
 const { combine, label, colorize, printf } = format;
 
+const levelInfo = () => {
+  switch (process.env.NODE_ENV) {
+    case 'production':
+      return 'info'
+
+    case 'test':
+      return 'error'
+
+    default:
+      return 'debug'
+  }
+}
+
 module.exports = (loggedModule) => {
   const path = loggedModule.filename
     .split('/')
@@ -17,6 +30,7 @@ module.exports = (loggedModule) => {
   const logger = createLogger({
     transports: [new transports.Console()],
     format: combine(colorize(), label({ label: path }), customFormat),
+    level: levelInfo()
   });
 
   logger.stream = {

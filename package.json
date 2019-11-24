@@ -42,9 +42,9 @@
   "scripts": {
     "dev": "nodemon ./start.js",
     "start": "pm2-runtime start ./start.js --name UA-api -i 4",
-    "lint": "eslint src/ --ext .js",
-    "lint-fix": "eslint --fix src/ --ext .js",
+    "lint": "eslint src/ tests/ db/ --ext .js",
+    "lint-fix": "eslint --fix src/ tests/ db/ --ext .js",
     "seed": "node db/seed.js",
-    "test": "jest"
+    "test": "jest --runInBand"
   }
 }

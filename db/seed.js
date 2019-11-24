@@ -11,11 +11,7 @@ const seedCartItems = require('./cartsItems');
 
 dotenv.config();
 
-(async () => {
-  const forceSync = process.argv.some((arg) => arg === '--force-sync');
-
-  const { sequelize, models } = await database(forceSync);
-
+const seedAll = async (models, sequelize) => {
   await seedTournaments(models.Tournament);
   await seedTeams(models.Team);
   await seedUsers(models.User);
@@ -24,6 +20,18 @@ dotenv.config();
   await seedItems(models.Item);
   await seedItemsHasAttributes(sequelize);
   await seedCartItems(models.Cart)
+}
 
-  sequelize.close();
-})();
+// If called via node
+if (require.main === module) {
+  (async () => {
+    const forceSync = process.argv.some((arg) => arg === '--force-sync');
+
+    const { sequelize, models } = await database(forceSync);
+
+    await seedAll(models, sequelize);
+    sequelize.close();
+  })();
+}
+
+module.exports = seedAll;
