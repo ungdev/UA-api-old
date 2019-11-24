@@ -5,7 +5,6 @@ module.exports = (sequelize) => {
   const Info = sequelize.import(`${__dirname}/info.js`);
   const Item = sequelize.import(`${__dirname}/item.js`);
   const Message = sequelize.import(`${__dirname}/message.js`);
-  const Network = sequelize.import(`${__dirname}/network.js`);
   const State = sequelize.import(`${__dirname}/state.js`);
   const Team = sequelize.import(`${__dirname}/team.js`);
   const Tournament = sequelize.import(`${__dirname}/tournament.js`);
@@ -82,9 +81,6 @@ module.exports = (sequelize) => {
     onDelete: 'cascade',
   });
 
-  User.hasOne(Network);
-  Network.belongsTo(User, {});
-
   CartItem.belongsTo(Attribute);
   Attribute.hasMany(CartItem);
 
@@ -111,7 +107,6 @@ module.exports = (sequelize) => {
     Info,
     Item,
     Message,
-    Network,
     State,
     Team,
     Tournament,

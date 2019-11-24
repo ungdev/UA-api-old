@@ -19,7 +19,7 @@ const { includePay, includeCart } = require('../../utils/customIncludes');
  * @param {object} teamModel
  * @param {object} tournamentModel
  */
-const Search = (userModel, teamModel, tournamentModel, cartItemModel, cartModel, itemModel) => async (request, response) => {
+const Search = (userModel, teamModel, tournamentModel, cartItemModel, cartModel, itemModel, attributeModel) => async (request, response) => {
   try {
     const { search } = request.query;
     let users = await userModel.findAll({
@@ -32,7 +32,7 @@ const Search = (userModel, teamModel, tournamentModel, cartItemModel, cartModel,
         'place',
         'permissions',
         'type',
-        'scanned'
+        'scanned',
       ],
       where: querySearch(search),
       include: [
@@ -44,14 +44,14 @@ const Search = (userModel, teamModel, tournamentModel, cartItemModel, cartModel,
             attributes: ['shortName'],
           },
         },
-        includePay(cartItemModel, cartModel),
-        includeCart(cartModel, cartItemModel, itemModel),
+        includePay(cartItemModel, cartModel, userModel),
+        includeCart(cartModel, cartItemModel, itemModel, userModel, attributeModel),
       ],
     });
 
     users = users.map((user) => ({
       ...user.toJSON(),
-      isPaid: user.forUser.length
+      isPaid: user.forUser.length,
     }));
 
     if (users.length !== 1) {

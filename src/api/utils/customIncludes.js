@@ -11,7 +11,7 @@ const includePay = (cartItemModel, cartModel, userModel) => ({
   where: {
     [Op.or]: [
       { itemId: ITEM_PLAYER_ID },
-      { itemId: ITEM_VISITOR_ID }
+      { itemId: ITEM_VISITOR_ID },
     ],
   },
   include: [{
@@ -19,32 +19,38 @@ const includePay = (cartItemModel, cartModel, userModel) => ({
     as: 'cart',
     attributes: [],
     where: {
-      transactionState: 'paid'
+      transactionState: 'paid',
     },
   }, {
     model: userModel,
     as: 'userCart',
-    attributes: ['email', 'username']
-  }]
+    attributes: ['email', 'username'],
+  }],
 });
 
-const includeCart = (cartModel, cartItemModel, itemModel, userModel) => ({
+const includeCart = (cartModel, cartItemModel, itemModel, userModel, attributeModel) => ({
   model: cartModel,
   attributes: ['id', 'transactionId', 'paidAt', 'transactionState'],
   required: false,
   separate: true,
   include: [{
     model: cartItemModel,
-    attributes: ['id','quantity', 'refunded'],
+    attributes: ['id', 'quantity'],
     include: [{
       model: itemModel,
-      attributes: ['name']
+      attributes: ['name'],
     }, {
       model: userModel,
       as: 'forUser',
-      attributes: ['email', 'username']
-    }]
+      attributes: ['email', 'username'],
+    }, {
+      model: attributeModel,
+      attributes: ['label'],
+    }],
   }],
+  where: {
+    transactionState: { [Op.ne]: 'draft' },
+  },
   order: [['paidAt', 'ASC']],
 });
 

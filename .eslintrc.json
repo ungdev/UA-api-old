@@ -3,16 +3,23 @@
     "es6": true,
     "node": true
   },
-  "extends": ["airbnb-base", "prettier"],
+  "extends": ["prettier"],
   "parserOptions": {
     "ecmaVersion": 2018
   },
   "rules": {
-    "eol-last": "off",
     "linebreak-style": ["warn", "windows"],
+    "semi": "error",
+    "comma-dangle": ["warn", "always-multiline"],
+    "object-curly-spacing": ["warn", "always"],
+    "quotes": ["warn", "single"],
+    "arrow-parens": ["error", "always"],
+    "no-console": "error",
+    "no-alert": "error",
+    "brace-style": ["warn", "stroustrup"],
+    "eol-last": "off",
     "object-curly-newline": "off",
     "no-param-reassign": "off",
-    "brace-style": ["warn", "stroustrup"],
     "no-plusplus": "off",
     "max-len": "off",
     "radix": "off"

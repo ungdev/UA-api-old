@@ -26,11 +26,10 @@ const CheckList = [
  * @param {object} teamModel model to query Infos
  * @param {object} tournamentModel model to query Infos
  */
-const List = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, itemModel) => async (req, res) => {
+const List = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, itemModel, attributeModel) => async (req, res) => {
   const page = req.query.page || 0;
-  const pageSize = 25;
-  const offset = page * pageSize;
-  const limit = pageSize;
+  const limit = 25;
+  const offset = page * limit;
   const filterTournament = req.query.tournamentId === 'all' ? undefined : req.query.tournamentId;
 
   const customWhere = [];
@@ -78,22 +77,24 @@ const List = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, i
         'place',
         'permissions',
         'type',
-        'scanned'
+        'scanned',
       ],
       include: [
         includeTeam,
-        includeCart(cartModel, cartItemModel, itemModel, userModel),
+        includeCart(cartModel, cartItemModel, itemModel, userModel, attributeModel),
         includePay(cartItemModel, cartModel, userModel),
       ],
-      order: [filterTournament ? [col('team.name'),'ASC'] : ['username', 'ASC']],
-      limit,
-      offset,
+      order: [[col('team.name'),'ASC'], ['username', 'ASC']],
     });
 
     // Filter by payment
     if(req.query.payment && req.query.payment !== 'all') {
       users = users.filter((user) => req.query.payment === 'paid' ? user.forUser.length > 0 : user.forUser.length === 0);
     }
+
+    // Offset and limit
+    const total = users.length;
+    users = users.slice(offset, offset + limit);
 
     const formatUsers = users.map((user) => ({
       ...user.toJSON(),
@@ -104,10 +105,7 @@ const List = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, i
       .status(200)
       .json({
         users: formatUsers,
-        pageSize,
-        offset,
-        limit,
-        total: users.length,
+        total,
       })
       .end();
   }

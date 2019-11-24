@@ -61,7 +61,7 @@ const DeleteUserFromTeam = (
     }
 
     if (user.team.captainId === userId) {
-      log.info("Can't delete captain user");
+      log.info('Can\'t delete captain user');
       return res
         .status(403)
         .json({ error: 'CAPTAIN' })

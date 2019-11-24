@@ -1,6 +1,6 @@
 const Express = require('express');
 
-const hasPermission = require('../../middlewares/hasPermission');
+const hasPermission = require('../../middlewares/hasPermission.js');
 const { List, CheckList } = require('./list.js');
 const GigaSearch = require('./gigaSearch.js');
 const { UpdateUser, CheckUpdateUser } = require('./updateUser.js');
@@ -12,11 +12,11 @@ const Admin = (models) => {
   router.get('/users',
     hasPermission('anim'),
     CheckList,
-    List(models.User, models.Team, models.Tournament, models.Cart, models.CartItem, models.Item)
+    List(models.User, models.Team, models.Tournament, models.Cart, models.CartItem, models.Item, models.Attribute)
   );
   router.get('/users/search',
     hasPermission('anim'),
-    GigaSearch(models.User, models.Team, models.Tournament, models.Cart, models.CartItem, models.Item)
+    GigaSearch(models.User, models.Team, models.Tournament, models.Cart, models.CartItem, models.Item, models.Attribute)
   );
   router.put(`/users/:${userId}`,
     hasPermission('admin'),

@@ -20,10 +20,12 @@ const { includePay, includeCart } = require('../../utils/customIncludes');
  * @param {object} teamModel
  * @param {object} tournamentModel
  */
-const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, itemModel) => async (request, response) => {
-  try {
-    const { search } = request.query;
+const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, itemModel, attributeModel) => async (request, response) => {
+  const { page = 0, search } = request.query;
+  const limit = 25;
+  const offset = page * limit;
 
+  try {
     const attributes = [
       'id',
       'email',
@@ -33,7 +35,7 @@ const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel,
       'place',
       'permissions',
       'type',
-      'scanned'
+      'scanned',
     ];
     const usersFind = await userModel.findAndCountAll({
       where: querySearch(search),
@@ -47,9 +49,9 @@ const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel,
             attributes: ['shortName'],
           },
         },
-        includeCart(cartModel, cartItemModel, itemModel, userModel),
-        includePay(cartItemModel, cartModel, userModel)
-      ]
+        includeCart(cartModel, cartItemModel, itemModel, userModel, attributeModel),
+        includePay(cartItemModel, cartModel, userModel),
+      ],
     });
     const usersTeam = await userModel.findAndCountAll({
       attributes,
@@ -60,16 +62,16 @@ const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel,
           where: {
             name: {
               [Op.like]: `%${search}%`,
-            }
+            },
           },
           include: {
             model: tournamentModel,
             attributes: ['shortName'],
           },
         },
-        includeCart(cartModel, cartItemModel, itemModel, userModel),
-        includePay(cartItemModel, cartModel, userModel)
-      ]
+        includeCart(cartModel, cartItemModel, itemModel, userModel, attributeModel),
+        includePay(cartItemModel, cartModel, userModel),
+      ],
     });
 
     let users = [...usersTeam.rows, ...usersFind.rows];
@@ -81,11 +83,8 @@ const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel,
     });
     users = Object.values(uniqueUsers);
 
-    // Sort users
-    users.sort((user1, user2) => user1.username > user2.username);
-
+    // Count users
     const count = users.length;
-
     if (count === 0) {
       return response
         .status(404)
@@ -93,18 +92,20 @@ const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel,
         .end();
     }
 
+    // Sort and limit
+    users = users
+      .sort((user1, user2) => user1.username.localeCompare(user2.username))
+      .slice(offset, offset + limit);
+
     const formatUsers = users.map((user) => ({
       ...user.toJSON(),
       isPaid: user.forUser.length,
-    }))
+    }));
 
     return response
       .status(200)
       .json({
         users: formatUsers,
-        limit: count,
-        offset: 0,
-        pageSize: count,
         total: count,
       })
       .end();

@@ -50,8 +50,7 @@ const List = (tournamentModel, teamModel, userModel) => async (req, res) => {
               );
             }
             if (req.query.notFull === 'true') {
-              notFull = team.users.length
-                                    < tournament.playersPerTeam;
+              notFull = team.users.length < tournament.playersPerTeam;
             }
             const formatUsers = team.users.map(
               ({ username }) => username,

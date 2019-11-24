@@ -31,6 +31,7 @@ const CheckUpdateUser = [
 const UpdateUser = (userModel, userIdString) => async (req, res) => {
   const userId = req.params[userIdString];
   const { place, permissions } = req.body;
+
   try {
     const user = await userModel.findByPk(userId);
 
@@ -41,8 +42,12 @@ const UpdateUser = (userModel, userIdString) => async (req, res) => {
         .end();
     }
 
-    user.place = place || user.place;
-    user.permissions = permissions !== 'none' && permissions || user.permissions;
+    if(place !== undefined) {
+      user.place = place === '' ? null : place;
+    }
+    if(permissions !== undefined) {
+      user.permissions = permissions === '' ? null : permissions;
+    }
     await user.save();
 
     return res.status(204).end();

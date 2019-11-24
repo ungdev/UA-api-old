@@ -1,9 +1,8 @@
 const errorHandler = require('../../utils/errorHandler');
 const hasCartPaid = require('../../utils/hasCartPaid');
-const querySearch = require('../../utils/querySearch');
 
 /**
- * Get a user based on its id
+ * Scan a user based on its barcode
  *
  * POST /entry/scan
  * {
@@ -23,13 +22,10 @@ const querySearch = require('../../utils/querySearch');
  */
 const Scan = (userModel, teamModel, tournamentModel, cartModel, cartItemModel) => async (request, response) => {
   try {
-    const { barcode, search } = request.query;
-    const users = await userModel.findAll({
-      where: barcode
-        ? { barcode }
-        : {
-          ...querySearch(search),
-        },
+    const user = await userModel.findOne({
+      where: {
+        barcode: request.query.barcode,
+      },
       include: {
         model: teamModel,
         attributes: ['id', 'name'],
@@ -40,14 +36,12 @@ const Scan = (userModel, teamModel, tournamentModel, cartModel, cartItemModel) =
       },
     });
 
-    if (users.length > 1) {
+    if (!user) {
       return response
         .status(404)
-        .json({ error: 'NOT_FOUND' })
+        .json({ error: 'USER_NOT_FOUND' })
         .end();
     }
-
-    const user = users[0];
 
     if (user.scanned) {
       return response
@@ -55,12 +49,12 @@ const Scan = (userModel, teamModel, tournamentModel, cartModel, cartItemModel) =
         .json({ error: 'ALREADY_SCANNED' })
         .end();
     }
-    const isPaid = await hasCartPaid(user, cartModel, cartItemModel);
 
+    const isPaid = await hasCartPaid(user, cartModel, cartItemModel);
     if (!isPaid) {
       return response
         .status(403)
-        .json({ error: 'NOT_PAID' })
+        .json({ error: 'USER_NOT_PAID' })
         .end();
     }
 
