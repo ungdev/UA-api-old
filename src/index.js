@@ -11,7 +11,7 @@ const error = require('./api/middlewares/error.js');
 const log = require('./api/utils/log.js');
 
 module.exports = async () => {
-  const { models } = await database();
+  const { sequelize, models } = await database();
 
   const api = Express();
   api.locals.models = models;
@@ -50,5 +50,5 @@ module.exports = async () => {
     process.send('ready');
   }
 
-  return api;
+  return { api, sequelize };
 };

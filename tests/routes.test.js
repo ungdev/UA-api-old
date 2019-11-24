@@ -1,5 +1,6 @@
 const supertest = require('supertest');
 const src = require('../src');
+const users = require('../src/api/seeders/4-users');
 
 describe('routes', () => {
   const fakeUser = {
@@ -15,8 +16,12 @@ describe('routes', () => {
   let request;
 
   beforeAll(async () => {
-    app = await src();
+    const api = await src();
     request = supertest(app);
+
+    app = api.api;
+
+    await users.up(api.sequelize.queryInterface, api.sequelize);
   })
 
   it('should create a user', async () => {
@@ -103,5 +108,7 @@ describe('routes', () => {
     expect(json.username).toBe('FortniteCLeFeu!');
     expect(json.firstname).toBe('Le Sang de tes Morts !');
     expect(json.lastname).toBe('La calotte de ses morts !');
-  })
+  });
+
+
 })

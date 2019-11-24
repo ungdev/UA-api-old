@@ -2,20 +2,19 @@ const Sequelize = require('sequelize');
 
 const modelFactory = require('./api/models');
 const log = require('./api/utils/log.js')(module);
-const { production: credentials } = require('../config.js');
 
 module.exports = async function database() {
   log.info(
-    `Trying to connect to database : ${credentials.dialect}://${credentials.username}:******@${credentials.host}:${credentials.port}/${credentials.database}`,
+    `Trying to connect to database : ${process.env.ARENA_DB_TYPE}://${process.env.ARENA_DB_USER}:******@${process.env.ARENA_DB_HOST}:${process.env.ARENA_DB_PORT}/${process.env.ARENA_DB_NAME}`,
   );
 
   const sequelize = new Sequelize({
-    dialect: credentials.dialect,
-    username: credentials.username,
-    password: credentials.password,
-    host: credentials.host,
-    port: credentials.port,
-    database: `${credentials.database}${process.env.NODE_ENV === 'test' ? '_test' : ''}`,
+    dialect: process.env.ARENA_DB_TYPE,
+    username: process.env.ARENA_DB_USER,
+    password: process.env.ARENA_DB_PASSWORD,
+    host: process.env.ARENA_DB_HOST,
+    port: process.env.ARENA_DB_PORT,
+    database: `${process.env.ARENA_DB_NAME}${process.env.NODE_ENV === 'test' ? '_test' : ''}`,
     logging: (sql) => process.env.NODE_ENV !== 'test' ? log.info(sql) : ''
   });
 
