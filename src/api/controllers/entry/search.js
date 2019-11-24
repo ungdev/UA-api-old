@@ -44,8 +44,8 @@ const Search = (userModel, teamModel, tournamentModel, cartItemModel, cartModel,
             attributes: ['shortName'],
           },
         },
-        includePay(cartItemModel, cartModel),
-        includeCart(cartModel, cartItemModel, itemModel),
+        includePay(cartItemModel, cartModel, userModel),
+        includeCart(cartModel, cartItemModel, itemModel, userModel),
       ],
     });
 
