@@ -1,4 +1,4 @@
-const log = require('../utils/log')(module);
+const log = require('../utils/log.js')(module);
 
 module.exports = (err, res) => {
   log.info(err);

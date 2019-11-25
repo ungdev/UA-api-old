@@ -10,7 +10,6 @@ module.exports = {
         firstname: 'kevin',
         lastname: 'keke',
         email: 'kevin@msn.fr',
-        teamId: '49ee896a-6ff2-4324-b3b7-c3454ca32e38',
         type: 'none',
       }, {
         id: '48fe6584-a118-4f85-8b6a-a2f26a1538b2',

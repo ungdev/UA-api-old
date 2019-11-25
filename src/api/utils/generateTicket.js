@@ -4,9 +4,9 @@ const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 
-const log = require('./log')(module);
+const log = require('./log.js')(module);
 
-const background = `data:image/jpg;base64,${fs.readFileSync(path.join(__dirname, '../utils', 'assets', 'billet-ua.jpg'), 'base64')}`;
+const background = `data:image/jpg;base64,${fs.readFileSync(path.join(__dirname, '..', 'assets', 'billet-ua.jpg'), 'base64')}`;
 
 const generateBarcode = (user) => new Promise((resolve, reject) => {
   bwipjs.toBuffer({
@@ -33,7 +33,7 @@ module.exports = (user, placeName, encodeBase64 = false) => new Promise(async (r
   doc.image(background, 0, 0, { width: doc.page.width, height: doc.page.height });
   doc.image(barcode, 764, 70, { width: 49 });
   doc
-    .font(path.join(__dirname, '../utils', 'assets', 'montserrat.ttf'), 30)
+    .font(path.join(__dirname, '..', 'assets', 'montserrat.ttf'), 30)
     .fillColor('white')
     .text(`${user.lastname} ${user.firstname}`, 400, 40)
     .fontSize(20)

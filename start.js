@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 require('dotenv').config();
-const express = require('express');
-const log = require('./src/api/utils/log')(module);
+const debug = require('debug')('arena.utt.fr-api:bin');
+const src = require('./src');
 
-const app = express();
+const main = async () => {
+    const api = await src();
+    api.listen(process.env.ARENA_API_PORT, () =>
+        debug(
+            `server started on port ${process.env.ARENA_API_PORT} [${process.env.NODE_ENV}]`
+        )
+    );
+};
 
-require('./src')(app);
-
-app.listen(process.env.ARENA_API_PORT, () => log.debug(`server started on port ${process.env.ARENA_API_PORT} [${process.env.NODE_ENV}]`));
+main();

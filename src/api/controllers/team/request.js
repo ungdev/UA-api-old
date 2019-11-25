@@ -1,70 +1,61 @@
-const isAuth = require('../../middlewares/isAuth');
-const { isTournamentFull } = require('../../utils/isFull');
 const errorHandler = require('../../utils/errorHandler');
-const log = require('../../utils/log')(module);
+const log = require('../../utils/log.js')(module);
 
 /**
+ * Make a request to join a specified team
  * POST /teams/:id/request
  *
  * Response:
  * {}
+ *
+ * @param {string} teamIdString team id name in the route parameter
+ * @param {object}  teamModel team model to query
+ * @param {object}  userModel user model to query
+ * @param {object}  tournamentModel tournament model to query
  */
-module.exports = (app) => {
-  app.post('/teams/:id/request', [isAuth()]);
+const Request = (teamIdString, teamModel, userModel, tournamentModel) => async (req, res) => {
+  const teamId = req.params[teamIdString];
+  if (req.user.teamId !== null) {
+    log.warn(
+      `user ${req.user.name} tried to join team while he already has one`,
+    );
 
-  app.post('/teams/:id/request', async (req, res) => {
-    const { Team, User, Tournament } = req.app.locals.models;
+    return res
+      .status(400)
+      .json({ error: 'ALREADY_IN_TEAM' })
+      .end();
+  }
 
-    if (req.user.teamId !== null) {
-      log.warn(`user ${req.user.name} tried to join team while he already has one`);
-
+  try {
+    const team = await teamModel.findByPk(teamId, {
+      include: [
+        {
+          model: userModel,
+          attributes: ['id'],
+        },
+        {
+          model: tournamentModel,
+          attributes: ['playersPerTeam'],
+        },
+      ],
+    });
+    if (team.tournament.playersPerTeam === team.users.length) {
       return res
         .status(400)
-        .json({ error: 'ALREADY_IN_TEAM' })
+        .json({ error: 'TEAM_FULL' })
         .end();
     }
 
-    try {
-      const team = await Team.findByPk(req.params.id, {
-        include: [{
-          model: User,
-          attributes: ['id'],
-        }, {
-          model: Tournament,
-          include: {
-            model: Team,
-            include: {
-              model: User,
-            },
-          },
-        }],
-      });
+    req.user.askingTeamId = teamId;
+    await req.user.save();
 
-      if (await isTournamentFull(team.tournament, req)) {
-        return res
-          .status(400)
-          .json({ error: 'TOURNAMENT_FULL' })
-          .end();
-      }
+    log.info(`user ${req.user.username} asked to join team ${teamId}`);
 
-      if (team.tournament.playersPerTeam === team.users.length) {
-        return res
-          .status(400)
-          .json({ error: 'TEAM_FULL' })
-          .end();
-      }
-
-      req.user.askingTeamId = req.params.id;
-      await req.user.save();
-
-      log.info(`user ${req.user.username} asked to join team ${req.params.id}`);
-
-      return res
-        .status(200)
-        .end();
-    }
-    catch (err) {
-      return errorHandler(err, res);
-    }
-  });
+    return res.status(204).end();
+  }
+  catch (err) {
+    return errorHandler(err, res);
+  }
 };
+
+module.exports = Request;

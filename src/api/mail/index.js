@@ -18,8 +18,10 @@ const register = (data) => ({
   data: mustache.render(template, {
     title: 'INSCRIPTION',
     subtitle: `Bienvenue à l'UTT Arena, ${data.username} !`,
-    content: 'Merci de vérifier votre e-mail en cliquant sur le bouton ci-dessous.',
-    button_title: 'CONFIRMER MON INSCRIPTION' }),
+    content:
+            'Merci de vérifier votre e-mail en cliquant sur le bouton ci-dessous.',
+    button_title: 'CONFIRMER MON INSCRIPTION',
+  }),
 });
 
 const reset = (data) => ({
@@ -27,7 +29,8 @@ const reset = (data) => ({
   data: mustache.render(template, {
     title: 'MOT DE PASSE OUBLIÉ',
     subtitle: `Bonjour ${data.username} !`,
-    content: 'Vous avez demandé à changer votre mot de passe. Cliquez sur le bouton ci-dessous pour continuer.',
+    content:
+            'Vous avez demandé à changer votre mot de passe. Cliquez sur le bouton ci-dessous pour continuer.',
     button_title: 'CHANGER MON MOT DE PASSE',
   }),
 });
@@ -37,14 +40,29 @@ const payment = (data) => ({
   data: mustache.render(template, {
     title: 'PAIEMENT',
     subtitle: `Félicitations ${data.username}, votre commande est confirmée !`,
-    content: 'Si vous avez acheté une place, elle est disponible en pièce jointe de ce mail ou dans l\'onglet "Mon compte" sur le site.<br />Vous pouvez accéder à votre commande en cliquant sur le bouton ci-dessous.',
+    content:
+            'Si vous avez acheté une place, elle est disponible en pièce jointe de ce mail ou dans l\'onglet "Mon compte" sur le site.<br />Vous pouvez accéder à votre commande en cliquant sur le bouton ci-dessous.',
     button_title: 'CONSULTER MA COMMANDE',
   }),
 });
 
-const sendMail = (type, to, data, attachments = []) => {
-  const transporter = nodemailer.createTransport(process.env.ARENA_MAIL_SMTP);
-  const mailContent = type(data);
+/**
+ *
+ * @param {(object) => object} emailType define the type of email to send
+ * @param {string} to who you want to send the email to
+ * @param {object} data content of the email
+ * @param {array} attachments any attachment you want to send
+ */
+const sendMail = (emailType, to, data, attachments = []) => {
+  const transporter = nodemailer.createTransport({
+    host: process.env.ARENA_MAIL_HOST,
+    port: process.env.ARENA_MAIL_PORT,
+    auth: {
+      user: process.env.ARENA_MAIL_USER || undefined,
+      pass: process.env.ARENA_MAIL_PASSWORD || undefined,
+    },
+  });
+  const mailContent = emailType(data);
 
   return transporter.sendMail({
     from: process.env.ARENA_MAIL_SENDER,

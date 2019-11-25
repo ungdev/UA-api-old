@@ -1,4 +1,3 @@
-const isAuth = require('../../middlewares/isAuth');
 const errorHandler = require('../../utils/errorHandler');
 
 /**
@@ -10,33 +9,30 @@ const errorHandler = require('../../utils/errorHandler');
  * {
  *   Items
  * }
+ * @param {object} itemModel model to query Items
+ * @param {object} attributeModel model to query Attributes
  */
-module.exports = (app) => {
-  app.get('/items', [isAuth()]);
-
-  app.get('/items', async (req, res) => {
-    const { Item, Attribute } = req.app.locals.models;
-    try {
-      const items = await Item.findAll({
-        attributes: ['id', 'name', 'key', 'price', 'infos', 'image'],
-        include: {
-          model: Attribute,
-          attributes: ['label', 'value', 'id'],
-          through: {
-            attributes: [],
-          },
+const List = (itemModel, attributeModel) => async (req, res) => {
+  try {
+    const items = await itemModel.findAll({
+      attributes: ['id', 'name', 'key', 'price', 'infos', 'image'],
+      include: {
+        model: attributeModel,
+        attributes: ['id', 'label', 'value'],
+        through: {
+          attributes: [],
         },
-      });
+      },
+    });
 
-
-      return res
-        .status(200)
-        .json(items)
-        .end();
-    }
-
-    catch (error) {
-      return errorHandler(error, res);
-    }
-  });
+    return res
+      .status(200)
+      .json(items)
+      .end();
+  }
+  catch (error) {
+    return errorHandler(error, res);
+  }
 };
+
+module.exports = List;

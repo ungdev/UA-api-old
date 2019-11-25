@@ -11,7 +11,7 @@ module.exports = (loggedModule) => {
     .split('.js')[0];
 
   const customFormat = printf(
-    ({ level, message, label }) => `${moment().format('H:mm:ss')} ${level}: [${label}] ${message}`,
+    ({ level, message, label: location }) => `${moment().format('HH:mm:ss')} ${level}: [${location}] ${message}`,
   );
 
   const logger = createLogger({

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => sequelize.define('user', {
   firstname: { type: DataTypes.STRING, allowNull: false },
   lastname: { type: DataTypes.STRING, allowNull: false },
   password: { type: DataTypes.STRING, allowNull: false },
-  barcode: { type: DataTypes.STRING },
+  barcode: { type: DataTypes.STRING, unique: true },
   place: { type: DataTypes.STRING },
   scanned: { type: DataTypes.BOOLEAN, defaultValue: false },
   permissions: { type: DataTypes.STRING },
