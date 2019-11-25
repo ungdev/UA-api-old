@@ -1,5 +1,6 @@
 const errorHandler = require('../../utils/errorHandler');
 const hasTeamPaid = require('../../utils/hasTeamPaid.js');
+const { op, literal, col } = require('sequelize');
 
 /**
  * Get all the tournaments
@@ -20,57 +21,59 @@ const hasTeamPaid = require('../../utils/hasTeamPaid.js');
  * @param {object} teamModel
  * @param {object} userModel
  */
-const List = (tournamentModel, teamModel, userModel) => async (req, res) => {
+const List = (tournamentModel, teamModel, userModel, cartItemModel, cartModel) => async (req, res) => {
   try {
-    let tournaments = await tournamentModel.findAll({
+    const includeCart = {
+      model: cartItemModel,
+      as: 'forUser',
+      attributes: [],
+      where: {
+        itemId: 1,
+      },
+      include: [
+        {
+          model: cartModel,
+          as: 'cart',
+          attributes: [],
+          where: {
+            transactionState: 'paid',
+          },
+        },
+      ],
+    };
+
+    const tournaments = await tournamentModel.findAll({
       include: [
         {
           model: teamModel,
           include: {
             model: userModel,
             attributes: ['username', 'id'],
+            ...(req.query.paidOnly && {
+              include: [includeCart],
+            }),
           },
         },
       ],
       order: [['id', 'ASC']],
     });
 
-    tournaments = await Promise.all(
-      tournaments.map(async (tournament) => {
-        let teams = await Promise.all(
-          tournament.teams.map(async (team) => {
-            let isPaid = true;
-            let notFull = true;
-            if (req.query.paidOnly === 'true') {
-              isPaid = await hasTeamPaid(
-                req,
-                team,
-                null,
-                tournament.playersPerTeam,
-              );
-            }
-            if (req.query.notFull === 'true') {
-              notFull = team.users.length < tournament.playersPerTeam;
-            }
-            const formatUsers = team.users.map(
-              ({ username }) => username,
-            );
-            return isPaid && notFull
-              ? { ...team.toJSON(), users: formatUsers }
-              : 'empty';
-          }),
-        );
-        teams = teams.filter((team) => team !== 'empty');
+    const formatTournaments = tournaments.map((tournament) => {
+      if (req.query.notFull) {
         return {
           ...tournament.toJSON(),
-          teams,
+          teams: tournament.teams.filter((team) => team.users.length < tournament.playersPerTeam),
         };
-      }),
-    );
+      }
+      return {
+        ...tournament.toJSON(),
+        teams: tournament.teams.filter((team) => team.users.length === tournament.playersPerTeam),
+      };
+    });
 
     return res
       .status(200)
-      .json(tournaments)
+      .json(formatTournaments)
       .end();
   }
   catch (err) {
