@@ -24,6 +24,24 @@ const Get = (
 ) => async (req, res) => {
   const teamId = req.params[teamIdString];
   try {
+    const includeCart = {
+      model: cartItemModel,
+      as: 'forUser',
+      attributes: ['id'],
+      where: {
+        itemId: 1,
+      },
+      include: [
+        {
+          model: cartModel,
+          as: 'cart',
+          attributes: [],
+          where: {
+            transactionState: 'paid',
+          },
+        },
+      ],
+    };
     const team = await teamModel.findOne({
       where: {
         id: teamId,
@@ -32,6 +50,7 @@ const Get = (
         {
           model: userModel,
           attributes: ['id', 'username', 'email'],
+          include: [includeCart],
         },
         {
           model: tournamentModel,
@@ -43,25 +62,7 @@ const Get = (
       where: { askingTeamId: teamId },
     });
     if (team) {
-      const users = await Promise.all(
-        team.users.map(async ({ id, username, email }) => {
-          const isCartPaid = await cartModel.count({
-            where: {
-              transactionState: 'paid',
-            },
-            include: [
-              {
-                model: cartItemModel,
-                where: {
-                  forUserId: id,
-                  itemId: ticketId,
-                },
-              },
-            ],
-          });
-          return { id, username, email, isPaid: !!isCartPaid };
-        }),
-      );
+      const users = team.users.map((user) => ({ ...user.toJSON(), isPaid: user.forUser.length }));
       askingUsers = askingUsers.map(({ username, email, id }) => ({
         username,
         email,
