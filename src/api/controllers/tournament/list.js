@@ -1,6 +1,4 @@
 const errorHandler = require('../../utils/errorHandler');
-const hasTeamPaid = require('../../utils/hasTeamPaid.js');
-const { op, literal, col } = require('sequelize');
 
 /**
  * Get all the tournaments
@@ -48,7 +46,7 @@ const List = (tournamentModel, teamModel, userModel, cartItemModel, cartModel) =
           model: teamModel,
           include: {
             model: userModel,
-            attributes: ['username', 'id'],
+            attributes: ['username'],
             ...(req.query.paidOnly && {
               include: [includeCart],
             }),

@@ -1,5 +1,4 @@
 const errorHandler = require('../../utils/errorHandler');
-const hasTeamPaid = require('../../utils/hasTeamPaid.js');
 
 /**
  * Get all the teams that have join the current tournament
@@ -24,8 +23,29 @@ const GetTeamsFromTournaments = (
   teamModel,
   userModel,
   tournamentModel,
+  cartItemModel,
+  cartModel
 ) => async (req, res) => {
   try {
+    const includeCart = {
+      model: cartItemModel,
+      as: 'forUser',
+      required: false,
+      attributes: ['id'],
+      where: {
+        itemId: 1,
+      },
+      include: [
+        {
+          model: cartModel,
+          as: 'cart',
+          attributes: [],
+          where: {
+            transactionState: 'paid',
+          },
+        },
+      ],
+    };
     let teams = await teamModel.findAll({
       where: {
         tournamentId: req.params.tournamentId,
@@ -33,7 +53,8 @@ const GetTeamsFromTournaments = (
       include: [
         {
           model: userModel,
-          attributes: ['id', 'username', 'firstname', 'lastname'],
+          attributes: ['username', 'firstname', 'lastname'],
+          include: [includeCart],
         },
         {
           model: tournamentModel,
@@ -41,34 +62,22 @@ const GetTeamsFromTournaments = (
         },
       ],
     });
-    teams = await Promise.all(
-      teams.map(async (team) => {
-        const teamFormat = {
-          ...team.toJSON(),
-          users: team.users.map(({ username, firstname, lastname }) => ({
-            username,
-            firstname,
-            lastname,
-          })),
-          tournament: undefined,
-        };
-        if (req.query.paidOnly === 'true') {
-          const isPaid = await hasTeamPaid(
-            req,
-            team,
-            null,
-            team.tournament.playersPerTeam,
-          );
-          return isPaid ? teamFormat : 'empty';
-        }
-        if (req.query.notFull === 'true') {
-          const notFull = team.users.length < team.tournament.playersPerTeam;
-          return notFull ? teamFormat : 'empty';
-        }
-        return teamFormat;
-      }),
-    );
-    teams = teams.filter((team) => team !== 'empty');
+
+    if (req.query.paidOnly) {
+      teams = teams.filter((team) => {
+        const usersPaid = team.users.filter((user) => user.forUser.length);
+        return usersPaid.length === team.tournament.playersPerTeam;
+      });
+    }
+    else if (req.query.notFull) {
+      teams = teams.filter((team) => {
+        const usersNotPaid = team.users.filter((user) => user.forUser.length === 0);
+        return (
+          usersNotPaid.length < team.tournament.playersPerTeam &&
+          team.users.length < team.tournament.playersPerTeam
+        );
+      });
+    }
     return res
       .status(200)
       .json(teams)

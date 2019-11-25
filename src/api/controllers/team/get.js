@@ -27,6 +27,7 @@ const Get = (
     const includeCart = {
       model: cartItemModel,
       as: 'forUser',
+      required: false,
       attributes: ['id'],
       where: {
         itemId: 1,
