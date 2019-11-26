@@ -28,6 +28,7 @@ const Get = (
       model: cartItemModel,
       as: 'forUser',
       attributes: ['id'],
+      required: false,
       where: {
         itemId: 1,
       },
