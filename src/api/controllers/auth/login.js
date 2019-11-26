@@ -95,6 +95,7 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
           type: user.type,
           permissions: user.permissions,
           isPaid,
+          place: user.place,
         },
         token,
       })
