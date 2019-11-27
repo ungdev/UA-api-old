@@ -33,6 +33,7 @@ const GetUser = (userIdString, userModel, teamModel, cartModel, cartItemModel) =
         'askingTeamId',
         'type',
         'permissions',
+        'place',
       ],
       include: {
         model: teamModel,
