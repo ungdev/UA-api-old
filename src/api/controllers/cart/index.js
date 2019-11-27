@@ -37,7 +37,7 @@ const Cart = (models) => {
     `/:${cartId}/add`,
     isAuth(),
     CheckAddItem,
-    AddItemToCart(cartId, models.CartItem, models.User, models.Cart),
+    AddItemToCart(cartId, models.CartItem, models.User, models.Cart, models.Team, models.Tournament),
   );
   router.put(
     `/:${cartId}/cartItems/:${itemId}`,
