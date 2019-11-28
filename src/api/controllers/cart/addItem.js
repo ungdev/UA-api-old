@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const errorHandler = require('../../utils/errorHandler');
 const validateBody = require('../../middlewares/validateBody');
 const tshirtStocks = require('../../utils/tshirtStocks');
-const { isTournamentFull } = require('../../utils/isFull');
+const { isUserTournamentFull } = require('../../utils/isFull');
 
 const ITEM_PLAYER_ID = 1;
 const ITEM_VISITOR_ID = 2;
@@ -40,8 +40,7 @@ const CheckAddItem = [
  *
  * }
  */
-const AddItemToCart = (cartIdString, cartItemModel, userModel, cartModel, teamModel, tournamentModel) => async (req, res) => {
-
+const AddItemToCart = (cartIdString, cartItemModel, userModel, cartModel, teamModel, tournamentModel, itemModel) => async (req, res) => {
 
   const cartId = req.params[cartIdString];
 
@@ -85,25 +84,7 @@ const AddItemToCart = (cartIdString, cartItemModel, userModel, cartModel, teamMo
     // Attention: pas de verification d'attribute si ça peut correspondre à un itemId
     // Est-ce utile ?
     if (itemId === ITEM_PLAYER_ID) {
-      const forUser = await userModel.findByPk(req.body.forUserId, {
-        include: [
-          {
-            model: teamModel,
-            include: [
-              {
-                model: tournamentModel,
-                include: [
-                  {
-                    model: teamModel,
-                    include: [userModel],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-      const isFull = await isTournamentFull(forUser.team.tournament, req);
+      const isFull = await isUserTournamentFull(req.body.forUserId, userModel, teamModel, tournamentModel, cartItemModel, cartModel);
       if (isFull) {
         return res
           .status(400)
@@ -113,7 +94,7 @@ const AddItemToCart = (cartIdString, cartItemModel, userModel, cartModel, teamMo
     }
 
     if (itemId === ITEM_VISITOR_ID) {
-      const visitorItem = await Item.findByPk(ITEM_VISITOR_ID);
+      const visitorItem = await itemModel.findByPk(ITEM_VISITOR_ID);
 
       const maxVisitors = visitorItem.stock;
 

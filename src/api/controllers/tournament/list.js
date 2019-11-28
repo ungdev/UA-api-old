@@ -1,6 +1,4 @@
 const errorHandler = require('../../utils/errorHandler');
-const hasTeamPaid = require('../../utils/hasTeamPaid.js');
-const { op, literal, col } = require('sequelize');
 
 /**
  * Get all the tournaments

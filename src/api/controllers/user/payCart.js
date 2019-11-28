@@ -1,7 +1,7 @@
 const etupay = require('../../utils/etupay');
 
 const errorHandler = require('../../utils/errorHandler');
-const { isTournamentFull } = require('../../utils/isFull');
+const { isUserTournamentFull } = require('../../utils/isFull');
 const removeAccent = require('../../utils/removeAccents');
 
 const ITEM_PLAYER_ID = 1;
@@ -119,39 +119,17 @@ const PayCart = (
         (cartItem) => cartItem.item.id === ITEM_PLAYER_ID,
       )
     ) {
-      await Promise.all(
-        cart.cartItems.map(async (cartItem) => {
-          if (cartItem.item.id === ITEM_PLAYER_ID) {
-            const team = await teamModel.findByPk(
-              req.user.teamId,
-              {
-                include: [
-                  {
-                    model: tournamentModel,
-                    include: [
-                      {
-                        model: teamModel,
-                        include: [userModel],
-                      },
-                    ],
-                  },
-                ],
-              },
-            );
-            const isFull = await isTournamentFull(
-              team.tournament,
-              req,
-            );
-            if (isFull) {
-              return res
-                .status(400)
-                .json({ error: 'TOURNAMENT_FULL' })
-                .end();
-            }
+      for (const cartItem of cart.cartItems) {
+        if (cartItem.item.id === ITEM_PLAYER_ID) {
+          const isFull = await isUserTournamentFull(cartItem.forUserId, userModel, teamModel, tournamentModel, cartItemModel, cartModel);
+          if (isFull) {
+            return res
+              .status(400)
+              .json({ error: 'TOURNAMENT_FULL' })
+              .end();
           }
-          return null;
-        }),
-      );
+        }
+      }
     }
 
     const data = JSON.stringify({ cartId: cart.id });
