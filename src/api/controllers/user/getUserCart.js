@@ -1,4 +1,5 @@
 const errorHandler = require('../../utils/errorHandler');
+const deleteExpireCarts = require('../../utils/deleteExpireCarts');
 
 /**
  * GET /users/:userId/carts/current
@@ -25,6 +26,7 @@ const GetUserCart = (
   userModel,
 ) => async (req, res) => {
   const userId = req.params[userIdString];
+  deleteExpireCarts(cartModel);
   try {
     if (userId !== req.user.id) {
       return res

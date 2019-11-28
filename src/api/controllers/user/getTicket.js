@@ -3,9 +3,9 @@ const { Op } = require('sequelize');
 const generateTicket = require('../../utils/generateTicket');
 const errorHandler = require('../../utils/errorHandler');
 
-const GetTicket = (userIdString, userModel, cartItemModel, itemModel, cartModel) => async (req, res) => {
+const GetTicket = (userModel, cartItemModel, itemModel, cartModel) => async (req, res) => {
   try {
-    const userId = req.params[userIdString];
+    const { userId } = req.params;
     const user = await userModel.findByPk(userId);
 
     if (!user) {

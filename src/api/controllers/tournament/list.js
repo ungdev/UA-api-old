@@ -46,7 +46,7 @@ const List = (tournamentModel, teamModel, userModel, cartItemModel, cartModel) =
           model: teamModel,
           include: {
             model: userModel,
-            attributes: ['username'],
+            attributes: ['username', 'id'],
             ...(req.query.paidOnly && {
               include: [includeCart],
             }),

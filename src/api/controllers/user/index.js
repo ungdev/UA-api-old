@@ -35,8 +35,8 @@ const User = (models) => {
     ),
   );
   router.get(
-    `/:${userId}/ticket`,
-    GetTicket(userId, models.User, models.CartItem, models.Item, models.Cart),
+    '/:userId/ticket',
+    GetTicket(models.User, models.CartItem, models.Item, models.Cart),
   );
   router.get(
     `/:${userId}/carts/current`,

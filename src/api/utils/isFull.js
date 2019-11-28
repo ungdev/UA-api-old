@@ -1,45 +1,96 @@
-const hasTeamPaid = require('./hasTeamPaid');
+const { Op } = require('sequelize');
 
-const isTeamFull = (team, max, paid = false) => {
-  let count;
-  if (!team.users) {
-    return false;
-  }
-
-  if (paid) {
-    count = team.users.filter((user) => user.paid).length;
-  }
-  else {
-    count = team.users.length;
-  }
-
-  return count >= max;
+const isUserTournamentFull = async (id, userModel, teamModel, tournamentModel, cartItemModel, cartModel) => {
+  const includeCart = {
+    model: cartItemModel,
+    as: 'forUser',
+    attributes: [],
+    where: {
+      itemId: 1,
+    },
+    include: [
+      {
+        model: cartModel,
+        as: 'cart',
+        attributes: [],
+        where: {
+          transactionState: {
+            [Op.in]: ['paid', 'draft'],
+          },
+        },
+      },
+    ],
+  };
+  const forUser = await userModel.findByPk(id, {
+    include: [
+      {
+        model: teamModel,
+        include: [
+          {
+            model: tournamentModel,
+            attributes: ['playersPerTeam', 'maxPlayers'],
+            include: [
+              {
+                model: teamModel,
+                attributes: ['id'],
+                include: {
+                  model: userModel,
+                  attributes: ['id'],
+                  include: [includeCart],
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+  const fullTeams = forUser.team.tournament.teams.filter((team) => team.users.length === forUser.team.tournament.playersPerTeam);
+  const maxTeams = forUser.team.tournament.maxPlayers / forUser.team.tournament.playersPerTeam;
+  return fullTeams.length > maxTeams;
 };
 
-const isTournamentFull = async (tournament, req) => {
+const isTournamentFull = async (id, userModel, teamModel, tournamentModel, cartItemModel, cartModel) => {
+  const includeCart = {
+    model: cartItemModel,
+    as: 'forUser',
+    attributes: [],
+    where: {
+      itemId: 1,
+    },
+    include: [
+      {
+        model: cartModel,
+        as: 'cart',
+        attributes: [],
+        where: {
+          transactionState: {
+            [Op.in]: ['paid', 'draft'],
+          },
+        },
+      },
+    ],
+  };
+  const tournament = await tournamentModel.findByPk(
+    id,
+    {
+      attributes: ['playersPerTeam', 'maxPlayers'],
+      include: [
+        {
+          model: teamModel,
+          attributes: ['id'],
+          include: {
+            model: userModel,
+            attributes: ['id'],
+            include: [includeCart],
+          },
+        },
+      ],
+    },
+  );
+  const fullTeams = tournament.teams.filter((team) => team.users.length === tournament.playersPerTeam);
   const maxTeams = tournament.maxPlayers / tournament.playersPerTeam;
-  if (!tournament.teams) {
-    return false;
-  }
-  let teams = await Promise.all(tournament.teams.map(async (team) => {
-    let isPaid = true;
-    isPaid = await hasTeamPaid(req, team, null, tournament.playersPerTeam);
-    return (isPaid ? 'paid' : 'empty');
-  }));
-  teams = teams.filter((team) => team !== 'empty');
-  return teams.length >= maxTeams;
+  return [fullTeams.length >= maxTeams, tournament];
 };
 
-const remainingPlaces = (spotlight) => {
-  const maxTeams = spotlight.maxPlayers / spotlight.perTeam;
-  if (!spotlight.teams) {
-    return false;
-  }
-  const teams = spotlight.teams.filter((team) => isTeamFull(team, spotlight.perTeam, true)).length;
-
-  const remaining = maxTeams - teams;
-
-  return remaining <= 5 && remaining > 0 ? remaining : '/';
-};
-
-module.exports = { isTeamFull, isTournamentFull, remainingPlaces };
+module.exports = { isUserTournamentFull, isTournamentFull };
