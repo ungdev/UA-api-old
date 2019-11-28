@@ -47,7 +47,7 @@ const isUserTournamentFull = async (id, userModel, teamModel, tournamentModel, c
   });
   const fullTeams = forUser.team.tournament.teams.filter((team) => team.users.length === forUser.team.tournament.playersPerTeam);
   const maxTeams = forUser.team.tournament.maxPlayers / forUser.team.tournament.playersPerTeam;
-  return fullTeams.length >= maxTeams;
+  return fullTeams.length > maxTeams;
 };
 
 const isTournamentFull = async (id, userModel, teamModel, tournamentModel, cartItemModel, cartModel) => {
