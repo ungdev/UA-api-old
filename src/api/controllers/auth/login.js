@@ -42,7 +42,7 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
       },
       include: {
         model: teamModel,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'tournamentId'],
       },
     });
 
