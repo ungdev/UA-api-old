@@ -1,6 +1,6 @@
 const errorHandler = require('../../utils/errorHandler');
+const { APIToornament } = require('../../utils/APIToornament');
 
-const ticketId = 1;
 /**
  * Return the user's team. The user should be in the team, other wise
  * he cannot access this infos
@@ -21,6 +21,7 @@ const Get = (
   tournamentModel,
   cartModel,
   cartItemModel,
+  infoModel,
 ) => async (req, res) => {
   const teamId = req.params[teamIdString];
   try {
@@ -47,6 +48,7 @@ const Get = (
       where: {
         id: teamId,
       },
+      attributes: ['id', 'captainId', 'name', 'toornamentId'],
       include: [
         {
           model: userModel,
@@ -55,6 +57,7 @@ const Get = (
         },
         {
           model: tournamentModel,
+          attributes: ['id', 'playersPerTeam', 'name', 'toornamentId'],
         },
       ],
     });
@@ -62,21 +65,51 @@ const Get = (
     let askingUsers = await userModel.findAll({
       where: { askingTeamId: teamId },
     });
-    if (team) {
-      const users = team.users.map((user) => ({ ...user.toJSON(), isPaid: user.forUser.length }));
-      askingUsers = askingUsers.map(({ username, email, id }) => ({
-        username,
-        email,
-        id,
-      }));
+
+    let matches = [];
+    let lastStage;
+    let lastInfo;
+
+    if (!team) {
       return res
-        .status(200)
-        .json({ ...team.toJSON(), users, askingUsers })
+        .status(404)
+        .json({ error: 'NOT_FOUND' })
         .end();
     }
+
+    if (team.toornamentId) {
+      const matchesToornament = await APIToornament.matches({
+        toornamentTeam: team.toornamentId,
+        toornamentId: team.tournament.toornamentId,
+      });
+      matches = matchesToornament.data.map((match) => {
+        const formatOpponents = match.opponents.map((opponent) => ({
+          name: opponent.participant.name,
+          result: opponent.result,
+          score: opponent.score,
+        }));
+        return { opponents: formatOpponents, note: match.private_note, id: match.id };
+      });
+      lastStage = matchesToornament.data[matchesToornament.data.length-1].stage_id;
+      lastInfo = await infoModel.findOne({
+        attributes: ['title','content'],
+        where: {
+          tournamentId: team.tournament.id,
+        },
+        order: [['createdAt', 'DESC']],
+      });
+    }
+
+    const users = team.users.map((user) => ({ ...user.toJSON(), isPaid: user.forUser.length }));
+    askingUsers = askingUsers.map(({ username, email, id }) => ({
+      username,
+      email,
+      id,
+    }));
+
     return res
-      .status(404)
-      .json({ error: 'NOT_FOUND' })
+      .status(200)
+      .json({ ...team.toJSON(), users, askingUsers, matches, lastStage, lastInfo })
       .end();
   }
   catch (err) {

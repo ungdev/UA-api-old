@@ -22,6 +22,7 @@
     "no-param-reassign": "off",
     "no-plusplus": "off",
     "max-len": "off",
-    "radix": "off"
+    "radix": "off",
+    "no-unused-vars": "error"
   }
 }
