@@ -31,7 +31,6 @@ const CheckUpdateUser = [
 const UpdateUser = (userModel, userIdString) => async (req, res) => {
   const userId = req.params[userIdString];
   const { place, permissions } = req.body;
-
   try {
     const user = await userModel.findByPk(userId);
 

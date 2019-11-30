@@ -4,6 +4,7 @@ const hasPermission = require('../../middlewares/hasPermission');
 const List = require('./list.js');
 const { Create, CheckCreate } = require('./create.js');
 const Delete = require('./delete.js');
+const { SendNotificationToTournament } = require('../../utils/notification-sender.js');
 
 const infoId = 'infoId';
 
@@ -14,12 +15,12 @@ const Info = (models) => {
     '/',
     hasPermission('anim'),
     CheckCreate,
-    Create(models.Info),
+    Create(models.Info, SendNotificationToTournament)
   );
   router.delete(
     `/:${infoId}`,
     hasPermission('anim'),
-    Delete(infoId, models.Info),
+    Delete(infoId, models.Info)
   );
   return router;
 };

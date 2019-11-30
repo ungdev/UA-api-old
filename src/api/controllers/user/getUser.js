@@ -37,7 +37,7 @@ const GetUser = (userIdString, userModel, teamModel, cartModel, cartItemModel) =
       ],
       include: {
         model: teamModel,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'tournamentId'],
       },
     });
 
