@@ -18,6 +18,7 @@ const List = (infoModel, userModel) => async (request, response) => {
         model: userModel,
         attributes: ['firstname', 'lastname'],
       }],
+      order: [['createdAt', 'DESC']],
     });
 
     return response
