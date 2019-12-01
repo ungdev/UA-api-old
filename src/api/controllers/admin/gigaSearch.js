@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const errorHandler = require('../../utils/errorHandler');
 const querySearch = require('../../utils/querySearch');
 const { includePay, includeCart } = require('../../utils/customIncludes');
+const formatUsers = require('../../utils/formatUsers');
 
 /**
  * Get a user based on its id
@@ -21,7 +22,8 @@ const { includePay, includeCart } = require('../../utils/customIncludes');
  * @param {object} tournamentModel
  */
 const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, itemModel, attributeModel) => async (request, response) => {
-  const { page = 0, search } = request.query;
+  const { page = 0 } = request.query;
+  const search = request.query.search.trim();
   const limit = 25;
   const offset = page * limit;
 
@@ -97,15 +99,10 @@ const Search = (userModel, teamModel, tournamentModel, cartModel, cartItemModel,
       .sort((user1, user2) => user1.username.localeCompare(user2.username))
       .slice(offset, offset + limit);
 
-    const formatUsers = users.map((user) => ({
-      ...user.toJSON(),
-      isPaid: user.forUser.length,
-    }));
-
     return response
       .status(200)
       .json({
-        users: formatUsers,
+        users: formatUsers(users),
         total: count,
       })
       .end();
