@@ -57,7 +57,7 @@ const Search = (userModel, teamModel, tournamentModel, cartItemModel, cartModel,
     if (users.length !== 1) {
       return response
         .status(404)
-        .json({ error: 'NOT_FOUND' })
+        .json({ error: 'USER_NOT_FOUND' })
         .end();
     }
 

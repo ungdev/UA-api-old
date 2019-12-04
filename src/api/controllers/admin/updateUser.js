@@ -37,7 +37,7 @@ const UpdateUser = (userModel, userIdString) => async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ error: 'NOT_FOUND' })
+        .json({ error: 'USER_NOT_FOUND' })
         .end();
     }
 
