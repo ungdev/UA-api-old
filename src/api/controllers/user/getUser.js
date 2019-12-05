@@ -33,17 +33,18 @@ const GetUser = (userIdString, userModel, teamModel, cartModel, cartItemModel) =
         'askingTeamId',
         'type',
         'permissions',
+        'place',
       ],
       include: {
         model: teamModel,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'tournamentId'],
       },
     });
 
     if (!user) {
       return res
         .status(404)
-        .json({ error: 'NOT_FOUND' })
+        .json({ error: 'USER_NOT_FOUND' })
         .end();
     }
     const isPaid = await hasCartPaid(user, cartModel, cartItemModel);

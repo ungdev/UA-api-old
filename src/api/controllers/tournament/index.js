@@ -9,7 +9,7 @@ const Tournament = (models) => {
   router.get('/', List(models.Tournament, models.Team, models.User, models.CartItem, models.Cart));
   router.get(
     '/:tournamentId/teams',
-    GetTeams(models.Team, models.User, models.Tournament),
+    GetTeams(models.Team, models.User, models.Tournament, models.CartItem, models.Cart),
   );
   router.get(
     '/:tournamentId',

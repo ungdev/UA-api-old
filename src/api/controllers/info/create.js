@@ -21,19 +21,32 @@ const CheckCreate = [
  *   Info
  * }
  * @param {object} infoModel model to query Infos
+ * @param {(title: string, content: string, tournamentId: int) => void} sendNotificationToTournament callback to send notification to  tournament users users
  */
-const Create = (infoModel) => async (request, response) => {
+const Create = (infoModel, sendNotificationToTournament) => async (
+  request,
+  response
+) => {
   try {
     const info = await infoModel.create({
       ...request.body,
       userId: request.user.id,
     });
 
+    sendNotificationToTournament(
+      request.body.title,
+      request.body.content,
+      request.body.tournamentId
+    );
+
     return response
       .status(201)
       .json({
         ...info.toJSON(),
-        user: { firstname: request.user.firstname, lastname: request.user.lastname },
+        user: {
+          firstname: request.user.firstname,
+          lastname: request.user.lastname,
+        },
       })
       .end();
   }

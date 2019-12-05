@@ -66,6 +66,7 @@ const Team = (models) => {
       models.Tournament,
       models.Cart,
       models.CartItem,
+      models.Info,
     ),
   );
 

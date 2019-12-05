@@ -3,6 +3,7 @@ const { check } = require('express-validator');
 const errorHandler = require('../../utils/errorHandler');
 const { includePay, includeCart } = require('../../utils/customIncludes');
 const validateBody = require('../../middlewares/validateBody');
+const formatUsers = require('../../utils/formatUsers');
 
 const CheckList = [
   check('status').isIn(['all', 'player', 'visitor', 'orga']).optional(),
@@ -96,15 +97,10 @@ const List = (userModel, teamModel, tournamentModel, cartModel, cartItemModel, i
     const total = users.length;
     users = users.slice(offset, offset + limit);
 
-    const formatUsers = users.map((user) => ({
-      ...user.toJSON(),
-      isPaid: user.forUser.length,
-    }));
-
     return res
       .status(200)
       .json({
-        users: formatUsers,
+        users: formatUsers(users),
         total,
       })
       .end();

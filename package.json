@@ -24,6 +24,8 @@
     "nodemon": "^1.19.2",
     "pdfkit": "^0.10.0",
     "pm2": "^4.0.0",
+    "redis": "^2.8.0",
+    "query-string": "^6.9.0",
     "sequelize": "^5.19.0",
     "socket.io": "^2.3.0",
     "uuid": "^3.3.3",
@@ -38,7 +40,7 @@
   },
   "scripts": {
     "dev": "nodemon ./start.js",
-    "start": "pm2-runtime start ./start.js --name UA-api -i 4",
+    "start": "pm2-runtime start ./start.js --name UA-api -i 1",
     "lint": "eslint src/ --ext .js",
     "lint-fix": "eslint --fix src/ --ext .js",
     "seed": "sequelize db:drop; sequelize db:create --charset=utf8; sequelize db:seed:all",

@@ -24,7 +24,6 @@ const CheckAddItem = [
   validateBody(),
 ];
 
-
 /**
  * Add an item to a user's cart.
  *

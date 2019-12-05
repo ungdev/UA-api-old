@@ -31,14 +31,13 @@ const CheckUpdateUser = [
 const UpdateUser = (userModel, userIdString) => async (req, res) => {
   const userId = req.params[userIdString];
   const { place, permissions } = req.body;
-
   try {
     const user = await userModel.findByPk(userId);
 
     if (!user) {
       return res
         .status(404)
-        .json({ error: 'NOT_FOUND' })
+        .json({ error: 'USER_NOT_FOUND' })
         .end();
     }
 

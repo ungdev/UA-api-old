@@ -2,10 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const { check } = require('express-validator');
+
 const log = require('../../utils/log.js')(module);
 const errorHandler = require('../../utils/errorHandler');
 const hasCartPaid = require('../../utils/hasCartPaid');
 const validateBody = require('../../middlewares/validateBody');
+const captivePortal = require('../../utils/captivePortal');
 
 const CheckLogin = [
   check('username').exists(),
@@ -42,7 +44,7 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
       },
       include: {
         model: teamModel,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'tournamentId'],
       },
     });
 
@@ -82,6 +84,8 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
 
     log.info(`user ${user.username} logged`);
 
+    const captivePortalSuccess = await captivePortal(req, user);
+
     return res
       .status(200)
       .json({
@@ -91,12 +95,18 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
           firstname: user.firstname,
           lastname: user.lastname,
           email: user.email,
-          team: user.team,
+          team: user.team ? {
+            id: user.team && user.team.id,
+            name: user.team && user.team.name,
+            tournamentId: user.team && user.team.tournamentId,
+          } : null,
           type: user.type,
           permissions: user.permissions,
           isPaid,
+          place: user.place,
         },
         token,
+        captivePortalSuccess,
       })
       .end();
   }

@@ -38,7 +38,7 @@ const includeCart = (cartModel, cartItemModel, itemModel, userModel, attributeMo
     attributes: ['id', 'quantity'],
     include: [{
       model: itemModel,
-      attributes: ['name'],
+      attributes: ['id', 'name', 'price'],
     }, {
       model: userModel,
       as: 'forUser',
