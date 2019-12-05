@@ -91,14 +91,14 @@ const Get = (
         return { opponents: formatOpponents, note: match.private_note, id: match.id };
       });
       lastStage = matchesToornament.data[matchesToornament.data.length-1].stage_id;
-      lastInfo = await infoModel.findOne({
-        attributes: ['title','content'],
-        where: {
-          tournamentId: team.tournament.id,
-        },
-        order: [['createdAt', 'DESC']],
-      });
     }
+    lastInfo = await infoModel.findOne({
+      attributes: ['title','content'],
+      where: {
+        tournamentId: team.tournament.id,
+      },
+      order: [['createdAt', 'DESC']],
+    });
 
     const users = team.users.map((user) => ({ ...user.toJSON(), isPaid: user.forUser.length }));
     askingUsers = askingUsers.map(({ username, email, id }) => ({
