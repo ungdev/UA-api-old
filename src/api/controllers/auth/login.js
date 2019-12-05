@@ -98,6 +98,7 @@ const Login = (userModel, teamModel, cartModel, cartItemModel) => async (req, re
           team: user.team ? {
             id: user.team && user.team.id,
             name: user.team && user.team.name,
+            tournamentId: user.team && user.team.tournamentId,
           } : null,
           type: user.type,
           permissions: user.permissions,
