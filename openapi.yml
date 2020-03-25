@@ -1,0 +1,228 @@
+openapi: 3.0.0
+
+info:
+  title: UTT Arena - API
+  description: API web à destination des services de l'[UTT Arena](https://arena.utt.fr).
+  version: 1.0.0
+  contact:
+    name: UTT Arena
+    url: https://arena.utt.fr
+    email: arena@utt.fr
+  license:
+    name: Licence MIT
+    url: https://github.com/ungdev/UA-api/blob/master/LICENSE
+
+servers:
+  - url: https://ua-api.uttnetgroup.fr
+
+tags:
+  - name: Admin
+    description: Routes d'administration
+
+components:
+  parameters:
+    Authorization:
+      in: header
+      name: Authorization
+      description: Token d'authentification
+      schema:
+        type: string
+      required: true
+
+  schemas:
+    Permission:
+      type: string
+      enum: [stream, orga, entry, anim, admin]
+      nullable: true
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: V1StGX
+        firstname:
+          type: string
+        lastname:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+          enum: [player, coach, visitor]
+        permissions:
+          type: string
+          nullable: true
+        place:
+          type: string
+          example: X000
+        scanned:
+          type: boolean
+        discordId:
+          type: string
+          nullable: true
+        hasPaid:
+          type: boolean
+
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          example: Z5jdHi
+        name:
+          type: string
+        tournamentId:
+          type: integer
+        captainId:
+          type: string
+          example: XiHGta
+        lockedAt:
+          type: string
+          nullable: true
+
+    Tournament:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        shortName:
+          type: string
+        maxPlayers:
+          type: integer
+        playersPerTeam:
+          type: integer
+        toornamentId:
+          type: string
+          nullable: true
+
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+          enum: [ticket, item]
+        attribute:
+          type: string
+          nullable: true
+        price:
+          type: integer
+        infos:
+          type: string
+          nullable: true
+        image:
+          type: string
+          nullable: true
+        stock:
+          type: integer
+          nullable: true
+
+paths:
+  /admin/users:
+    get:
+      summary: Retourne la liste des utilisateurs et leur équipe
+      description: La permission 'anim' ou 'admin' est requise
+      tags:
+        - Admin
+      parameters:
+        - $ref: "#/components/parameters/Authorization"
+        - in: query
+          name: firstname
+          description: Recherche par prénom
+          schema:
+            type: string
+        - in: query
+          name: lastname
+          description: Recherche par nom
+          schema:
+            type: string
+        - in: query
+          name: username
+          description: Recherche par nom d'utilisateur
+          schema:
+            type: string
+        - in: query
+          name: email
+          description: Recherche par adresse email
+          schema:
+            type: string
+        - in: query
+          name: place
+          description: Recherche par place
+          schema:
+            type: string
+        - in: query
+          name: discordId
+          description: Recherche par identifiant Discord
+          schema:
+            type: string
+        - in: query
+          name: type
+          description: Filtre les utilisateurs par leur type
+          schema:
+            type: string
+            enum: [player, coach, visitor]
+        - in: query
+          name: tournament
+          description: Filtre les utilisateurs en fonction de l'ID de leur tournoi
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: permission
+          description: Filtre les utilisateurs en fonction de leurs permissions
+          schema:
+            $ref: "#/components/schemas/Permission"
+        - in: query
+          name: paid
+          description: Filtre les utilisateurs en fonction de s'ils ont payé ou non
+          schema:
+            type: boolean
+        - in: query
+          name: scanned
+          description: Filtre les utilisateurs en fonction de s'ils ont été scannés ou non
+          schema:
+            type: boolean
+        - in: query
+          name: pageSize
+          description: "(Pagination) Longueur de la page. Doit être utilisé avec 'pageIndex'"
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: pageIndex
+          description: "(Pagination) Indice de la page. Doit être utilisé avec 'pageSize'"
+          schema:
+            type: integer
+            minimum: 0
+
+      responses:
+        200:
+          description: Liste de tous les utilisateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "#/components/schemas/User"
+                    - type: object
+                      properties:
+                        team:
+                          $ref: "#/components/schemas/Team"
+        204:
+          description: Aucun utilisateur correspondant trouvé
+        401:
+          description: Vous n'êtes pas authentifié
+        403:
+          description: Vous n'avez pas la permission
