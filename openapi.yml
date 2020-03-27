@@ -18,16 +18,14 @@ servers:
 tags:
   - name: Admin
     description: Routes d'administration
+  - name: Auth
+    description: Routes d'authentification
 
 components:
-  parameters:
-    Authorization:
-      in: header
-      name: Authorization
-      description: Token d'authentification
-      schema:
-        type: string
-      required: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: Bearer
 
   schemas:
     Permission:
@@ -35,38 +33,44 @@ components:
       enum: [stream, orga, entry, anim, admin]
       nullable: true
 
-    User:
+    UserRestricted:
       type: object
       properties:
         id:
           type: string
           example: V1StGX
-        firstname:
-          type: string
-        lastname:
-          type: string
         username:
           type: string
-        email:
-          type: string
-          nullable: true
-        type:
-          type: string
-          nullable: true
-          enum: [player, coach, visitor]
-        permissions:
-          type: string
-          nullable: true
-        place:
-          type: string
-          example: X000
-        scanned:
-          type: boolean
-        discordId:
-          type: string
-          nullable: true
-        hasPaid:
-          type: boolean
+
+    User:
+      allOf:
+        - $ref: "#/components/schemas/UserRestricted"
+        - type: object
+          properties:
+            firstname:
+              type: string
+            lastname:
+              type: string
+            email:
+              type: string
+              nullable: true
+            type:
+              type: string
+              nullable: true
+              enum: [player, coach, visitor]
+            permissions:
+              type: string
+              nullable: true
+            place:
+              type: string
+              example: X000
+            scanned:
+              type: boolean
+            discordId:
+              type: string
+              nullable: true
+            hasPaid:
+              type: boolean
 
     Team:
       type: object
@@ -83,6 +87,7 @@ components:
           example: XiHGta
         lockedAt:
           type: string
+          format: datetime
           nullable: true
 
     Tournament:
@@ -131,11 +136,12 @@ paths:
   /admin/users:
     get:
       summary: Retourne la liste des utilisateurs et leur équipe
-      description: La permission 'anim' ou 'admin' est requise
+      description: Permission 'anim' ou 'admin' requise
       tags:
         - Admin
+      security:
+        - BearerAuth: []
       parameters:
-        - $ref: "#/components/parameters/Authorization"
         - in: query
           name: firstname
           description: Recherche par prénom
@@ -174,7 +180,7 @@ paths:
             enum: [player, coach, visitor]
         - in: query
           name: tournament
-          description: Filtre les utilisateurs en fonction de l'ID de leur tournoi
+          description: Filtre les utilisateurs en fonction de l'identifiant de leur tournoi
           schema:
             type: integer
             minimum: 0
@@ -226,3 +232,87 @@ paths:
           description: Vous n'êtes pas authentifié
         403:
           description: Vous n'avez pas la permission
+
+  /admin/users/{userId}:
+    put:
+      summary: Modifie les informations d'un utilisateur
+      description: Permission 'admin' requise
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          description: Identifiant de l'utilisateur à modifier
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permissions:
+                  type: string
+                place:
+                  type: string
+      responses:
+        204:
+          description: L'utilisateur a bien été modifié
+        401:
+          description: Vous n'êtes pas authentifié
+        403:
+          description: Vous n'avez pas la permission
+        404:
+          description: L'identifiant n'est associé à aucun utilisateur
+
+  /auth/login:
+    post:
+      summary: Authentifie l'utilisateur
+      tags:
+        - Auth
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+        - in: query
+          name: password
+          schema:
+            type: string
+      responses:
+        200:
+          description:
+            Retourne le token d'authentification et les informations de l'utilisateur.
+            Le champ 'captivePortalSuccess' indique si l'utilisateur a été ajouté au portail captif
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+                  token:
+                    type: string
+                  captivePortalSuccess:
+                    type: boolean
+        400:
+          description: Requête erronée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                invalid_credentials:
+                  summary: Identifiant ou mot de passe incorrect
+                  value:
+                    error: Identifiant ou mot de passe incorrect
+                not_activated:
+                  summary: Compte non activé
+                  value:
+                    error: Compte non activé. Veuillez vérifier votre boîte mail
