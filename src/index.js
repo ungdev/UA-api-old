@@ -11,6 +11,7 @@ const MainRoutes = require('./api/controllers');
 const error = require('./api/middlewares/error.js');
 const log = require('./api/utils/log.js');
 const getIp = require('./api/utils/getIP.js');
+const Status = require('./api/controllers/status');
 
 module.exports = async () => {
   const { models } = await database();
@@ -40,6 +41,7 @@ module.exports = async () => {
   api.use(cors());
   api.use(bodyParser.json());
 
+  api.use('/', Status);
   api.use('/api/v1', MainRoutes(models));
   api.use('/api/v1/uploads', Express.static(process.env.ARENA_FILES_TO_SERVE));
 
