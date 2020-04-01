@@ -58,21 +58,43 @@ components:
       type: string
       enum: [pending, paid, canceled, refused, refunded]
 
+    Tournament:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        shortName:
+          type: string
+        maxPlayers:
+          type: integer
+          example: 80
+        playersPerTeam:
+          type: integer
+          example: 5
+        lockedTeams:
+          type: integer
+
     UserRestricted:
       type: object
       properties:
         id:
           type: string
           example: V1StGX
-        username:
-          type: string
-          nullable: true
+        type:
+          $ref: "#/components/schemas/Type"
+        hasPaid:
+          type: boolean
 
     User:
       allOf:
         - $ref: "#/components/schemas/UserRestricted"
         - type: object
           properties:
+            username:
+              type: string
+              nullable: true
             firstname:
               type: string
             lastname:
@@ -81,8 +103,6 @@ components:
               type: string
               format: email
               nullable: true
-            type:
-              $ref: "#/components/schemas/Type"
             permissions:
               type: string
               nullable: true
@@ -91,12 +111,12 @@ components:
               nullable: true
               example: X000
             scanned:
-              type: boolean
+              type: string
+              format: datetime
+              nullable: true
             discordId:
               type: string
               nullable: true
-            hasPaid:
-              type: boolean
             teamId:
               type: string
               example: Z5jdHi
@@ -167,6 +187,16 @@ components:
         forUserId:
           type: string
           example: V1StGX
+
+    CartWithCartItems:
+      allOf:
+        - $ref: "#/components/schemas/Cart"
+        - type: object
+          properties:
+            cartItems:
+              type: array
+              items:
+                $ref: "#/components/schemas/CartItem"
 
     Item:
       type: object
@@ -240,40 +270,6 @@ paths:
                     type: boolean
                   shop:
                     type: boolean
-
-  /contact:
-    post:
-      summary: Envoie un message à l'équipe de l'UTT Arena
-      description: "Envoie un message sur le slack UNG dans #ua-contact-bot"
-      tags:
-        - Général
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                firstname:
-                  type: string
-                lastname:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                subject:
-                  type: string
-                message:
-                  type: string
-      responses:
-        204:
-          description: Le message a bien été envoyé
-        400:
-          description: Requête erronée
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 
   /admin/auth/login/{userId}:
     post:
@@ -528,8 +524,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/UserWithTeam"
-        204:
-          description: Aucun utilisateur correspondant trouvé
         401:
           $ref: "#/components/responses/401Unauthenticated"
         403:
@@ -597,14 +591,7 @@ paths:
               schema:
                 type: array
                 items:
-                  allOf:
-                    - $ref: "#/components/schemas/Cart"
-                    - type: object
-                      properties:
-                        cartItems:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/CartItem"
+                  $ref: "#/components/schemas/CartWithCartItems"
         401:
           $ref: "#/components/responses/401Unauthenticated"
         403:
@@ -711,7 +698,9 @@ paths:
   /auth/login:
     post:
       summary: Authentifie l'utilisateur
-      description: Permet d'obtenir un token d'authentification
+      description: Permet d'obtenir un token d'authentification.
+        La connexion doit être autorisée.
+        Seuls les organisateurs sont toujours autorisés à se connecter.
       tags:
         - Auth
       requestBody:
@@ -750,20 +739,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               examples:
-                invalid_credentials:
+                invalidCredentials:
                   summary: Identifiant ou mot de passe incorrect
                   value:
                     error: Identifiant ou mot de passe incorrect
-                not_activated:
+                userNotActivated:
                   summary: Compte non activé
                   value:
                     error: Compte non activé. Veuillez vérifier votre boîte mail
+                loginDisabled:
+                  summary: Connexion désactivée
+                  value:
+                    error: La connexion est désactivée pour le moment
 
   /auth/refreshToken:
     post:
       summary: Génère un nouveau token d'authentification
-      description: Nécessite d'être authentifié.
-        Génère un nouveau token d'authentification si le token actuel arrive bientôt à expiration.
+      description: "**Nécessite d'être authentifié.**
+        Génère un nouveau token d'authentification si le token actuel arrive bientôt à expiration."
       tags:
         - Auth
       security:
@@ -780,6 +773,7 @@ paths:
   /auth/register:
     post:
       summary: Crée un nouvel utilisateur
+      description: Crée un nouvel utilisateur
       tags:
         - Auth
       requestBody:
@@ -908,6 +902,40 @@ paths:
                   token:
                     type: string
 
+  /contact:
+    post:
+      summary: Envoie un message à l'équipe de l'UTT Arena
+      description: "Envoie un message sur le slack UNG dans #ua-contact-bot"
+      tags:
+        - Général
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                subject:
+                  type: string
+                message:
+                  type: string
+      responses:
+        204:
+          description: Le message a bien été envoyé
+        400:
+          description: Requête erronée
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /items:
     get:
       summary: Renvoie la liste des items
@@ -923,3 +951,311 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Item"
+
+  /tickets/{cartItemId}:
+    get:
+      summary: Renvoie le billet associé au cartItem
+      description:
+        "**L'utilisateur doit nécessairement avoir payé ce cartItem.**
+        Renvoie le billet associé au cartItem."
+      tags:
+        - Tickets
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: cartItemId
+          description: Identifiant du cartItem
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Renvoie le billet au format PDF
+        404:
+          description: Aucun billet n'est associé à cet identifiant
+
+  /tournaments:
+    get:
+      summary: Renvoie les informations sur les tournois
+      description: Renvoie les informations sur les tournois
+      tags:
+        - Tournaments
+      responses:
+        200:
+          description: Renvoie les informations sur les tournois
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tournament"
+
+  /tournaments/{tournamentId}/teams:
+    get:
+      summary: Renvoie la liste des équipes du tournoi
+      description: Renvoie la liste des équipes du tournoi
+      tags:
+        - Tournaments
+      parameters:
+        - in: path
+          name: tournamentId
+          description: Identifiant du tournoi cible
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: locked
+          description: Filtre les équipes en fonction de si elles sont 'locked' ou non
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Renvoie la liste des équipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "#/components/schemas/Team"
+                    - type: object
+                      properties:
+                        players:
+                          type: array
+                          description: Liste des noms d'utilisateurs des joueurs de l'équipe
+                          items:
+                            type: string
+                        coachs:
+                          type: array
+                          description: Liste des noms d'utilisateurs des coachs de l'équipe
+                          items:
+                            type: string
+        404:
+          description: L'identifiant n'est associé à aucun tournoi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: L'identifiant n'est associé à aucun tournoi
+
+  /uploads/{filename}:
+    get:
+      summary: Renvoie un fichier statique
+      description: Renvoie un fichier statique présent sur le stockage persistent de l'API
+      tags:
+        - Général
+      parameters:
+        - in: path
+          name: filename
+          description: Nom du fichier à servir
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Le fichier demandé est renvoyé
+        404:
+          description: Le fichier demandé est introuvable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: Le fichier demandé est introuvable
+
+  /users/search:
+    get:
+      summary: Renvoie les informations minimales d'un utilisateur
+      description: Renvoie les informations minimales d'un utilisateur
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: email
+          description: Adresse mail de l'utilisateur
+          schema:
+            type: string
+            format: email
+          required: true
+      responses:
+        200:
+          description: Renvoie les informations minimales de l'utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRestricted"
+        404:
+          description: Aucun utilisateur n'est associé à cette adresse mail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: Aucun utilisateur n'est associé à cette adresse mail
+
+  /users/{userId}:
+    put:
+      summary: Modifie les informations d'un utilisateur
+      description:
+        "**L'identifiant doit être associé à l'utilisateur originaire de la requête.**
+        Modifie les informations d'un utilisateur."
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          description: Identifiant de l'utilisateur à modifier
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  nullable: true
+                newPassword:
+                  type: string
+                  nullable: true
+      responses:
+        204:
+          description: L'utilisateur a bien été modifié
+        401:
+          $ref: "#/components/responses/401Unauthenticated"
+        403:
+          description: Vous ne pouvez pas modifier les informations d'un autre utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: Vous ne pouvez pas modifier les informations d'un autre utilisateur
+        404:
+          $ref: "#/components/responses/404UserNotFound"
+
+  /users/{userId}/carts:
+    get:
+      summary: Renvoie la liste des achats de l'utilisateur
+      description:
+        "**L'identifiant doit être associé à l'utilisateur originaire de la requête.**
+        Renvoie la liste des achats de l'utilisateur."
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          description: Identifiant de l'utilisateur
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Renvoie la liste des achats de l'utilisateur
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CartWithCartItems"
+        401:
+          $ref: "#/components/responses/401Unauthenticated"
+        403:
+          description: Vous ne pouvez pas récupérer la liste des achats d'un autre utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: Vous ne pouvez pas récupérer la liste des achats d'un autre utilisateur
+        404:
+          $ref: "#/components/responses/404UserNotFound"
+
+    post:
+      summary: Crée un panier
+      description:
+        "**L'identifiant doit être associé à l'utilisateur originaire de la requête.**
+        Crée un panier et renvoie l'URL du paiement.
+        Pour chaque accompagnateur, un compte inaccessible est créé.
+        Cet accompagnateur sera lié à l'équipe actuelle de l'utilisateur procédant à l'achat."
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          description: Identifiant de l'utilisateur à qui sera associé le panier
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tickets:
+                  type: object
+                  properties:
+                    userIds:
+                      type: array
+                      description: Liste des identifiants des utilisateurs pour qui acheter les billets
+                      items:
+                        type: string
+                      example:
+                        - V1StGX
+                    guides:
+                      type: array
+                      description: Liste des billets accompagnateurs à acheter
+                      items:
+                        type: object
+                        properties:
+                          firstname:
+                            type: string
+                            description: Prénom de l'accompagnateur
+                          lastname:
+                            type: string
+                            description: Nom de l'accompagnateur
+                items:
+                  type: array
+                  description: Liste des items (goodies) à acheter
+                  items:
+                    type: object
+                    properties:
+                      itemId:
+                        type: integer
+                        description: Identifiant de l'item à acheter
+                      quantity:
+                        type: integer
+                        description: Quantité à acheter
+      responses:
+        200:
+          description: Le panier a bien été créé. L'URL permettant de procéder au paiement est renvoyée.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+        400:
+          description: Requête erronée, possiblement car un des items est écoulé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          $ref: "#/components/responses/404UserNotFound"
